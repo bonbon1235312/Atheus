@@ -27,7 +27,7 @@ export default function WorkPage() {
 
           <div className="mt-12 grid gap-5 md:grid-cols-2">
             {projects.map((project, index) => (
-              <MotionReveal key={project.slug} delay={index * 0.04}>
+              <MotionReveal key={project.slug} className="min-w-0" delay={index * 0.04}>
                 <ProjectCard project={project} featured={index === 0} />
               </MotionReveal>
             ))}

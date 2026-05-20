@@ -11,12 +11,12 @@ const footerLinks = [
 export function SiteFooter() {
   return (
     <footer className="border-t border-white/10 bg-ink">
-      <div className="container-studio grid gap-10 py-12 md:grid-cols-[1.3fr_0.7fr_0.8fr]">
+      <div className="container-studio grid gap-10 py-16 md:grid-cols-[1.35fr_0.65fr_0.8fr]">
         <div>
-          <p className="type-display text-4xl font-semibold">ATHEUS</p>
-          <p className="mt-4 max-w-md text-chalk/64">
-            Design-led websites for independent businesses. Built with clarity,
-            motion, and identity.
+          <p className="type-display text-7xl font-semibold leading-none">ATHEUS</p>
+          <p className="mt-5 max-w-md text-chalk/64">
+            Portfolio websites and lead generation sites with identity, motion,
+            and enough confidence to make the business feel established.
           </p>
         </div>
 
