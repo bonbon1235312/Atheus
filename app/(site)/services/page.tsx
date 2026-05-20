@@ -5,7 +5,7 @@ import { MotionReveal } from "@/components/site/motion-reveal";
 export const metadata: Metadata = {
   title: "Services",
   description:
-    "Website design, frontend development, landing pages, hospitality websites, trade websites, and managed hosting support from ATHEUS.",
+    "Website design, frontend development, landing pages, hospitality websites, trade websites, and ongoing website support from ATHEUS.",
 };
 
 const services = [
@@ -15,7 +15,7 @@ const services = [
   },
   {
     title: "Frontend development",
-    copy: "Responsive, accessible Next.js builds with polished motion, clean component structure, and deployment-ready code.",
+    copy: "Responsive, accessible frontend builds with polished motion, clean component structure, and production-ready code.",
   },
   {
     title: "Landing pages",
@@ -34,8 +34,8 @@ const services = [
     copy: "High-impact pages for makers, creators, founders, launches, drops, and short-term campaigns.",
   },
   {
-    title: "Managed hosting/support",
-    copy: "Ongoing support, managed hosting, minor edits, monitoring, and handover support after launch.",
+    title: "Website care/support",
+    copy: "Ongoing support, managed hosting options, minor edits, monitoring, and clear ownership after launch.",
   },
 ];
 
@@ -86,7 +86,7 @@ export default function ServicesPage() {
       <section className="section-pad bg-chalk text-ink">
         <div className="container-studio grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
           <MotionReveal>
-            <p className="font-black text-flare">Hosting</p>
+            <p className="font-black text-flare">After launch</p>
             <h2 className="type-display mt-3 text-6xl font-semibold leading-none">
               Managed when useful. Portable when preferred.
             </h2>
@@ -101,17 +101,17 @@ export default function ServicesPage() {
                 </p>
               </div>
               <div className="studio-card-light p-5">
-                <h3 className="text-2xl font-black">Self-hosted handover</h3>
+                <h3 className="text-2xl font-black">Client-owned handover</h3>
                 <p className="mt-3 text-black/68">
-                  For clients who want full ownership: the project can be
-                  deployed to their Vercel account with a clean handover.
+                  For clients who want full ownership: the site can be handed
+                  over with clear access, documentation, and launch guidance.
                 </p>
               </div>
             </div>
             <p className="mt-6 text-lg text-black/68">
-              Portfolio launch projects are available for selected independent
-              businesses. The tone stays premium because the work should be
-              something both sides are proud to show.
+              Selected launch projects are available for independent businesses
+              that fit the studio. The tone stays premium because the work
+              should be something both sides are proud to show.
             </p>
           </MotionReveal>
         </div>

@@ -26,12 +26,12 @@ const steps = [
   {
     number: "04",
     title: "Launch",
-    copy: "We connect the domain, metadata, analytics-ready structure, forms, deployment, and final polish for Vercel.",
+    copy: "We connect the domain, metadata, analytics-ready structure, forms, launch settings, and final polish.",
   },
   {
     number: "05",
     title: "Support",
-    copy: "After launch, clients can choose managed hosting, updates, minor edits, or a clean self-hosted handover.",
+    copy: "After launch, clients can choose managed care, updates, minor edits, or a clear client-owned handover.",
   },
 ];
 

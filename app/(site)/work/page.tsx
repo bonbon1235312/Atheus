@@ -19,8 +19,9 @@ export default function WorkPage() {
               Case studies for independent businesses with actual texture.
             </h1>
             <p className="mt-6 max-w-2xl text-xl text-chalk/68">
-              Each project is a fictional client concept built to demonstrate a
-              different commercial problem, brand direction, and conversion path.
+              Each case study pairs a commercial problem with a complete live
+              demo site, showing how ATHEUS shapes identity, copy, layout, and
+              conversion into something a client can actually use.
             </p>
           </MotionReveal>
 

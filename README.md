@@ -8,7 +8,7 @@ Premium creative web studio portfolio for `atheus.dev`.
 - TypeScript
 - Tailwind CSS
 - Framer Motion
-- Vercel-ready static routes
+- Deployment-ready static routes
 
 ## Run Locally
 

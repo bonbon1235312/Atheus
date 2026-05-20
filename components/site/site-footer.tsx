@@ -39,8 +39,8 @@ export function SiteFooter() {
             hello@atheus.dev
           </a>
           <p className="mt-3 text-chalk/60">
-            Portfolio launch projects available for selected independent
-            businesses.
+            Selected launch projects available for independent businesses that
+            fit the studio.
           </p>
         </div>
       </div>

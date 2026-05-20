@@ -19,9 +19,9 @@ export default function TermsPage() {
             Content is for general information and may change without notice.
           </p>
           <p>
-            Portfolio concepts shown on this site are fictional demonstration
-            projects unless otherwise stated. They are used to show design,
-            frontend, and creative direction capability.
+            Portfolio concepts shown on this site are studio case studies and
+            live demo sites unless otherwise stated. They are used to show
+            design, frontend, and creative direction capability.
           </p>
           <p>
             Project scope, timelines, deliverables, hosting, support, and payment

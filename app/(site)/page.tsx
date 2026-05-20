@@ -13,7 +13,7 @@ const services = [
 const process = [
   ["01", "Discovery", "Pin down the business, audience, offer, and the job the website has to do."],
   ["02", "Direction", "Define the visual identity, page structure, copy direction, and conversion path."],
-  ["03", "Build", "Develop a fast, responsive, polished site with careful motion and clean handover."],
+  ["03", "Build", "Develop a fast, responsive, polished site with careful motion and a clean launch path."],
 ];
 
 export default function Home() {
@@ -31,9 +31,9 @@ export default function Home() {
               Design-led websites for independent businesses.
             </p>
             <p className="mt-6 max-w-2xl text-lg text-chalk/70">
-              A small creative web studio building sharp, responsive, identity-rich
-              websites for hospitality, trades, fitness, local brands, and
-              independent founders who need to look as good as they work.
+              A small high-end web studio building portfolio websites, lead
+              generation sites, and identity-rich digital homes for independent
+              businesses that need to look as sharp as they work.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link href="/work" className="studio-button studio-button-primary">
@@ -58,7 +58,7 @@ export default function Home() {
                 <span>CONVERSION</span>
                 <span>HOSPITALITY</span>
                 <span>LOCAL BUSINESS</span>
-                <span>VERCEL</span>
+                <span>PORTFOLIO</span>
               </div>
             ))}
           </div>
@@ -102,14 +102,14 @@ export default function Home() {
           <MotionReveal delay={0.08}>
             <div className="max-w-2xl text-xl leading-relaxed text-black/72">
               <p>
-                ATHEUS builds websites with a clear point of view: less template,
-                more identity. The work sits between creative direction and
-                production-grade frontend, so a site can feel distinctive without
-                becoming difficult to use.
+                ATHEUS is built to be the front door for serious independent
+                businesses: a place where the work looks premium, the message is
+                clear, and every page has a reason to exist.
               </p>
               <p className="mt-5">
-                Portfolio launch projects are available for selected independent
-                businesses that need a credible first site or a serious redesign.
+                The portfolio shows complete website directions, not loose
+                mockups. Each case study has a live demo so clients can feel the
+                pace, layout, copy, and conversion path for themselves.
               </p>
             </div>
           </MotionReveal>

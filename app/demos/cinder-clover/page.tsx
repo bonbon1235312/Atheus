@@ -3,7 +3,7 @@ import { CinderCloverDemo } from "@/components/demos/cinder-clover-demo";
 
 export const metadata: Metadata = {
   title: "Cinder & Clover Demo",
-  description: "A fictional cafe website demo by ATHEUS.",
+  description: "A cafe website concept and live demo by ATHEUS.",
 };
 
 export default function CinderCloverDemoPage() {

@@ -3,7 +3,7 @@ import { SaplingsDemo } from "@/components/demos/saplings-demo";
 
 export const metadata: Metadata = {
   title: "Saplings Demo",
-  description: "A fictional restaurant website demo by ATHEUS.",
+  description: "A restaurant website concept and live demo by ATHEUS.",
 };
 
 export default function SaplingsDemoPage() {
