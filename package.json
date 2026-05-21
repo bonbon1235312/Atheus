@@ -12,7 +12,8 @@
     "framer-motion": "latest",
     "next": "latest",
     "react": "latest",
-    "react-dom": "latest"
+    "react-dom": "latest",
+    "resend": "^6.12.3"
   },
   "devDependencies": {
     "@tailwindcss/forms": "latest",

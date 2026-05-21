@@ -1,18 +1,64 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
+
+type Status = "idle" | "submitting" | "success" | "error";
 
 export function ContactForm() {
-  const [submitted, setSubmitted] = useState(false);
+  const [status, setStatus] = useState<Status>("idle");
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (status === "submitting") return;
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const payload = {
+      name: formData.get("name"),
+      business: formData.get("business"),
+      email: formData.get("email"),
+      projectType: formData.get("projectType"),
+      budget: formData.get("budget"),
+      message: formData.get("message"),
+    };
+
+    setStatus("submitting");
+    setErrorMessage(null);
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        const data: unknown = await response.json().catch(() => null);
+        const message =
+          data && typeof data === "object" && "error" in data && typeof (data as { error: unknown }).error === "string"
+            ? (data as { error: string }).error
+            : "Could not send your enquiry. Please email hello@atheus.dev directly.";
+        throw new Error(message);
+      }
+
+      form.reset();
+      setStatus("success");
+    } catch (error) {
+      setStatus("error");
+      setErrorMessage(
+        error instanceof Error
+          ? error.message
+          : "Could not send your enquiry. Please email hello@atheus.dev directly.",
+      );
+    }
+  }
+
+  const submitting = status === "submitting";
 
   return (
-    <form
-      className="grid gap-0"
-      onSubmit={(event) => {
-        event.preventDefault();
-        setSubmitted(true);
-      }}
-    >
+    <form className="grid gap-0" onSubmit={handleSubmit} noValidate>
       <label className="studio-field">
         <span className="studio-field-label">Your name</span>
         <input
@@ -21,6 +67,7 @@ export function ContactForm() {
           className="studio-field-input"
           placeholder="e.g. Eleanor Carr"
           autoComplete="name"
+          disabled={submitting}
         />
       </label>
 
@@ -31,6 +78,7 @@ export function ContactForm() {
           className="studio-field-input"
           placeholder="Cinder &amp; Clover"
           autoComplete="organization"
+          disabled={submitting}
         />
       </label>
 
@@ -43,12 +91,18 @@ export function ContactForm() {
           className="studio-field-input"
           placeholder="you@somewhere.co.uk"
           autoComplete="email"
+          disabled={submitting}
         />
       </label>
 
       <label className="studio-field">
         <span className="studio-field-label">Project type</span>
-        <select className="studio-field-select" name="projectType" defaultValue="">
+        <select
+          className="studio-field-select"
+          name="projectType"
+          defaultValue=""
+          disabled={submitting}
+        >
           <option value="" disabled>
             — Choose one —
           </option>
@@ -62,7 +116,12 @@ export function ContactForm() {
 
       <label className="studio-field">
         <span className="studio-field-label">Budget range</span>
-        <select className="studio-field-select" name="budget" defaultValue="">
+        <select
+          className="studio-field-select"
+          name="budget"
+          defaultValue=""
+          disabled={submitting}
+        >
           <option value="" disabled>
             — Choose one —
           </option>
@@ -81,11 +140,16 @@ export function ContactForm() {
           name="message"
           className="studio-field-area"
           placeholder="The business, the problem, and what the site needs to do."
+          disabled={submitting}
         />
       </label>
 
-      <button type="submit" className="studio-button studio-button-primary mt-8 justify-self-start">
-        Send enquiry
+      <button
+        type="submit"
+        disabled={submitting}
+        className="studio-button studio-button-primary mt-8 justify-self-start disabled:cursor-not-allowed disabled:opacity-60"
+      >
+        {submitting ? "Sending…" : "Send enquiry"}
       </button>
 
       <p className="mt-5 text-sm text-chalk/55">
@@ -96,9 +160,23 @@ export function ContactForm() {
         . First reply within one working day.
       </p>
 
-      {submitted ? (
-        <p className="mt-5 border border-acid/40 bg-acid/10 p-4 text-sm font-semibold text-acid">
-          Enquiry captured. While the form is in MVP mode, please also send the same details to hello@atheus.dev so we can pick it up.
+      {status === "success" ? (
+        <p
+          className="mt-5 border border-acid/40 bg-acid/10 p-4 text-sm font-semibold text-acid"
+          role="status"
+          aria-live="polite"
+        >
+          Thanks — enquiry received. I&apos;ll reply within one working day.
+        </p>
+      ) : null}
+
+      {status === "error" ? (
+        <p
+          className="mt-5 border border-flare/40 bg-flare/10 p-4 text-sm font-semibold text-flare"
+          role="alert"
+          aria-live="assertive"
+        >
+          {errorMessage}
         </p>
       ) : null}
     </form>
