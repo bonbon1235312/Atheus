@@ -34,50 +34,71 @@ export default async function ProjectPage({ params }: PageProps) {
     notFound();
   }
 
+  const currentIndex = projects.findIndex((p) => p.slug === project.slug);
+  const nextProject = projects[(currentIndex + 1) % projects.length];
+
+  const heroBg = project.palette[1].value;
+  const heroFg = project.palette[1].text === "dark" ? "#0a0a0a" : "#f4efe6";
+  const heroAccent = project.palette[2].value;
+
   return (
     <main>
       <section className="section-pad">
         <div className="container-studio">
           <MotionReveal>
             <Link href="/work" className="studio-link text-chalk/72">
-              Back to work
+              ← Back to work
             </Link>
-            <p className="kicker mt-10">{project.industry}</p>
-            <h1 className="type-display mt-4 max-w-5xl text-7xl font-semibold leading-none md:text-9xl">
+            <p className="kicker mt-10">
+              0{currentIndex + 1} <span className="text-chalk/40">/</span> {project.industry}
+            </p>
+            <h1 className="type-display mt-4 max-w-5xl text-6xl font-semibold leading-[0.95] sm:text-7xl md:text-9xl">
               {project.name}
             </h1>
-            <p className="mt-6 max-w-2xl text-2xl font-semibold leading-tight text-chalk/82">
+            <p className="type-display mt-6 max-w-2xl text-2xl font-medium italic leading-tight text-chalk/82 md:text-3xl">
               {project.keyLine}
             </p>
           </MotionReveal>
 
-          <MotionReveal className="mt-10">
+          <MotionReveal className="mt-12">
             <div className="mock-browser">
               <div className="mock-browser-bar">
                 <span className="mock-browser-dot" />
                 <span className="mock-browser-dot" />
                 <span className="mock-browser-dot" />
+                <span className="ml-3 text-[11px] font-black uppercase tracking-[0.16em] text-chalk/45">
+                  atheus.dev/demos/{project.slug}
+                </span>
               </div>
               <div
-                className="grid min-h-[460px] items-end p-8"
-                style={{
-                  background: `linear-gradient(135deg, ${project.palette[0].value}, ${project.palette[1].value} 56%, ${project.palette[2].value})`,
-                }}
+                className="relative grid min-h-[480px] items-end p-10"
+                style={{ background: heroBg, color: heroFg }}
               >
+                <span
+                  className="absolute left-10 top-10 h-px w-16"
+                  style={{ background: heroAccent }}
+                  aria-hidden="true"
+                />
                 <div>
                   <p
-                    className={`text-lg font-black ${
-                      project.palette[1].text === "dark" ? "text-black/72" : "text-white/74"
-                    }`}
+                    className="text-xs font-black uppercase tracking-[0.22em]"
+                    style={{ color: heroAccent }}
                   >
-                    {project.concept}
+                    {project.industry}
+                  </p>
+                  <p className="type-display mt-5 max-w-3xl text-6xl font-semibold leading-[0.95] md:text-8xl">
+                    {project.keyLine}
                   </p>
                   <p
-                    className={`type-display mt-5 max-w-3xl text-7xl font-semibold leading-none ${
-                      project.palette[1].text === "dark" ? "text-black" : "text-white"
-                    }`}
+                    className="mt-6 max-w-xl text-lg"
+                    style={{
+                      color:
+                        project.palette[1].text === "dark"
+                          ? "rgba(10,10,10,0.7)"
+                          : "rgba(244,239,230,0.78)",
+                    }}
                   >
-                    {project.keyLine}
+                    {project.concept}
                   </p>
                 </div>
               </div>
@@ -89,26 +110,29 @@ export default async function ProjectPage({ params }: PageProps) {
       <section className="section-pad border-y border-white/10 bg-chalk text-ink">
         <div className="container-studio grid gap-10 lg:grid-cols-[0.8fr_1.2fr]">
           <MotionReveal>
-            <p className="font-black text-flare">Overview</p>
-            <h2 className="type-display mt-3 text-6xl font-semibold leading-none">
+            <p className="font-black uppercase tracking-[0.2em] text-flare">Overview</p>
+            <h2 className="type-display mt-3 text-5xl font-semibold leading-[1.0] md:text-7xl">
               Built around the business problem.
             </h2>
           </MotionReveal>
           <MotionReveal delay={0.08}>
             <div className="grid gap-8 md:grid-cols-2">
               <div>
-                <p className="text-sm font-black text-black/48">Industry</p>
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-black/48">Industry</p>
                 <p className="mt-2 text-2xl font-black">{project.industry}</p>
               </div>
               <div>
-                <p className="text-sm font-black text-black/48">Design direction</p>
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-black/48">Direction</p>
                 <p className="mt-2 text-lg text-black/70">{project.style}</p>
               </div>
               <div className="md:col-span-2">
-                <p className="text-sm font-black text-black/48">Case study focus</p>
-                <ul className="mt-3 grid gap-2 text-lg text-black/72">
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-black/48">Case focus</p>
+                <ul className="mt-4 grid gap-3 text-lg text-black/74">
                   {project.focus.map((item) => (
-                    <li key={item}>- {item}</li>
+                    <li key={item} className="flex gap-3 border-t border-black/10 pt-3">
+                      <span className="text-flare">·</span>
+                      <span>{item}</span>
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -121,10 +145,10 @@ export default async function ProjectPage({ params }: PageProps) {
         <div className="container-studio grid gap-10 lg:grid-cols-[0.95fr_1.05fr]">
           <MotionReveal>
             <p className="kicker">Visual system</p>
-            <h2 className="type-display mt-3 text-6xl font-semibold leading-none">
-              Typography and colour do the positioning work.
+            <h2 className="type-display mt-3 text-5xl font-semibold leading-[1.0] md:text-7xl">
+              Type and colour <em className="italic text-acid">do the positioning.</em>
             </h2>
-            <p className="mt-5 max-w-xl text-chalk/68">{project.typography}</p>
+            <p className="mt-5 max-w-xl text-chalk/70">{project.typography}</p>
           </MotionReveal>
           <div className="grid gap-3 sm:grid-cols-2">
             {project.palette.map((color, index) => (
@@ -135,7 +159,10 @@ export default async function ProjectPage({ params }: PageProps) {
                   }`}
                   style={{ backgroundColor: color.value }}
                 >
-                  {color.name} / {color.value}
+                  <span>
+                    <span className="block">{color.name}</span>
+                    <span className="block text-[10px] opacity-70">{color.value}</span>
+                  </span>
                 </div>
               </MotionReveal>
             ))}
@@ -144,19 +171,24 @@ export default async function ProjectPage({ params }: PageProps) {
       </section>
 
       <section className="section-pad border-y border-white/10 bg-graphite">
-        <div className="container-studio grid gap-10 lg:grid-cols-2">
+        <div className="container-studio grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">
           <MotionReveal>
-            <p className="kicker">Key sections</p>
-            <h2 className="type-display mt-3 text-6xl font-semibold leading-none">
-              A page structure designed to move visitors.
+            <p className="kicker">Page structure</p>
+            <h2 className="type-display mt-3 text-5xl font-semibold leading-[1.0] md:text-7xl">
+              A layout designed to move visitors.
             </h2>
+            <p className="mt-5 max-w-md text-chalk/68">
+              Every section earns its place. No filler grids, no decorative testimonials, no "as seen in" badges without proof.
+            </p>
           </MotionReveal>
-          <div className="grid gap-3">
+          <div className="grid gap-0">
             {project.sections.map((section, index) => (
               <MotionReveal key={section} delay={index * 0.035}>
-                <div className="flex items-center justify-between border-t border-white/12 py-4">
+                <div className="flex items-baseline justify-between gap-4 border-t border-white/12 py-5">
                   <span className="font-black text-acid">0{index + 1}</span>
-                  <span className="text-xl font-semibold">{section}</span>
+                  <span className="type-display flex-1 text-2xl font-semibold leading-tight md:text-3xl">
+                    {section}
+                  </span>
                 </div>
               </MotionReveal>
             ))}
@@ -165,67 +197,49 @@ export default async function ProjectPage({ params }: PageProps) {
       </section>
 
       <section className="section-pad">
-        <div className="container-studio grid gap-10 lg:grid-cols-[1fr_1fr]">
+        <div className="container-studio grid gap-12 lg:grid-cols-[0.9fr_1.1fr]">
           <MotionReveal>
-            <p className="kicker">Responsive preview</p>
-            <div className="mt-5 grid gap-4 md:grid-cols-[1fr_0.42fr]">
-              <div className="mock-browser min-h-[360px]">
-                <div className="mock-browser-bar">
-                  <span className="mock-browser-dot" />
-                  <span className="mock-browser-dot" />
-                  <span className="mock-browser-dot" />
-                </div>
-                <div className="grid min-h-[324px] content-between p-5" style={{ background: project.palette[1].value }}>
-                  <div className="h-3 w-28" style={{ background: project.palette[2].value }} />
-                  <div>
-                    <div className="h-12 w-4/5 bg-white/24" />
-                    <div className="mt-3 h-12 w-3/5 bg-white/18" />
-                  </div>
-                  <div className="grid grid-cols-3 gap-3">
-                    <span className="h-20 bg-white/12" />
-                    <span className="h-20 bg-white/12" />
-                    <span className="h-20 bg-white/12" />
-                  </div>
-                </div>
-              </div>
-              <div className="mock-browser min-h-[360px]">
-                <div className="mock-browser-bar">
-                  <span className="mock-browser-dot" />
-                  <span className="mock-browser-dot" />
-                  <span className="mock-browser-dot" />
-                </div>
-                <div className="grid min-h-[324px] content-between p-4" style={{ background: project.palette[0].value }}>
-                  <div className="h-3 w-20" style={{ background: project.palette[2].value }} />
-                  <div className="grid gap-2">
-                    <span className="h-9 bg-black/20" />
-                    <span className="h-9 bg-black/16" />
-                    <span className="h-9 bg-black/12" />
-                  </div>
-                  <span className="h-12" style={{ background: project.palette[2].value }} />
-                </div>
-              </div>
-            </div>
+            <p className="kicker">What improved</p>
+            <h2 className="type-display mt-3 text-5xl font-semibold leading-[1.0] md:text-7xl">
+              Stronger design, <em className="italic text-acid">clearer business intent.</em>
+            </h2>
           </MotionReveal>
           <MotionReveal delay={0.08}>
-            <p className="kicker">What improved</p>
-            <h2 className="type-display mt-3 text-6xl font-semibold leading-none">
-              Stronger design, clearer business intent.
-            </h2>
-            <ul className="mt-7 grid gap-4 text-lg text-chalk/72">
-              {project.improvements.map((item) => (
-                <li key={item} className="border-t border-white/12 pt-4">
-                  {item}
+            <ul className="grid gap-0">
+              {project.improvements.map((item, index) => (
+                <li key={item} className="grid grid-cols-[40px_1fr] gap-4 border-t border-white/12 py-5">
+                  <span className="font-black text-acid">0{index + 1}</span>
+                  <span className="text-lg text-chalk/82">{item}</span>
                 </li>
               ))}
             </ul>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-10 flex flex-wrap gap-3">
               <Link href={project.demoHref} className="studio-button studio-button-primary">
-                View live demo
+                View live demo →
               </Link>
               <Link href="/contact" className="studio-button studio-button-secondary">
                 Start a similar project
               </Link>
             </div>
+          </MotionReveal>
+        </div>
+      </section>
+
+      <section className="section-pad border-t border-white/10">
+        <div className="container-studio">
+          <MotionReveal>
+            <p className="kicker">Next case</p>
+            <Link
+              href={`/work/${nextProject.slug}`}
+              className="group mt-6 flex flex-wrap items-baseline justify-between gap-6 border-y border-white/15 py-10"
+            >
+              <span className="type-display text-5xl font-semibold leading-[0.95] transition-colors group-hover:text-acid md:text-8xl">
+                {nextProject.name}
+              </span>
+              <span className="flex items-center gap-3 text-xs font-black uppercase tracking-[0.2em] text-chalk/65 transition-colors group-hover:text-acid">
+                {nextProject.industry} <span>→</span>
+              </span>
+            </Link>
           </MotionReveal>
         </div>
       </section>

@@ -15,13 +15,11 @@ export default function WorkPage() {
         <div className="container-studio">
           <MotionReveal>
             <p className="kicker">Work</p>
-            <h1 className="type-display mt-4 max-w-4xl text-6xl font-semibold leading-none sm:text-7xl md:text-8xl">
-              Case studies for independent businesses with actual texture.
+            <h1 className="type-display mt-4 max-w-4xl text-6xl font-semibold leading-[0.95] sm:text-7xl md:text-8xl">
+              Four case studies. <em className="italic text-acid">Four independent businesses.</em>
             </h1>
-            <p className="mt-6 max-w-2xl text-xl text-chalk/68">
-              Each case study pairs a commercial problem with a complete live
-              demo site, showing how ATHEUS shapes identity, copy, layout, and
-              conversion into something a client can actually use.
+            <p className="mt-6 max-w-2xl text-xl text-chalk/70">
+              Each piece is a complete website direction — identity, copy, layout, motion and conversion route — built so a client can read it as their own.
             </p>
           </MotionReveal>
 

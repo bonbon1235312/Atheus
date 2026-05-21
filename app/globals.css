@@ -476,6 +476,130 @@ textarea {
   font-weight: 800;
 }
 
+.mobile-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  background: var(--ink);
+  transform: translateY(-110%);
+  transition: transform 460ms cubic-bezier(.2,.8,.2,1);
+}
+
+body.nav-open .mobile-drawer {
+  transform: translateY(0);
+}
+
+body.nav-open {
+  overflow: hidden;
+}
+
+.studio-field {
+  display: grid;
+  gap: 8px;
+  border-top: 1px solid var(--line-dark);
+  padding-block: 18px;
+}
+
+.studio-field:first-of-type {
+  border-top-width: 2px;
+  border-top-color: var(--chalk);
+}
+
+.studio-field-label {
+  font-size: 11px;
+  font-weight: 900;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: rgba(244, 239, 230, 0.6);
+}
+
+.studio-field-input,
+.studio-field-select,
+.studio-field-area {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  padding: 4px 0;
+  font-family: var(--font-display);
+  font-size: 22px;
+  color: var(--chalk);
+}
+
+.studio-field-input::placeholder,
+.studio-field-area::placeholder {
+  color: rgba(244, 239, 230, 0.32);
+}
+
+.studio-field-select {
+  background-color: var(--ink);
+}
+
+.studio-field-input:focus,
+.studio-field-select:focus,
+.studio-field-area:focus {
+  outline: none;
+}
+
+.rate-row {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) minmax(0, 0.6fr);
+  gap: 24px;
+  align-items: baseline;
+  padding: 28px 0;
+  border-bottom: 1px solid var(--line-dark);
+  transition: background-color 220ms cubic-bezier(.2,.8,.2,1);
+}
+
+.rate-row:first-of-type {
+  border-top: 1px solid var(--line-dark);
+}
+
+.rate-row:hover {
+  background: rgba(241, 238, 229, 0.025);
+}
+
+.rate-row-index {
+  font-family: var(--font-display);
+  color: rgba(241, 238, 229, 0.45);
+  font-size: 20px;
+}
+
+.rate-row-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.rate-row-copy {
+  margin-top: 10px;
+  color: rgba(241, 238, 229, 0.62);
+  font-size: 15px;
+  max-width: 36rem;
+}
+
+.rate-row-tag {
+  justify-self: end;
+  color: rgba(241, 238, 229, 0.55);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+@media (max-width: 760px) {
+  .rate-row {
+    grid-template-columns: 40px 1fr;
+    gap: 14px;
+  }
+  .rate-row-tag {
+    grid-column: 2;
+    justify-self: start;
+    margin-top: 8px;
+  }
+}
+
 @media (max-width: 840px) {
   .section-pad,
   .demo-section {
