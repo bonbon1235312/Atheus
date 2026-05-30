@@ -28,6 +28,10 @@ export async function GET(req: Request) {
     line_items: [{ price: priceId, quantity: 1 }],
     metadata: { guildId },
     subscription_data: { metadata: { guildId } },
+    // Let customers enter a promotion code (e.g. a 100%-off code for free Pro).
+    allow_promotion_codes: true,
+    // Don't ask for a card when nothing is due (a fully-discounted subscription).
+    payment_method_collection: "if_required",
     success_url: `${base}/dashboard/${guildId}?upgraded=1`,
     cancel_url: `${base}/dashboard/${guildId}`,
   });
