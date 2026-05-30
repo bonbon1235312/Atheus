@@ -63,10 +63,10 @@ export default async function DashboardLayout({
 
           <div className="flex items-center gap-4">
             <Link
-              href="/#pricing"
-              className="hidden text-sm text-chalk/68 transition-colors hover:text-chalk sm:inline"
+              href="/dashboard/upgrade"
+              className="hidden text-sm font-semibold text-blurpleHi transition-colors hover:text-chalk sm:inline"
             >
-              Plans
+              Upgrade
             </Link>
             {user?.name && (
               <span className="hidden text-sm text-chalk/68 sm:inline">{user.name}</span>

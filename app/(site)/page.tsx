@@ -145,7 +145,7 @@ const tiers: Tier[] = [
     blurb: "One server, fully unlocked.",
     items: proPlan,
     highlight: false,
-    cta: { label: "Upgrade a server", href: "/dashboard", external: false },
+    cta: { label: "Upgrade a server", href: "/dashboard/upgrade", external: false },
   },
   {
     name: "All-Access",
@@ -155,7 +155,7 @@ const tiers: Tier[] = [
     blurb: "Every server you own, one bill.",
     items: allAccessPlan,
     highlight: true,
-    cta: { label: "Get All-Access", href: "/dashboard", external: false },
+    cta: { label: "Get All-Access", href: "/dashboard/upgrade", external: false },
   },
 ];
 

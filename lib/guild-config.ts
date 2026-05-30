@@ -249,6 +249,24 @@ export async function getAccountPremium(userId: string): Promise<PremiumStatus> 
   return { status, active: data ? activeFrom(status, periodEnd) : false, currentPeriodEnd: periodEnd };
 }
 
+/** Set of guild IDs with an active per-server subscription. */
+export async function getActivePremiumGuildIds(): Promise<Set<string>> {
+  const { data, error } = await supabaseAdmin()
+    .from("premium")
+    .select("guild_id, status, current_period_end");
+  if (error) throw error;
+  const now = Date.now();
+  const set = new Set<string>();
+  for (const r of data ?? []) {
+    const inPeriod =
+      !r.current_period_end || new Date(r.current_period_end as string).getTime() > now;
+    if (["active", "trialing"].includes(String(r.status)) && inPeriod) {
+      set.add(r.guild_id as string);
+    }
+  }
+  return set;
+}
+
 export async function getPremiumStatus(guildId: string): Promise<PremiumStatus> {
   const sb = supabaseAdmin();
 
