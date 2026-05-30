@@ -314,6 +314,92 @@ export async function getPremiumStatus(guildId: string): Promise<PremiumStatus> 
   };
 }
 
+// --- Forms (dashboard viewer) ---------------------------------------------
+
+export type FormSummary = { id: string; name: string; questions: number; responses: number };
+
+export async function getFormSummaries(guildId: string): Promise<FormSummary[]> {
+  const sb = supabaseAdmin();
+  const forms = await sb.from("forms").select("id, name, questions").eq("guild_id", guildId).order("created_at", { ascending: true });
+  if (forms.error) throw forms.error;
+  const resp = await sb.from("form_responses").select("form_id").eq("guild_id", guildId);
+  if (resp.error) throw resp.error;
+
+  const counts = new Map<string, number>();
+  for (const r of resp.data ?? []) {
+    const fid = (r as { form_id: string }).form_id;
+    counts.set(fid, (counts.get(fid) ?? 0) + 1);
+  }
+  return (forms.data ?? []).map((f) => {
+    const row = f as { id: string; name: string; questions: unknown };
+    return {
+      id: row.id,
+      name: row.name,
+      questions: Array.isArray(row.questions) ? row.questions.length : 0,
+      responses: counts.get(row.id) ?? 0,
+    };
+  });
+}
+
+export type FormResponseRow = {
+  id: string;
+  userId: string;
+  submittedAt: string;
+  formName: string;
+  answers: Record<string, { label: string; value: string }>;
+};
+
+export async function getRecentFormResponses(guildId: string, limit = 20): Promise<FormResponseRow[]> {
+  const { data, error } = await supabaseAdmin()
+    .from("form_responses")
+    .select("id, user_id, answers, submitted_at, forms(name)")
+    .eq("guild_id", guildId)
+    .order("submitted_at", { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+
+  const rows = (data ?? []) as Array<{
+    id: string;
+    user_id: string;
+    answers: Record<string, { label: string; value: string }> | null;
+    submitted_at: string;
+    forms: { name: string } | { name: string }[] | null;
+  }>;
+  return rows.map((r) => ({
+    id: r.id,
+    userId: r.user_id,
+    submittedAt: r.submitted_at,
+    answers: r.answers ?? {},
+    formName: Array.isArray(r.forms) ? r.forms[0]?.name ?? "Form" : r.forms?.name ?? "Form",
+  }));
+}
+
+// --- Analytics (dashboard viewer) -----------------------------------------
+
+export type AnalyticsSummary = { joins7: number; joins30: number; leaves7: number; leaves30: number };
+
+export async function getAnalyticsSummary(guildId: string): Promise<AnalyticsSummary> {
+  const sb = supabaseAdmin();
+  async function count(eventType: string, days: number) {
+    const since = new Date(Date.now() - days * 86_400_000).toISOString();
+    const { count, error } = await sb
+      .from("analytics_events")
+      .select("id", { count: "exact", head: true })
+      .eq("guild_id", guildId)
+      .eq("event_type", eventType)
+      .gte("created_at", since);
+    if (error) throw error;
+    return count ?? 0;
+  }
+  const [joins7, joins30, leaves7, leaves30] = await Promise.all([
+    count("join", 7),
+    count("join", 30),
+    count("leave", 7),
+    count("leave", 30),
+  ]);
+  return { joins7, joins30, leaves7, leaves30 };
+}
+
 export type TemplateAiSnapshot = {
   createdAt?: string;
   createdBy?: string;

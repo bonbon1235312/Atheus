@@ -1,10 +1,5 @@
 import { auth } from "@/auth";
-import {
-  fetchUserGuilds,
-  canManage,
-  guildIconUrl,
-  type DiscordGuild,
-} from "@/lib/discord";
+import { fetchUserGuilds, guildIconUrl, type DiscordGuild } from "@/lib/discord";
 import { getActivePremiumGuildIds, getAccountPremium } from "@/lib/guild-config";
 
 export const metadata = {
@@ -16,7 +11,8 @@ export default async function UpgradePage() {
   const session = await auth();
   if (!session?.accessToken) return null; // layout renders the login screen
 
-  const manageable = (await fetchUserGuilds(session.accessToken)).filter(canManage);
+  // Per-server upgrades only apply to servers you own.
+  const owned = (await fetchUserGuilds(session.accessToken)).filter((g) => g.owner);
 
   let premiumSet = new Set<string>();
   try {
@@ -74,18 +70,19 @@ export default async function UpgradePage() {
           Or upgrade one server (£5/mo each)
         </h2>
 
-        {manageable.length === 0 ? (
+        {owned.length === 0 ? (
           <p className="mt-5 text-chalk/60">
-            We couldn&apos;t find any servers where you have Manage Server permission.
+            You don&apos;t own any servers atheus can see. Per-server upgrades are only
+            available on servers you own.
           </p>
         ) : (
           <ul className="mt-5 grid gap-3">
-            {manageable.map((g) => (
+            {owned.map((g) => (
               <ServerRow
                 key={g.id}
                 guild={g}
                 pro={premiumSet.has(g.id)}
-                coveredByAllAccess={allAccess && g.owner}
+                coveredByAllAccess={allAccess}
               />
             ))}
           </ul>

@@ -60,8 +60,22 @@ const features = [
     live: true,
     status: "Live",
   },
-  { key: "forms", name: "Forms & applications", desc: "Build applications members fill in.", live: false },
-  { key: "analytics", name: "Analytics", desc: "See how your server is growing.", live: false },
+  {
+    key: "forms",
+    name: "Forms & applications",
+    desc: "View forms and read member application responses.",
+    href: (id: string) => `/dashboard/${id}/forms`,
+    live: true,
+    status: "Live",
+  },
+  {
+    key: "analytics",
+    name: "Analytics",
+    desc: "See how your server is growing: joins, leaves and net change.",
+    href: (id: string) => `/dashboard/${id}/analytics`,
+    live: true,
+    status: "Live",
+  },
 ];
 
 export default async function GuildOverview({ params }: Params) {

@@ -48,7 +48,7 @@ const features: Feature[] = [
     span: "lg:col-span-1",
     tone: "plain",
     icon: ChartLineUp,
-    status: "Soon",
+    status: "Live",
   },
   {
     name: "Roles & onboarding",
@@ -75,7 +75,7 @@ const features: Feature[] = [
     span: "lg:col-span-2",
     tone: "plain",
     icon: ClipboardText,
-    status: "Soon",
+    status: "Live",
   },
   {
     name: "Giveaways & events",
