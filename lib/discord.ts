@@ -1,0 +1,117 @@
+// Discord API helpers for the dashboard.
+
+const MANAGE_GUILD = 0x20n; // "Manage Server" permission bit
+
+export type DiscordGuild = {
+  id: string;
+  name: string;
+  icon: string | null;
+  owner: boolean;
+  permissions: string;
+};
+
+export type DiscordRole = {
+  id: string;
+  name: string;
+  managed: boolean;
+  position: number;
+  color: number;
+};
+
+export type DiscordChannel = {
+  id: string;
+  name: string;
+  type: number;
+  position?: number;
+  parent_id?: string | null;
+};
+
+/** True if the user can configure this server (owner or has Manage Server). */
+export function canManage(g: DiscordGuild): boolean {
+  if (g.owner) return true;
+  try {
+    return (BigInt(g.permissions) & MANAGE_GUILD) === MANAGE_GUILD;
+  } catch {
+    return false;
+  }
+}
+
+export function guildIconUrl(g: { id: string; icon: string | null }): string | null {
+  return g.icon
+    ? `https://cdn.discordapp.com/icons/${g.id}/${g.icon}.png?size=128`
+    : null;
+}
+
+/** The "Add atheus to your server" invite link (optionally pre-selecting a guild). */
+export function inviteUrl(guildId?: string): string {
+  const clientId = process.env.AUTH_DISCORD_ID ?? "";
+  // Manage Roles + Channels + View + Send + Manage Messages + Reactions + History
+  const permissions = "268512336";
+  const base =
+    `https://discord.com/oauth2/authorize?client_id=${clientId}` +
+    `&scope=bot+applications.commands&permissions=${permissions}`;
+  return guildId ? `${base}&guild_id=${guildId}` : base;
+}
+
+/** Servers the logged-in user is in (uses their OAuth token). */
+export async function fetchUserGuilds(accessToken: string): Promise<DiscordGuild[]> {
+  const res = await fetch("https://discord.com/api/users/@me/guilds", {
+    headers: { Authorization: `Bearer ${accessToken}` },
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(`Discord guilds fetch failed (${res.status})`);
+  return res.json();
+}
+
+/** Roles in a server (uses the BOT token — the bot must be in the server). */
+export async function fetchGuildRoles(guildId: string): Promise<DiscordRole[]> {
+  const token = process.env.DISCORD_BOT_TOKEN;
+  if (!token) throw new Error("DISCORD_BOT_TOKEN missing");
+  const res = await fetch(`https://discord.com/api/guilds/${guildId}/roles`, {
+    headers: { Authorization: `Bot ${token}` },
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(`Discord roles fetch failed (${res.status})`);
+  return res.json();
+}
+
+/** Text channels in a server (uses the BOT token). */
+export async function fetchGuildTextChannels(guildId: string): Promise<DiscordChannel[]> {
+  const token = process.env.DISCORD_BOT_TOKEN;
+  if (!token) throw new Error("DISCORD_BOT_TOKEN missing");
+  const res = await fetch(`https://discord.com/api/guilds/${guildId}/channels`, {
+    headers: { Authorization: `Bot ${token}` },
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(`Discord channels fetch failed (${res.status})`);
+  const channels = (await res.json()) as DiscordChannel[];
+  return channels
+    .filter((channel) => channel.type === 0 || channel.type === 5)
+    .sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+}
+
+/** Add the bot's reaction to the target message so the rule is visible in Discord. */
+export async function addBotReaction(channelId: string, messageId: string, emojiKey: string) {
+  const token = process.env.DISCORD_BOT_TOKEN;
+  if (!token) throw new Error("DISCORD_BOT_TOKEN missing");
+
+  const res = await fetch(
+    `https://discord.com/api/channels/${channelId}/messages/${messageId}/reactions/${encodeURIComponent(
+      emojiKey
+    )}/@me`,
+    {
+      method: "PUT",
+      headers: { Authorization: `Bot ${token}` },
+      cache: "no-store",
+    }
+  );
+
+  if (!res.ok) throw new Error(`Discord reaction add failed (${res.status})`);
+}
+
+/** Roles a user can assign as an auto-role: real, assignable, highest first. */
+export function assignableRoles(roles: DiscordRole[]): DiscordRole[] {
+  return roles
+    .filter((r) => r.name !== "@everyone" && !r.managed)
+    .sort((a, b) => b.position - a.position);
+}

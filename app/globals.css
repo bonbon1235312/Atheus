@@ -4,18 +4,21 @@
 
 :root {
   --font-sans: system-ui, sans-serif;
-  --font-display: Georgia, serif;
-  --ink: #030303;
-  --graphite: #10100e;
-  --steel: #8e9087;
-  --chalk: #f1eee5;
-  --paper: #fff8e8;
-  --acid: #d7ff35;
-  --flare: #ff4f2f;
-  --signal: #5773ff;
-  --violet: #a678ff;
-  --line-dark: rgba(241, 238, 229, 0.15);
-  --line-light: rgba(5, 5, 5, 0.14);
+  --font-display: var(--font-sans);
+  --font-mono: ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --ink: #13141c;
+  --graphite: #1e2030;
+  --slate: #262a3d;
+  --steel: #9aa0b8;
+  --chalk: #f2f3f8;
+  --paper: #ffffff;
+  --acid: #5865f2;
+  --blurple-hi: #818cf8;
+  --flare: #ed4245;
+  --signal: #57f287;
+  --violet: #818cf8;
+  --line-dark: rgba(255, 255, 255, 0.1);
+  --line-light: rgba(15, 17, 28, 0.12);
 }
 
 * {
@@ -56,32 +59,15 @@ textarea {
 
 ::selection {
   background: var(--acid);
-  color: var(--ink);
+  color: #ffffff;
 }
 
 .site-shell {
   position: relative;
   min-height: 100vh;
   background:
-    radial-gradient(circle at 6% 12%, rgba(215, 255, 53, 0.16), transparent 16%),
-    radial-gradient(circle at 96% 0%, rgba(87, 115, 255, 0.18), transparent 20%),
-    linear-gradient(90deg, rgba(241, 238, 229, 0.048) 1px, transparent 1px),
-    linear-gradient(180deg, rgba(241, 238, 229, 0.044) 1px, transparent 1px),
+    radial-gradient(120% 75% at 50% -10%, rgba(88, 101, 242, 0.16), transparent 62%),
     var(--ink);
-  background-size: auto, auto, 86px 86px, 86px 86px;
-}
-
-.site-shell::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 0;
-  pointer-events: none;
-  background:
-    linear-gradient(115deg, transparent 0 42%, rgba(255, 79, 47, 0.09) 42% 43%, transparent 43% 100%),
-    repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0 1px, transparent 1px 5px);
-  mix-blend-mode: screen;
-  opacity: 0.7;
 }
 
 .site-shell > * {
@@ -97,6 +83,73 @@ textarea {
 .type-display {
   font-family: var(--font-display);
   overflow-wrap: break-word;
+  letter-spacing: -0.025em;
+}
+
+.type-mono {
+  font-family: var(--font-mono);
+  font-feature-settings: "ss01", "cv01";
+}
+
+/* Minimalist landing helpers */
+.hairline {
+  border-color: var(--line-dark);
+}
+
+.feature-tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 224px;
+  padding: 28px;
+  border-radius: 18px;
+  background: var(--graphite);
+  border: 1px solid var(--line-dark);
+  transition:
+    transform 240ms cubic-bezier(.2,.8,.2,1),
+    border-color 240ms cubic-bezier(.2,.8,.2,1),
+    background-color 240ms cubic-bezier(.2,.8,.2,1);
+}
+
+.feature-tile:hover {
+  transform: translateY(-3px);
+  border-color: rgba(129, 140, 248, 0.5);
+  background: var(--slate);
+}
+
+/* Legal pages (privacy, terms) */
+.legal-body {
+  color: rgba(242, 243, 248, 0.72);
+  line-height: 1.7;
+}
+.legal-body h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--chalk);
+  margin: 0 0 0.5rem;
+}
+.legal-body h3 {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--chalk);
+  margin: 1.3rem 0 0.4rem;
+}
+.legal-body p {
+  margin: 0 0 0.4rem;
+}
+.legal-body ul {
+  margin: 0.5rem 0 0;
+  padding-left: 1.15rem;
+  display: grid;
+  gap: 0.5rem;
+  list-style: disc;
+}
+.legal-body a {
+  color: var(--blurple-hi);
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 
 .text-balance {
@@ -126,22 +179,22 @@ textarea {
 
 .studio-button {
   display: inline-flex;
-  min-height: 46px;
+  min-height: 48px;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  border: 1px solid currentColor;
-  border-radius: 2px;
-  padding: 12px 18px;
-  font-size: 14px;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
+  gap: 9px;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  padding: 12px 22px;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   transition:
-    transform 220ms cubic-bezier(.2,.8,.2,1),
-    background-color 220ms cubic-bezier(.2,.8,.2,1),
-    color 220ms cubic-bezier(.2,.8,.2,1),
-    border-color 220ms cubic-bezier(.2,.8,.2,1);
+    transform 200ms cubic-bezier(.2,.8,.2,1),
+    background-color 200ms cubic-bezier(.2,.8,.2,1),
+    color 200ms cubic-bezier(.2,.8,.2,1),
+    border-color 200ms cubic-bezier(.2,.8,.2,1),
+    box-shadow 200ms cubic-bezier(.2,.8,.2,1);
 }
 
 .studio-button:hover {
@@ -151,45 +204,46 @@ textarea {
 .studio-button-primary {
   background: var(--acid);
   border-color: var(--acid);
-  color: var(--ink);
-  box-shadow: 0 0 0 1px rgba(215, 255, 53, 0.2), 0 16px 40px rgba(215, 255, 53, 0.15);
+  color: #ffffff;
+  box-shadow: 0 8px 26px rgba(88, 101, 242, 0.4);
 }
 
 .studio-button-primary:hover {
-  background: var(--chalk);
-  border-color: var(--chalk);
+  background: #4b58e0;
+  border-color: #4b58e0;
+  box-shadow: 0 12px 34px rgba(88, 101, 242, 0.5);
 }
 
 .studio-button-secondary {
   color: var(--chalk);
-  background: rgba(244, 239, 230, 0.04);
+  background: rgba(255, 255, 255, 0.05);
   border-color: var(--line-dark);
 }
 
 .studio-button-secondary:hover {
-  border-color: var(--chalk);
-  background: rgba(244, 239, 230, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.09);
 }
 
 .studio-card {
   border: 1px solid var(--line-dark);
-  border-radius: 2px;
-  background: rgba(3, 3, 3, 0.76);
+  border-radius: 18px;
+  background: var(--graphite);
   box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
 .studio-card-light {
   border: 1px solid var(--line-light);
-  border-radius: 2px;
-  background: rgba(255, 250, 240, 0.82);
+  border-radius: 18px;
+  background: #ffffff;
   color: var(--ink);
 }
 
 .kicker {
-  color: var(--acid);
+  color: var(--blurple-hi);
   font-size: 12px;
-  font-weight: 950;
-  letter-spacing: 0.16em;
+  font-weight: 800;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
 }
 
@@ -248,13 +302,15 @@ textarea {
 
 .brand-mark {
   display: grid;
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   place-items: center;
-  background: var(--chalk);
-  color: var(--ink);
-  font-weight: 950;
-  clip-path: polygon(0 0, 100% 0, 100% 76%, 76% 100%, 0 100%);
+  border-radius: 12px;
+  background: var(--acid);
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 20px;
+  box-shadow: 0 6px 18px rgba(88, 101, 242, 0.4);
 }
 
 .hero-index {
@@ -420,10 +476,10 @@ textarea {
 
 .mock-browser {
   border: 1px solid var(--line-dark);
-  border-radius: 2px;
+  border-radius: 16px;
   overflow: hidden;
-  background: #101010;
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+  background: var(--graphite);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
 }
 
 .mock-browser-bar {

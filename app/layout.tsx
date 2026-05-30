@@ -1,45 +1,43 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Inter_Tight } from "next/font/google";
+import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-const sans = Inter_Tight({
+const sans = Geist({
   subsets: ["latin"],
   variable: "--font-sans",
   display: "swap",
 });
 
-const display = Cormorant_Garamond({
+const mono = Geist_Mono({
   subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["400", "500", "600", "700"],
+  variable: "--font-mono",
   display: "swap",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://atheus.dev"),
   title: {
-    default: "ATHEUS | Design-led websites for independent businesses",
-    template: "%s | ATHEUS",
+    default: "atheus — one bot for your whole Discord server",
+    template: "%s | atheus",
   },
   description:
-    "ATHEUS is a premium creative web studio building design-led websites with clarity, motion, and identity for independent businesses.",
-  applicationName: "ATHEUS",
-  authors: [{ name: "ATHEUS", url: "https://atheus.dev" }],
-  creator: "ATHEUS",
-  publisher: "ATHEUS",
+    "atheus is a Discord Community OS: roles, tickets, forms, giveaways, events and analytics in one bot, configured from a real web dashboard. Replace half your bots with one.",
+  applicationName: "atheus",
+  creator: "atheus",
+  publisher: "atheus",
   openGraph: {
-    title: "ATHEUS | Design-led websites for independent businesses",
+    title: "atheus — one bot for your whole Discord server",
     description:
-      "Premium creative web design and frontend development for independent businesses.",
+      "Roles, tickets, forms, giveaways, events and analytics in one bot. Replace half your Discord bots with one.",
     url: "https://atheus.dev",
-    siteName: "ATHEUS",
+    siteName: "atheus",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "ATHEUS | Design-led websites for independent businesses",
+    title: "atheus — one bot for your whole Discord server",
     description:
-      "Premium creative web design and frontend development for independent businesses.",
+      "Roles, tickets, forms, giveaways, events and analytics in one bot.",
   },
 };
 
@@ -49,10 +47,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${sans.variable} ${display.variable}`}>
-      <body>
-        {children}
-      </body>
+    <html lang="en" className={`${sans.variable} ${mono.variable}`}>
+      <body>{children}</body>
     </html>
   );
 }

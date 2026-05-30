@@ -9,8 +9,11 @@
     "lint": "eslint ."
   },
   "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
+    "@supabase/supabase-js": "^2.106.2",
     "framer-motion": "latest",
     "next": "latest",
+    "next-auth": "^5.0.0-beta.31",
     "react": "latest",
     "react-dom": "latest",
     "resend": "^6.12.3"
