@@ -107,6 +107,58 @@ const proPlan = [
   "Priority support",
 ];
 
+const allAccessPlan = [
+  "Everything in Pro",
+  "Every server you own",
+  "New servers covered automatically",
+  "One subscription, one bill",
+  "Priority support",
+];
+
+type Tier = {
+  name: string;
+  price: string;
+  per: string;
+  tag: string;
+  blurb: string;
+  items: string[];
+  highlight: boolean;
+  cta: { label: string; href: string; external: boolean };
+};
+
+const tiers: Tier[] = [
+  {
+    name: "Free",
+    price: "£0",
+    per: "",
+    tag: "",
+    blurb: "Everything a community needs to start.",
+    items: freePlan,
+    highlight: false,
+    cta: { label: "Add to Discord", href: INVITE_URL, external: true },
+  },
+  {
+    name: "Pro",
+    price: "£5",
+    per: "/mo",
+    tag: "Per server",
+    blurb: "One server, fully unlocked.",
+    items: proPlan,
+    highlight: false,
+    cta: { label: "Upgrade a server", href: "/dashboard", external: false },
+  },
+  {
+    name: "All-Access",
+    price: "£15",
+    per: "/mo",
+    tag: "Best value",
+    blurb: "Every server you own, one bill.",
+    items: allAccessPlan,
+    highlight: true,
+    cta: { label: "Get All-Access", href: "/dashboard", external: false },
+  },
+];
+
 export default function Home() {
   return (
     <main>
@@ -288,56 +340,81 @@ export default function Home() {
           </h2>
         </MotionReveal>
 
-        <div className="mt-12 grid gap-4 lg:grid-cols-2">
-          <MotionReveal>
-            <div className="flex h-full flex-col rounded-2xl border border-white/12 bg-graphite p-8">
-              <p className="text-sm font-bold uppercase tracking-[0.14em] text-chalk/50">Free</p>
-              <p className="type-display mt-5 text-6xl font-semibold tracking-tight">£0</p>
-              <p className="mt-2 text-chalk/55">Everything a community needs to start.</p>
-              <ul className="mt-8 grid flex-1 gap-3 text-chalk/80">
-                {freePlan.map((item) => (
-                  <li key={item} className="flex items-center gap-3">
-                    <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-white/8 text-blurpleHi" aria-hidden="true">
-                      <Sparkle size={11} weight="fill" />
+        <div className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {tiers.map((t, i) => (
+            <MotionReveal key={t.name} delay={i * 0.06}>
+              <div
+                className={`flex h-full flex-col rounded-2xl border p-7 ${
+                  t.highlight ? "border-blurpleHi/30 bg-acid/[0.08]" : "border-white/12 bg-graphite"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <p
+                    className={`text-sm font-bold uppercase tracking-[0.14em] ${
+                      t.highlight ? "text-blurpleHi" : "text-chalk/50"
+                    }`}
+                  >
+                    {t.name}
+                  </p>
+                  {t.tag && (
+                    <span
+                      className={`rounded-full border px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] ${
+                        t.highlight ? "border-blurpleHi/40 text-blurpleHi" : "border-white/15 text-chalk/45"
+                      }`}
+                    >
+                      {t.tag}
                     </span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <a href={INVITE_URL} target="_blank" rel="noreferrer" className="studio-button studio-button-secondary mt-10 justify-center">
-                Add to Discord
-              </a>
-            </div>
-          </MotionReveal>
-
-          <MotionReveal delay={0.08}>
-            <div className="flex h-full flex-col rounded-2xl border border-blurpleHi/30 bg-acid/[0.08] p-8">
-              <div className="flex items-center justify-between">
-                <p className="text-sm font-bold uppercase tracking-[0.14em] text-blurpleHi">Pro</p>
-                <span className="rounded-full border border-blurpleHi/40 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-blurpleHi">
-                  Per server
-                </span>
+                  )}
+                </div>
+                <p className="type-display mt-5 text-5xl font-semibold tracking-tight">
+                  {t.price}
+                  {t.per && <span className="text-xl font-medium text-chalk/45">{t.per}</span>}
+                </p>
+                <p className="mt-2 text-chalk/55">{t.blurb}</p>
+                <ul className="mt-7 grid flex-1 gap-3 text-chalk/85">
+                  {t.items.map((item) => (
+                    <li key={item} className="flex items-start gap-3">
+                      <span
+                        className={`mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full ${
+                          t.highlight ? "bg-acid text-white" : "bg-white/8 text-blurpleHi"
+                        }`}
+                        aria-hidden="true"
+                      >
+                        <Sparkle size={11} weight="fill" />
+                      </span>
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+                {t.cta.external ? (
+                  <a
+                    href={t.cta.href}
+                    target="_blank"
+                    rel="noreferrer"
+                    className={`studio-button mt-9 justify-center ${
+                      t.highlight ? "studio-button-primary" : "studio-button-secondary"
+                    }`}
+                  >
+                    {t.cta.label}
+                  </a>
+                ) : (
+                  <Link
+                    href={t.cta.href}
+                    className={`studio-button mt-9 justify-center ${
+                      t.highlight ? "studio-button-primary" : "studio-button-secondary"
+                    }`}
+                  >
+                    {t.cta.label}
+                  </Link>
+                )}
               </div>
-              <p className="type-display mt-5 text-6xl font-semibold tracking-tight">
-                £5<span className="text-2xl font-medium text-chalk/45">/mo</span>
-              </p>
-              <p className="mt-2 text-chalk/55">For servers that want the whole thing.</p>
-              <ul className="mt-8 grid flex-1 gap-3 text-chalk/85">
-                {proPlan.map((item) => (
-                  <li key={item} className="flex items-center gap-3">
-                    <span className="grid h-5 w-5 shrink-0 place-items-center rounded-full bg-acid text-white" aria-hidden="true">
-                      <Sparkle size={11} weight="fill" />
-                    </span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <a href={INVITE_URL} target="_blank" rel="noreferrer" className="studio-button studio-button-primary mt-10 justify-center">
-                Add to Discord
-              </a>
-            </div>
-          </MotionReveal>
+            </MotionReveal>
+          ))}
         </div>
+        <p className="mt-6 text-sm text-chalk/45">
+          Upgrade any server from your dashboard, or get All-Access to cover every server you own.
+          Cancel anytime.
+        </p>
       </section>
 
       {/* Final CTA */}
