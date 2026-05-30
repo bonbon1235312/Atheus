@@ -231,33 +231,64 @@ export type PremiumStatus = {
   currentPeriodEnd: string | null;
 };
 
+function activeFrom(status: string, periodEnd: string | null): boolean {
+  const inPeriod = !periodEnd || new Date(periodEnd).getTime() > Date.now();
+  return ["active", "trialing"].includes(status) && inPeriod;
+}
+
+/** All-access (account-level) premium for a Discord user. */
+export async function getAccountPremium(userId: string): Promise<PremiumStatus> {
+  const { data, error } = await supabaseAdmin()
+    .from("account_premium")
+    .select("status, current_period_end")
+    .eq("user_id", userId)
+    .maybeSingle();
+  if (error) throw error;
+  const status = String(data?.status ?? "free");
+  const periodEnd = (data?.current_period_end as string | null) ?? null;
+  return { status, active: data ? activeFrom(status, periodEnd) : false, currentPeriodEnd: periodEnd };
+}
+
 export async function getPremiumStatus(guildId: string): Promise<PremiumStatus> {
   const sb = supabaseAdmin();
+
+  // 1. Per-server subscription.
   const premium = await sb
     .from("premium")
     .select("status, current_period_end")
     .eq("guild_id", guildId)
     .maybeSingle();
   if (premium.error) throw premium.error;
-
   if (premium.data) {
     const status = String(premium.data.status ?? "free");
     const periodEnd = premium.data.current_period_end as string | null;
-    const inPeriod = !periodEnd || new Date(periodEnd).getTime() > Date.now();
-    return {
-      status,
-      active: ["active", "trialing"].includes(status) && inPeriod,
-      currentPeriodEnd: periodEnd,
-    };
+    if (activeFrom(status, periodEnd)) return { status, active: true, currentPeriodEnd: periodEnd };
   }
 
+  // 2. The owner's all-access subscription.
   const guild = await sb
     .from("guilds")
-    .select("premium")
+    .select("owner_id, premium")
     .eq("guild_id", guildId)
     .maybeSingle();
   if (guild.error) throw guild.error;
 
+  const ownerId = guild.data?.owner_id as string | undefined;
+  if (ownerId) {
+    const acct = await getAccountPremium(ownerId);
+    if (acct.active) {
+      return { status: "active (all-access)", active: true, currentPeriodEnd: acct.currentPeriodEnd };
+    }
+  }
+
+  // 3. Inactive per-server row, manual override, or free.
+  if (premium.data) {
+    return {
+      status: String(premium.data.status ?? "free"),
+      active: false,
+      currentPeriodEnd: premium.data.current_period_end as string | null,
+    };
+  }
   return {
     status: guild.data?.premium ? "active" : "free",
     active: Boolean(guild.data?.premium),

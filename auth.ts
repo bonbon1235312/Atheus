@@ -15,10 +15,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async jwt({ token, account }) {
       // Stash the Discord access token so we can call the Discord API later.
       if (account?.access_token) token.accessToken = account.access_token;
+      // providerAccountId is the Discord user ID (matches guilds.owner_id).
+      if (account?.providerAccountId) token.discordId = account.providerAccountId;
       return token;
     },
     async session({ session, token }) {
       session.accessToken = token.accessToken as string | undefined;
+      session.discordId = token.discordId as string | undefined;
       return session;
     },
   },

@@ -70,14 +70,23 @@ export default async function PremiumPage({ params }: Params) {
             </p>
           ) : (
             <>
-              <a
-                href={`/api/billing/checkout?guild=${guildId}`}
-                className="studio-button studio-button-primary"
-              >
-                Upgrade to Pro
-              </a>
+              <div className="flex flex-wrap gap-3">
+                <a
+                  href={`/api/billing/checkout?guild=${guildId}`}
+                  className="studio-button studio-button-primary"
+                >
+                  Upgrade this server
+                </a>
+                <a
+                  href="/api/billing/checkout?scope=account"
+                  className="studio-button studio-button-secondary"
+                >
+                  All-Access for every server you own
+                </a>
+              </div>
               <p className="mt-3 text-sm text-chalk/45">
-                Secure checkout via Stripe. Cancel anytime.
+                Per server GBP 5/mo, or All-Access GBP 15/mo to cover every server you own.
+                Secure checkout via Stripe, cancel anytime.
               </p>
             </>
           )}

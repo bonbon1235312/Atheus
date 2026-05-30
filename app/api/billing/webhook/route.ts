@@ -1,6 +1,6 @@
 import type Stripe from "stripe";
 import { stripe } from "@/lib/stripe";
-import { upsertPremium } from "@/lib/premium-db";
+import { upsertPremium, upsertAccountPremium } from "@/lib/premium-db";
 
 export const runtime = "nodejs";
 
@@ -15,8 +15,28 @@ function periodEnd(sub: Stripe.Subscription): string | null {
   return ts ? new Date(ts * 1000).toISOString() : null;
 }
 
-// Stripe webhook: keeps the `premium` table in sync with subscriptions.
-// Add the endpoint URL https://atheus.dev/api/billing/webhook in Stripe.
+// Route a subscription to the right premium table based on its metadata scope.
+async function sync(meta: Stripe.Metadata | null, sub: Stripe.Subscription, status: string) {
+  const customerId = (sub.customer as string) ?? null;
+  if (meta?.scope === "account" && meta?.userId) {
+    await upsertAccountPremium({
+      userId: meta.userId,
+      customerId,
+      subscriptionId: sub.id,
+      status,
+      currentPeriodEnd: periodEnd(sub),
+    });
+  } else if (meta?.guildId) {
+    await upsertPremium({
+      guildId: meta.guildId,
+      customerId,
+      subscriptionId: sub.id,
+      status,
+      currentPeriodEnd: periodEnd(sub),
+    });
+  }
+}
+
 export async function POST(req: Request) {
   const body = await req.text();
   const sig = req.headers.get("stripe-signature");
@@ -33,32 +53,18 @@ export async function POST(req: Request) {
   try {
     if (event.type === "checkout.session.completed") {
       const s = event.data.object as Stripe.Checkout.Session;
-      const guildId = s.metadata?.guildId;
-      if (guildId && s.subscription) {
+      if (s.subscription) {
         const sub = await stripe().subscriptions.retrieve(s.subscription as string);
-        await upsertPremium({
-          guildId,
-          customerId: (s.customer as string) ?? null,
-          subscriptionId: sub.id,
-          status: sub.status,
-          currentPeriodEnd: periodEnd(sub),
-        });
+        // The session metadata carries scope; fall back to the subscription's.
+        await sync({ ...(sub.metadata ?? {}), ...(s.metadata ?? {}) } as Stripe.Metadata, sub, sub.status);
       }
     } else if (
       event.type === "customer.subscription.updated" ||
       event.type === "customer.subscription.deleted"
     ) {
       const sub = event.data.object as Stripe.Subscription;
-      const guildId = sub.metadata?.guildId;
-      if (guildId) {
-        await upsertPremium({
-          guildId,
-          customerId: (sub.customer as string) ?? null,
-          subscriptionId: sub.id,
-          status: event.type === "customer.subscription.deleted" ? "canceled" : sub.status,
-          currentPeriodEnd: periodEnd(sub),
-        });
-      }
+      const status = event.type === "customer.subscription.deleted" ? "canceled" : sub.status;
+      await sync(sub.metadata ?? null, sub, status);
     }
   } catch (e) {
     console.error("[stripe webhook]", e);
