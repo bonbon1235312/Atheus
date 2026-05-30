@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { auth, signIn, signOut } from "@/auth";
+import { AtheusMark } from "@/components/site/atheus-mark";
 
 export const metadata = {
   title: "Dashboard",
@@ -51,9 +52,9 @@ export default async function DashboardLayout({
       <header className="studio-header sticky top-0 z-50 border-b border-white/10">
         <div className="container-studio flex min-h-20 items-center justify-between gap-4">
           <Link href="/dashboard" className="brand-lockup" aria-label="atheus dashboard">
-            <span className="brand-mark">A</span>
+            <AtheusMark size={34} />
             <span className="flex flex-col leading-none">
-              <span className="text-xl font-black tracking-tight">ATHEUS</span>
+              <span className="text-xl font-black lowercase tracking-tight">atheus</span>
               <span className="mt-1 hidden text-[11px] font-black uppercase text-acid sm:block">
                 Dashboard
               </span>

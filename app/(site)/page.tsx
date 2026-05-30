@@ -17,7 +17,7 @@ const heroCommands = [
   "/template ai",
   "/ticket setup",
   "/giveaway start",
-  "/form create",
+  "/poll create",
   "/join-role add",
 ];
 
@@ -28,16 +28,18 @@ type Feature = {
   span: string;
   tone: "accent" | "dark" | "plain";
   icon: IconType;
+  status: string;
 };
 
 const features: Feature[] = [
   {
     name: "AI server builder",
-    body: "Describe your server in one sentence and atheus generates the full layout: roles, categories, channels and permissions. Preview, then apply.",
+    body: "Describe your server and atheus generates roles, categories, channels and permissions. Preview, apply, or wipe and rebuild with a snapshot.",
     cmd: "/template ai",
     span: "lg:col-span-2",
     tone: "accent",
     icon: Sparkle,
+    status: "Live",
   },
   {
     name: "Analytics",
@@ -46,6 +48,7 @@ const features: Feature[] = [
     span: "lg:col-span-1",
     tone: "plain",
     icon: ChartLineUp,
+    status: "Soon",
   },
   {
     name: "Roles & onboarding",
@@ -54,14 +57,16 @@ const features: Feature[] = [
     span: "lg:col-span-1",
     tone: "plain",
     icon: UsersThree,
+    status: "Live",
   },
   {
     name: "Tickets",
-    body: "Support tickets with claim, close and transcripts you can read on the web.",
+    body: "Support tickets with open, claim, add, remove, close and transcripts you can read on the web.",
     cmd: "/ticket setup",
     span: "lg:col-span-2",
     tone: "dark",
     icon: Ticket,
+    status: "Live",
   },
   {
     name: "Forms & applications",
@@ -70,14 +75,16 @@ const features: Feature[] = [
     span: "lg:col-span-2",
     tone: "plain",
     icon: ClipboardText,
+    status: "Soon",
   },
   {
     name: "Giveaways & events",
-    body: "Run giveaways, schedule events and polls.",
+    body: "Run giveaways and quick polls, then track entrants, status and winners from the dashboard.",
     cmd: "/giveaway start",
     span: "lg:col-span-1",
     tone: "plain",
     icon: Gift,
+    status: "Live",
   },
 ];
 
@@ -199,13 +206,22 @@ export default function Home() {
                   }`}
                 >
                   <div>
-                    <span
-                      className={`grid h-11 w-11 place-items-center rounded-xl ${
-                        f.tone === "accent" ? "bg-acid text-white" : "bg-white/5 text-blurpleHi"
-                      }`}
-                    >
-                      <Glyph size={22} weight="duotone" />
-                    </span>
+                    <div className="flex items-center justify-between gap-3">
+                      <span
+                        className={`grid h-11 w-11 place-items-center rounded-xl ${
+                          f.tone === "accent" ? "bg-acid text-white" : "bg-white/5 text-blurpleHi"
+                        }`}
+                      >
+                        <Glyph size={22} weight="duotone" />
+                      </span>
+                      <span
+                        className={`text-[10px] font-black uppercase tracking-[0.18em] ${
+                          f.status === "Live" ? "text-signal" : "text-chalk/35"
+                        }`}
+                      >
+                        {f.status}
+                      </span>
+                    </div>
                     <h3 className="mt-5 text-xl font-semibold tracking-tight">{f.name}</h3>
                     <p className="mt-2.5 max-w-md text-chalk/60">{f.body}</p>
                   </div>

@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "ATHEUS — Websites with identity, built to feel intentional.";
+export const alt = "atheus — replace half your Discord bots with one.";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -14,103 +14,58 @@ export default async function Image() {
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#050505",
-          color: "#f4efe6",
-          padding: 72,
-          fontFamily:
-            "ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+          background: "#13141C",
           backgroundImage:
-            "linear-gradient(rgba(241,238,229,0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(241,238,229,0.05) 1px, transparent 1px)",
-          backgroundSize: "86px 86px",
+            "radial-gradient(900px 500px at 50% -10%, rgba(88,101,242,0.35), transparent 60%)",
+          color: "#F2F3F8",
+          padding: 80,
+          fontFamily: "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
         }}
       >
-        {/* Top row */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            borderTop: "1px solid rgba(241,238,229,0.18)",
-            borderBottom: "1px solid rgba(241,238,229,0.18)",
-            paddingBlock: 16,
-          }}
-        >
-          <span
-            style={{
-              fontSize: 16,
-              fontWeight: 900,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              color: "#d7ff35",
-            }}
-          >
-            Studio
-          </span>
-          <span
-            style={{
-              fontSize: 16,
-              fontWeight: 900,
-              letterSpacing: "0.22em",
-              textTransform: "uppercase",
-              color: "rgba(241,238,229,0.6)",
-            }}
-          >
-            atheus.dev
-          </span>
+        {/* Brand row */}
+        <div style={{ display: "flex", alignItems: "center", gap: 18 }}>
+          <svg width="56" height="56" viewBox="0 0 100 100">
+            <path
+              fill="#F2F3F8"
+              fillRule="evenodd"
+              d="M50 9 L93 91 L69 91 L61 71 L39 71 L31 91 L7 91 Z M50 37 L59 59 L41 59 Z"
+            />
+          </svg>
+          <span style={{ fontSize: 34, fontWeight: 700, letterSpacing: "-0.02em" }}>atheus</span>
         </div>
 
-        {/* Wordmark + tagline */}
+        {/* Headline */}
         <div style={{ display: "flex", flexDirection: "column" }}>
           <div
             style={{
-              fontSize: 240,
-              fontWeight: 900,
-              lineHeight: 0.84,
-              letterSpacing: "-0.06em",
-              color: "#f4efe6",
+              fontSize: 92,
+              fontWeight: 600,
+              lineHeight: 1.02,
+              letterSpacing: "-0.03em",
+              maxWidth: 1000,
             }}
           >
-            ATHEUS
+            Replace half your Discord bots with one.
           </div>
-          <div
-            style={{
-              height: 2,
-              background: "#d7ff35",
-              width: 96,
-              marginTop: 36,
-            }}
-          />
-          <div
-            style={{
-              marginTop: 28,
-              fontSize: 42,
-              lineHeight: 1.18,
-              maxWidth: 920,
-              fontWeight: 500,
-              color: "rgba(244,239,230,0.92)",
-            }}
-          >
-            Websites with identity, built to feel intentional.
+          <div style={{ display: "flex", height: 4, width: 110, background: "#5865F2", marginTop: 32 }} />
+          <div style={{ marginTop: 26, fontSize: 34, fontWeight: 400, color: "rgba(242,243,248,0.7)" }}>
+            Roles, tickets, forms, giveaways, events and analytics in one bot.
           </div>
         </div>
 
-        {/* Bottom row */}
+        {/* Footer row */}
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            paddingTop: 18,
-            borderTop: "1px solid rgba(241,238,229,0.18)",
-            fontSize: 18,
-            fontWeight: 900,
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            color: "rgba(241,238,229,0.55)",
+            fontSize: 22,
+            fontWeight: 600,
+            color: "rgba(242,243,248,0.55)",
           }}
         >
-          <span>Hawthorne · Saplings · Forge House · Cinder &amp; Clover</span>
-          <span style={{ color: "#d7ff35" }}>Independent businesses</span>
+          <span>atheus.dev</span>
+          <span style={{ color: "#818CF8" }}>Discord Community OS</span>
         </div>
       </div>
     ),

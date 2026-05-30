@@ -13,25 +13,16 @@ export default function AppleIcon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#050505",
-          color: "#f4efe6",
-          fontSize: 140,
-          fontWeight: 900,
-          letterSpacing: "-0.06em",
-          position: "relative",
+          background: "#13141C",
         }}
       >
-        <span style={{ position: "relative", top: -4 }}>A</span>
-        <div
-          style={{
-            position: "absolute",
-            right: 0,
-            bottom: 0,
-            width: 40,
-            height: 40,
-            background: "#d7ff35",
-          }}
-        />
+        <svg width="120" height="120" viewBox="0 0 100 100">
+          <path
+            fill="#F2F3F8"
+            fillRule="evenodd"
+            d="M50 9 L93 91 L69 91 L61 71 L39 71 L31 91 L7 91 Z M50 37 L59 59 L41 59 Z"
+          />
+        </svg>
       </div>
     ),
     { ...size },

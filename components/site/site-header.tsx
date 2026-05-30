@@ -2,21 +2,16 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { usePathname } from "next/navigation";
 import { INVITE_URL, NAV_LINKS } from "@/lib/site";
+import { AtheusMark } from "@/components/site/atheus-mark";
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false);
-  const pathname = usePathname();
 
   useEffect(() => {
     document.body.classList.toggle("nav-open", open);
     return () => document.body.classList.remove("nav-open");
   }, [open]);
-
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
@@ -29,7 +24,7 @@ export function SiteHeader() {
       <header className="studio-header sticky top-0 z-50 border-b border-white/10">
         <div className="container-studio flex min-h-[72px] items-center justify-between gap-4">
           <Link href="/" className="brand-lockup" aria-label="atheus home">
-            <span className="brand-mark">a</span>
+            <AtheusMark size={34} />
             <span className="text-lg font-black lowercase tracking-tight">atheus</span>
           </Link>
 
@@ -76,7 +71,7 @@ export function SiteHeader() {
       <div id="mobile-drawer" className="mobile-drawer md:hidden" aria-hidden={!open} role="dialog" aria-modal="true">
         <div className="container-studio flex min-h-[72px] items-center justify-between border-b border-white/10">
           <span className="brand-lockup">
-            <span className="brand-mark">a</span>
+            <AtheusMark size={34} />
             <span className="text-lg font-black lowercase tracking-tight">atheus</span>
           </span>
           <button type="button" className="-m-2 p-2 text-chalk" aria-label="Close menu" onClick={() => setOpen(false)}>

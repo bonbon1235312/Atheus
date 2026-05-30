@@ -169,3 +169,136 @@ export async function disableWelcomeConfig(guildId: string): Promise<void> {
     );
   if (error) throw error;
 }
+
+export type TicketRow = {
+  id: string;
+  guild_id: string;
+  channel_id: string | null;
+  user_id: string;
+  status: "open" | "claimed" | "closed";
+  claimed_by: string | null;
+  closed_by: string | null;
+  transcript: unknown[];
+  created_at: string;
+  closed_at: string | null;
+  updated_at: string;
+};
+
+export async function getTickets(guildId: string): Promise<TicketRow[]> {
+  const { data, error } = await supabaseAdmin()
+    .from("tickets")
+    .select(
+      "id, guild_id, channel_id, user_id, status, claimed_by, closed_by, transcript, created_at, closed_at, updated_at"
+    )
+    .eq("guild_id", guildId)
+    .order("updated_at", { ascending: false })
+    .limit(50);
+  if (error) throw error;
+  return (data ?? []) as TicketRow[];
+}
+
+export type GiveawayRow = {
+  id: string;
+  guild_id: string;
+  channel_id: string;
+  message_id: string | null;
+  prize: string;
+  winner_count: number;
+  entrants: string[];
+  ends_at: string;
+  status: "active" | "ended" | "cancelled";
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export async function getGiveaways(guildId: string): Promise<GiveawayRow[]> {
+  const { data, error } = await supabaseAdmin()
+    .from("giveaways")
+    .select(
+      "id, guild_id, channel_id, message_id, prize, winner_count, entrants, ends_at, status, created_by, created_at, updated_at"
+    )
+    .eq("guild_id", guildId)
+    .order("ends_at", { ascending: true })
+    .limit(50);
+  if (error) throw error;
+  return (data ?? []) as GiveawayRow[];
+}
+
+export type PremiumStatus = {
+  status: string;
+  active: boolean;
+  currentPeriodEnd: string | null;
+};
+
+export async function getPremiumStatus(guildId: string): Promise<PremiumStatus> {
+  const sb = supabaseAdmin();
+  const premium = await sb
+    .from("premium")
+    .select("status, current_period_end")
+    .eq("guild_id", guildId)
+    .maybeSingle();
+  if (premium.error) throw premium.error;
+
+  if (premium.data) {
+    const status = String(premium.data.status ?? "free");
+    const periodEnd = premium.data.current_period_end as string | null;
+    const inPeriod = !periodEnd || new Date(periodEnd).getTime() > Date.now();
+    return {
+      status,
+      active: ["active", "trialing"].includes(status) && inPeriod,
+      currentPeriodEnd: periodEnd,
+    };
+  }
+
+  const guild = await sb
+    .from("guilds")
+    .select("premium")
+    .eq("guild_id", guildId)
+    .maybeSingle();
+  if (guild.error) throw guild.error;
+
+  return {
+    status: guild.data?.premium ? "active" : "free",
+    active: Boolean(guild.data?.premium),
+    currentPeriodEnd: null,
+  };
+}
+
+export type TemplateAiSnapshot = {
+  createdAt?: string;
+  createdBy?: string;
+  guildId?: string;
+  roles?: Array<{
+    id: string;
+    name: string;
+    color?: string;
+    position?: number;
+    managed?: boolean;
+  }>;
+  channels?: Array<{
+    id: string;
+    name: string;
+    type: number;
+    parentId?: string | null;
+    position?: number;
+    topic?: string | null;
+  }>;
+};
+
+export async function getTemplateAiSnapshot(
+  guildId: string
+): Promise<{ enabled: boolean; snapshot: TemplateAiSnapshot | null }> {
+  const { data, error } = await supabaseAdmin()
+    .from("feature_config")
+    .select("config, enabled")
+    .eq("guild_id", guildId)
+    .eq("feature_key", "template_ai_last_snapshot")
+    .maybeSingle();
+  if (error) throw error;
+
+  return {
+    enabled: Boolean(data?.enabled),
+    snapshot: data?.config ? (data.config as TemplateAiSnapshot) : null,
+  };
+}

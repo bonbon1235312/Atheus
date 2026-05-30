@@ -5,11 +5,20 @@ type Params = { params: Promise<{ guildId: string }> };
 
 const features = [
   {
+    key: "template-ai",
+    name: "AI server builder",
+    desc: "Preview, apply, or wipe and rebuild a full server template from Discord.",
+    href: (id: string) => `/dashboard/${id}/template-ai`,
+    live: true,
+    status: "Live",
+  },
+  {
     key: "join-role",
     name: "Join role",
     desc: "Automatically give a role to every new member.",
     href: (id: string) => `/dashboard/${id}/join-role`,
     live: true,
+    status: "Live",
   },
   {
     key: "reaction-roles",
@@ -17,6 +26,7 @@ const features = [
     desc: "React to get a role.",
     href: (id: string) => `/dashboard/${id}/reaction-role`,
     live: true,
+    status: "Live",
   },
   {
     key: "welcome",
@@ -24,10 +34,33 @@ const features = [
     desc: "Post a welcome message when someone joins.",
     href: (id: string) => `/dashboard/${id}/welcome`,
     live: true,
+    status: "Live",
   },
-  { key: "tickets", name: "Tickets", desc: "Support tickets with web transcripts.", live: false },
+  {
+    key: "tickets",
+    name: "Tickets",
+    desc: "Review open, claimed and closed support tickets from the bot.",
+    href: (id: string) => `/dashboard/${id}/tickets`,
+    live: true,
+    status: "Live",
+  },
+  {
+    key: "giveaways",
+    name: "Giveaways",
+    desc: "Track giveaway prizes, entrants, winner count and end times.",
+    href: (id: string) => `/dashboard/${id}/giveaways`,
+    live: true,
+    status: "Live",
+  },
+  {
+    key: "premium",
+    name: "Premium",
+    desc: "Check this server's plan and the Free vs Pro split.",
+    href: (id: string) => `/dashboard/${id}/premium`,
+    live: true,
+    status: "Live",
+  },
   { key: "forms", name: "Forms & applications", desc: "Build applications members fill in.", live: false },
-  { key: "giveaways", name: "Giveaways", desc: "Run giveaways with one command.", live: false },
   { key: "analytics", name: "Analytics", desc: "See how your server is growing.", live: false },
 ];
 
@@ -53,11 +86,13 @@ export default async function GuildOverview({ params }: Params) {
                 <div>
                   <div className="flex items-center justify-between gap-3">
                     <h2 className="text-2xl font-black">{f.name}</h2>
-                    {!f.live && (
-                      <span className="text-[10px] font-black uppercase tracking-[0.2em] text-chalk/40">
-                        Soon
-                      </span>
-                    )}
+                    <span
+                      className={`text-[10px] font-black uppercase tracking-[0.2em] ${
+                        f.live ? "text-acid" : "text-chalk/40"
+                      }`}
+                    >
+                      {f.live ? f.status : "Soon"}
+                    </span>
                   </div>
                   <p className="mt-3 text-chalk/65">{f.desc}</p>
                 </div>

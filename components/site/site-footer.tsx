@@ -1,12 +1,16 @@
 import Link from "next/link";
 import { INVITE_URL, NAV_LINKS, SUPPORT_EMAIL } from "@/lib/site";
+import { AtheusMark } from "@/components/site/atheus-mark";
 
 export function SiteFooter() {
   return (
     <footer className="border-t border-white/10">
       <div className="container-studio grid gap-12 py-16 md:grid-cols-[1.4fr_0.8fr_0.8fr]">
         <div>
-          <p className="type-display text-4xl font-semibold lowercase tracking-tight">atheus</p>
+          <div className="flex items-center gap-3">
+            <AtheusMark size={34} />
+            <p className="type-display text-4xl font-semibold lowercase tracking-tight">atheus</p>
+          </div>
           <p className="mt-4 max-w-xs text-chalk/55">
             One bot for your whole Discord server. Roles, tickets, forms, giveaways,
             events and analytics, run from a real web dashboard.
