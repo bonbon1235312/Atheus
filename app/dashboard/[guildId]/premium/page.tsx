@@ -62,6 +62,26 @@ export default async function PremiumPage({ params }: Params) {
             note="For servers that want the heavier automation and history."
           />
         </section>
+
+        <div className="mt-8">
+          {premium.active ? (
+            <p className="text-chalk/60">
+              Pro is active for this server. Thank you for supporting atheus.
+            </p>
+          ) : (
+            <>
+              <a
+                href={`/api/billing/checkout?guild=${guildId}`}
+                className="studio-button studio-button-primary"
+              >
+                Upgrade to Pro
+              </a>
+              <p className="mt-3 text-sm text-chalk/45">
+                Secure checkout via Stripe. Cancel anytime.
+              </p>
+            </>
+          )}
+        </div>
       </div>
     </main>
   );
