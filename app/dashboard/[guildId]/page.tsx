@@ -172,6 +172,30 @@ const features = [
     live: true,
     status: "Live",
   },
+  {
+    key: "color",
+    name: "Color roles",
+    desc: "See who has a personal name colour.",
+    href: (id: string) => `/dashboard/${id}/color`,
+    live: true,
+    status: "Live",
+  },
+  {
+    key: "afk",
+    name: "AFK",
+    desc: "See which members are currently away.",
+    href: (id: string) => `/dashboard/${id}/afk`,
+    live: true,
+    status: "Live",
+  },
+  {
+    key: "backups",
+    name: "Backups",
+    desc: "Manage saved server snapshots.",
+    href: (id: string) => `/dashboard/${id}/backups`,
+    live: true,
+    status: "Live",
+  },
 ];
 
 export default async function GuildOverview({ params }: Params) {

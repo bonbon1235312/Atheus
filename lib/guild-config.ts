@@ -400,6 +400,38 @@ export async function removeAutoresponderWeb(guildId: string, id: string) {
   if (error) throw error;
 }
 
+// --- Color roles / AFK / Backups (dashboard, Batch 7) ----------------------
+
+export async function getColorRolesWeb(guildId: string): Promise<{ userId: string; color: string; roleId: string }[]> {
+  const { config } = await getFeatureConfigRow(guildId, "color_roles");
+  const users = (config.users ?? {}) as Record<string, { roleId: string; color: string }>;
+  return Object.entries(users).map(([userId, v]) => ({ userId, color: v.color, roleId: v.roleId }));
+}
+
+export async function getAfkWeb(guildId: string): Promise<{ user_id: string; reason: string; set_at: string }[]> {
+  const { data, error } = await supabaseAdmin()
+    .from("afk")
+    .select("user_id, reason, set_at")
+    .eq("guild_id", guildId)
+    .order("set_at", { ascending: false });
+  if (error) throw error;
+  return (data ?? []) as { user_id: string; reason: string; set_at: string }[];
+}
+
+export type BackupRow = { id: string; name: string; createdAt: string };
+
+export async function getBackupsWeb(guildId: string): Promise<BackupRow[]> {
+  const { config } = await getFeatureConfigRow(guildId, "server_backups");
+  const backups = (config.backups ?? []) as Array<{ id: string; name: string; createdAt: string }>;
+  return backups.map((b) => ({ id: b.id, name: b.name, createdAt: b.createdAt }));
+}
+
+export async function deleteBackupWeb(guildId: string, id: string) {
+  const { config } = await getFeatureConfigRow(guildId, "server_backups");
+  const backups = ((config.backups ?? []) as Array<{ id: string }>).filter((b) => b.id !== id);
+  await setFeatureConfigRow(guildId, "server_backups", { backups }, true);
+}
+
 // --- Tags + Economy (dashboard) -------------------------------------------
 
 export type TagRow = { name: string; content: string };
