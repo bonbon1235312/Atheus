@@ -8,6 +8,7 @@ import {
   type DiscordGuild,
 } from "@/lib/discord";
 import { botGuildIds } from "@/lib/guild-config";
+import { DISCORD_SERVER_URL } from "@/lib/site";
 
 export default async function DashboardHome() {
   const session = await auth();
@@ -67,6 +68,19 @@ export default async function DashboardHome() {
             </div>
           </section>
         )}
+        {/* Support chip */}
+        <div className="mt-16 flex items-center gap-3 rounded-xl border border-white/10 bg-white/4 px-5 py-4 text-sm text-chalk/60">
+          <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-[#5865F2]" />
+          <span>Need help setting something up?</span>
+          <a
+            href={DISCORD_SERVER_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="ml-auto shrink-0 font-semibold text-chalk transition-colors hover:text-[#5865F2]"
+          >
+            Join our support server →
+          </a>
+        </div>
       </div>
     </main>
   );

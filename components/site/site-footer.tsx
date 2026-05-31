@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { INVITE_URL, NAV_LINKS, SUPPORT_EMAIL } from "@/lib/site";
+import { DISCORD_SERVER_URL, INVITE_URL, NAV_LINKS, SUPPORT_EMAIL } from "@/lib/site";
 import { AtheusMark } from "@/components/site/atheus-mark";
 
 export function SiteFooter() {
@@ -39,10 +39,26 @@ export function SiteFooter() {
         </div>
 
         <div>
-          <p className="text-xs font-black uppercase tracking-[0.18em] text-chalk/40">Contact</p>
-          <a className="mt-4 block text-chalk/75 transition-colors hover:text-chalk" href={`mailto:${SUPPORT_EMAIL}`}>
-            {SUPPORT_EMAIL}
-          </a>
+          <p className="text-xs font-black uppercase tracking-[0.18em] text-chalk/40">Community</p>
+          <ul className="mt-4 grid gap-2.5 text-chalk/60">
+            <li>
+              <a
+                href={DISCORD_SERVER_URL}
+                target="_blank"
+                rel="noreferrer"
+                className="flex items-center gap-2 transition-colors hover:text-chalk"
+              >
+                {/* Discord blurple dot */}
+                <span className="inline-block h-2 w-2 shrink-0 rounded-full bg-[#5865F2]" />
+                Support server
+              </a>
+            </li>
+            <li>
+              <a className="transition-colors hover:text-chalk" href={`mailto:${SUPPORT_EMAIL}`}>
+                {SUPPORT_EMAIL}
+              </a>
+            </li>
+          </ul>
         </div>
       </div>
 

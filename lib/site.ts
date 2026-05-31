@@ -11,6 +11,8 @@ export const INVITE_URL =
 
 export const SUPPORT_EMAIL = "hello@atheus.dev";
 
+export const DISCORD_SERVER_URL = "https://discord.gg/ZspegmXTvk";
+
 export const NAV_LINKS = [
   { href: "/#features", label: "Features" },
   { href: "/#pricing", label: "Pricing" },

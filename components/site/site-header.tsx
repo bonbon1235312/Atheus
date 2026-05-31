@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { INVITE_URL, NAV_LINKS } from "@/lib/site";
+import { DISCORD_SERVER_URL, INVITE_URL, NAV_LINKS } from "@/lib/site";
 import { AtheusMark } from "@/components/site/atheus-mark";
 
 export function SiteHeader() {
@@ -41,6 +41,14 @@ export function SiteHeader() {
                 {item.label}
               </Link>
             ))}
+            <a
+              href={DISCORD_SERVER_URL}
+              target="_blank"
+              rel="noreferrer"
+              className="transition-colors hover:text-chalk"
+            >
+              Support
+            </a>
           </nav>
 
           <div className="flex items-center gap-3">
@@ -91,6 +99,15 @@ export function SiteHeader() {
               {item.label}
             </Link>
           ))}
+          <a
+            href={DISCORD_SERVER_URL}
+            target="_blank"
+            rel="noreferrer"
+            className="type-display border-b border-white/10 py-5 text-4xl font-semibold tracking-tight transition-colors hover:text-acid"
+            onClick={() => setOpen(false)}
+          >
+            Support
+          </a>
           <a
             href={INVITE_URL}
             target="_blank"
