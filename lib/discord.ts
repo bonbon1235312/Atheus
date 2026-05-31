@@ -109,6 +109,30 @@ export async function addBotReaction(channelId: string, messageId: string, emoji
   if (!res.ok) throw new Error(`Discord reaction add failed (${res.status})`);
 }
 
+/** All channels in a server (uses the BOT token). */
+export async function fetchGuildChannels(guildId: string): Promise<DiscordChannel[]> {
+  const token = process.env.DISCORD_BOT_TOKEN;
+  if (!token) throw new Error("DISCORD_BOT_TOKEN missing");
+  const res = await fetch(`https://discord.com/api/guilds/${guildId}/channels`, {
+    headers: { Authorization: `Bot ${token}` },
+    cache: "no-store",
+  });
+  if (!res.ok) throw new Error(`Discord channels fetch failed (${res.status})`);
+  return (await res.json()) as DiscordChannel[];
+}
+
+export async function fetchGuildVoiceChannels(guildId: string): Promise<DiscordChannel[]> {
+  return (await fetchGuildChannels(guildId))
+    .filter((c) => c.type === 2)
+    .sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+}
+
+export async function fetchGuildCategories(guildId: string): Promise<DiscordChannel[]> {
+  return (await fetchGuildChannels(guildId))
+    .filter((c) => c.type === 4)
+    .sort((a, b) => (a.position ?? 0) - (b.position ?? 0));
+}
+
 /** Roles a user can assign as an auto-role: real, assignable, highest first. */
 export function assignableRoles(roles: DiscordRole[]): DiscordRole[] {
   return roles

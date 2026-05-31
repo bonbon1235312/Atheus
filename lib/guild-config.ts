@@ -314,6 +314,92 @@ export async function getPremiumStatus(guildId: string): Promise<PremiumStatus> 
   };
 }
 
+// --- Generic feature config (mirrors the bot's featureConfig.js) -----------
+
+export type FeatureConfigRow = { config: Record<string, unknown>; enabled: boolean };
+
+export async function getFeatureConfigRow(guildId: string, featureKey: string): Promise<FeatureConfigRow> {
+  const { data, error } = await supabaseAdmin()
+    .from("feature_config")
+    .select("config, enabled")
+    .eq("guild_id", guildId)
+    .eq("feature_key", featureKey)
+    .maybeSingle();
+  if (error) throw error;
+  return { config: (data?.config ?? {}) as Record<string, unknown>, enabled: Boolean(data?.enabled) };
+}
+
+export async function setFeatureConfigRow(
+  guildId: string,
+  featureKey: string,
+  config: Record<string, unknown>,
+  enabled = true
+) {
+  const { error } = await supabaseAdmin()
+    .from("feature_config")
+    .upsert({ guild_id: guildId, feature_key: featureKey, config, enabled }, { onConflict: "guild_id,feature_key" });
+  if (error) throw error;
+}
+
+export async function disableFeatureConfigRow(guildId: string, featureKey: string) {
+  await setFeatureConfigRow(guildId, featureKey, {}, false);
+}
+
+// --- Leveling / invites / autoresponders (dashboard) ----------------------
+
+export async function getLevelLeaderboard(guildId: string, limit = 10): Promise<{ user_id: string; xp: number }[]> {
+  const { data, error } = await supabaseAdmin()
+    .from("levels")
+    .select("user_id, xp")
+    .eq("guild_id", guildId)
+    .order("xp", { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  return (data ?? []) as { user_id: string; xp: number }[];
+}
+
+export async function getInviteLeaderboardWeb(guildId: string, limit = 10): Promise<{ inviterId: string; count: number }[]> {
+  const { data, error } = await supabaseAdmin()
+    .from("invite_uses")
+    .select("inviter_id")
+    .eq("guild_id", guildId)
+    .not("inviter_id", "is", null);
+  if (error) throw error;
+  const counts = new Map<string, number>();
+  for (const r of data ?? []) {
+    const id = (r as { inviter_id: string }).inviter_id;
+    counts.set(id, (counts.get(id) ?? 0) + 1);
+  }
+  return [...counts.entries()]
+    .map(([inviterId, count]) => ({ inviterId, count }))
+    .sort((a, b) => b.count - a.count)
+    .slice(0, limit);
+}
+
+export type AutoresponderRow = { id: string; trigger: string; response: string; match_type: string };
+
+export async function getAutoresponders(guildId: string): Promise<AutoresponderRow[]> {
+  const { data, error } = await supabaseAdmin()
+    .from("autoresponders")
+    .select("id, trigger, response, match_type")
+    .eq("guild_id", guildId)
+    .order("created_at", { ascending: true });
+  if (error) throw error;
+  return (data ?? []) as AutoresponderRow[];
+}
+
+export async function addAutoresponderWeb(guildId: string, trigger: string, response: string, matchType: string) {
+  const { error } = await supabaseAdmin()
+    .from("autoresponders")
+    .insert({ guild_id: guildId, trigger, response, match_type: matchType });
+  if (error) throw error;
+}
+
+export async function removeAutoresponderWeb(guildId: string, id: string) {
+  const { error } = await supabaseAdmin().from("autoresponders").delete().match({ guild_id: guildId, id });
+  if (error) throw error;
+}
+
 // --- Forms (dashboard viewer) ---------------------------------------------
 
 export type FormSummary = { id: string; name: string; questions: number; responses: number };
