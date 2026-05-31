@@ -109,6 +109,32 @@ export async function addBotReaction(channelId: string, messageId: string, emoji
   if (!res.ok) throw new Error(`Discord reaction add failed (${res.status})`);
 }
 
+export type DiscordUser = { id: string; displayName: string; avatarUrl: string };
+
+/** Resolve a Discord user's name + avatar by ID (uses the BOT token). */
+export async function fetchDiscordUser(userId: string): Promise<DiscordUser | null> {
+  const token = process.env.DISCORD_BOT_TOKEN;
+  if (!token) return null;
+  const res = await fetch(`https://discord.com/api/users/${userId}`, {
+    headers: { Authorization: `Bot ${token}` },
+    cache: "no-store",
+  });
+  if (!res.ok) return null;
+  const u = (await res.json()) as { id: string; username: string; global_name?: string; avatar?: string };
+  const avatarUrl = u.avatar
+    ? `https://cdn.discordapp.com/avatars/${u.id}/${u.avatar}.png?size=64`
+    : `https://cdn.discordapp.com/embed/avatars/${Number((BigInt(u.id) >> 22n) % 6n)}.png`;
+  return { id: u.id, displayName: u.global_name || u.username, avatarUrl };
+}
+
+/** Resolve many users in parallel into a Map keyed by ID. */
+export async function fetchDiscordUsers(ids: string[]): Promise<Map<string, DiscordUser>> {
+  const entries = await Promise.all(ids.map(async (id) => [id, await fetchDiscordUser(id)] as const));
+  const map = new Map<string, DiscordUser>();
+  for (const [id, u] of entries) if (u) map.set(id, u);
+  return map;
+}
+
 /** All channels in a server (uses the BOT token). */
 export async function fetchGuildChannels(guildId: string): Promise<DiscordChannel[]> {
   const token = process.env.DISCORD_BOT_TOKEN;

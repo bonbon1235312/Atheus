@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { revalidatePath } from "next/cache";
 import { requireManagedGuild } from "@/lib/dashboard-access";
-import { fetchGuildTextChannels } from "@/lib/discord";
+import { fetchGuildTextChannels, fetchDiscordUsers } from "@/lib/discord";
 import {
   getFeatureConfigRow,
   setFeatureConfigRow,
@@ -20,6 +20,7 @@ export default async function LevelingPage({ params }: Params) {
     getLevelLeaderboard(guildId, 10),
   ]);
   const announceChannelId = (cfg.config.announceChannelId as string) ?? "";
+  const users = await fetchDiscordUsers(leaders.map((l) => l.user_id));
 
   async function save(formData: FormData) {
     "use server";
@@ -62,7 +63,12 @@ export default async function LevelingPage({ params }: Params) {
           <ol className="mt-5 grid gap-2">
             {leaders.map((l, i) => (
               <li key={l.user_id} className="flex items-center justify-between rounded-xl border border-white/12 bg-graphite px-4 py-3">
-                <span className="text-chalk/85">#{i + 1} · {l.user_id}</span>
+                <span className="flex items-center gap-3">
+                  <span className="w-6 text-sm text-chalk/45">#{i + 1}</span>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={users.get(l.user_id)?.avatarUrl ?? "https://cdn.discordapp.com/embed/avatars/0.png"} alt="" width={28} height={28} className="h-7 w-7 rounded-full" />
+                  <span className="text-chalk/85">{users.get(l.user_id)?.displayName ?? l.user_id}</span>
+                </span>
                 <span className="type-mono text-sm text-blurpleHi">{l.xp.toLocaleString()} XP</span>
               </li>
             ))}

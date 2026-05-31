@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { requireManagedGuild } from "@/lib/dashboard-access";
 import { getInviteLeaderboardWeb } from "@/lib/guild-config";
+import { fetchDiscordUsers } from "@/lib/discord";
 
 type Params = { params: Promise<{ guildId: string }> };
 
@@ -8,6 +9,7 @@ export default async function InvitesPage({ params }: Params) {
   const { guildId } = await params;
   const guild = await requireManagedGuild(guildId);
   const rows = await getInviteLeaderboardWeb(guildId, 20);
+  const users = await fetchDiscordUsers(rows.map((r) => r.inviterId));
 
   return (
     <main className="section-pad">
@@ -23,7 +25,12 @@ export default async function InvitesPage({ params }: Params) {
           <ol className="mt-8 grid gap-2">
             {rows.map((r, i) => (
               <li key={r.inviterId} className="flex items-center justify-between rounded-xl border border-white/12 bg-graphite px-4 py-3">
-                <span className="text-chalk/85">#{i + 1} · {r.inviterId}</span>
+                <span className="flex items-center gap-3">
+                  <span className="w-6 text-sm text-chalk/45">#{i + 1}</span>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={users.get(r.inviterId)?.avatarUrl ?? "https://cdn.discordapp.com/embed/avatars/0.png"} alt="" width={28} height={28} className="h-7 w-7 rounded-full" />
+                  <span className="text-chalk/85">{users.get(r.inviterId)?.displayName ?? r.inviterId}</span>
+                </span>
                 <span className="type-mono text-sm text-blurpleHi">{r.count} invite{r.count === 1 ? "" : "s"}</span>
               </li>
             ))}
