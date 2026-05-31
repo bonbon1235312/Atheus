@@ -132,6 +132,46 @@ const features = [
     live: true,
     status: "Live",
   },
+  {
+    key: "welcomecard",
+    name: "Welcome cards",
+    desc: "Send a designed welcome image when someone joins.",
+    href: (id: string) => `/dashboard/${id}/welcomecard`,
+    live: true,
+    status: "Live",
+  },
+  {
+    key: "economy",
+    name: "Economy",
+    desc: "Coins, daily rewards, games and the richest leaderboard.",
+    href: (id: string) => `/dashboard/${id}/economy`,
+    live: true,
+    status: "Live",
+  },
+  {
+    key: "logging",
+    name: "Logging",
+    desc: "Log joins, leaves, role and nickname changes.",
+    href: (id: string) => `/dashboard/${id}/logging`,
+    live: true,
+    status: "Live",
+  },
+  {
+    key: "tags",
+    name: "Tags",
+    desc: "Saved answers members recall with /tag.",
+    href: (id: string) => `/dashboard/${id}/tags`,
+    live: true,
+    status: "Live",
+  },
+  {
+    key: "verification",
+    name: "Verification",
+    desc: "Pick the role members get when they verify.",
+    href: (id: string) => `/dashboard/${id}/verification`,
+    live: true,
+    status: "Live",
+  },
 ];
 
 export default async function GuildOverview({ params }: Params) {

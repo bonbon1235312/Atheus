@@ -400,6 +400,43 @@ export async function removeAutoresponderWeb(guildId: string, id: string) {
   if (error) throw error;
 }
 
+// --- Tags + Economy (dashboard) -------------------------------------------
+
+export type TagRow = { name: string; content: string };
+
+export async function getTagsWeb(guildId: string): Promise<TagRow[]> {
+  const { data, error } = await supabaseAdmin()
+    .from("tags")
+    .select("name, content")
+    .eq("guild_id", guildId)
+    .order("name", { ascending: true });
+  if (error) throw error;
+  return (data ?? []) as TagRow[];
+}
+
+export async function setTagWeb(guildId: string, name: string, content: string) {
+  const { error } = await supabaseAdmin()
+    .from("tags")
+    .upsert({ guild_id: guildId, name, content }, { onConflict: "guild_id,name" });
+  if (error) throw error;
+}
+
+export async function deleteTagWeb(guildId: string, name: string) {
+  const { error } = await supabaseAdmin().from("tags").delete().match({ guild_id: guildId, name });
+  if (error) throw error;
+}
+
+export async function getTopBalances(guildId: string, limit = 15): Promise<{ user_id: string; balance: number }[]> {
+  const { data, error } = await supabaseAdmin()
+    .from("economy")
+    .select("user_id, balance")
+    .eq("guild_id", guildId)
+    .order("balance", { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  return (data ?? []).map((r) => ({ user_id: r.user_id as string, balance: Number(r.balance) }));
+}
+
 // --- Forms (dashboard viewer) ---------------------------------------------
 
 export type FormSummary = { id: string; name: string; questions: number; responses: number };
