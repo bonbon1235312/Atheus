@@ -1,12 +1,56 @@
 import type { MetadataRoute } from "next";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const base = "https://atheus.dev";
-  const lastModified = new Date();
+import { supabaseAdmin } from "@/lib/supabase-admin";
 
-  return [
-    { url: `${base}`, lastModified, changeFrequency: "weekly", priority: 1 },
-    { url: `${base}/privacy`, lastModified, changeFrequency: "yearly", priority: 0.3 },
-    { url: `${base}/terms`, lastModified, changeFrequency: "yearly", priority: 0.3 },
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
+  const baseUrl = process.env.AUTH_URL ?? "http://localhost:3000";
+  const entries: MetadataRoute.Sitemap = [
+    {
+      url: baseUrl,
+      lastModified: new Date(),
+      changeFrequency: "weekly",
+      priority: 1,
+    },
   ];
+
+  try {
+    const { data: leagues } = await supabaseAdmin()
+      .from("leagues")
+      .select("slug, updated_at")
+      .eq("status", "active");
+
+    for (const league of leagues ?? []) {
+      const root = `${baseUrl}/leagues/${league.slug}`;
+      entries.push(
+        {
+          url: root,
+          lastModified: new Date(league.updated_at),
+          changeFrequency: "daily",
+          priority: 0.9,
+        },
+        {
+          url: `${root}/fixtures`,
+          lastModified: new Date(league.updated_at),
+          changeFrequency: "hourly",
+          priority: 0.8,
+        },
+        {
+          url: `${root}/table`,
+          lastModified: new Date(league.updated_at),
+          changeFrequency: "hourly",
+          priority: 0.8,
+        },
+        {
+          url: `${root}/stats`,
+          lastModified: new Date(league.updated_at),
+          changeFrequency: "hourly",
+          priority: 0.8,
+        },
+      );
+    }
+  } catch {
+    // Keep the root sitemap available before deployment environment setup.
+  }
+
+  return entries;
 }

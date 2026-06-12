@@ -3,14 +3,18 @@ import "next-auth/jwt";
 
 declare module "next-auth" {
   interface Session {
-    accessToken?: string;
-    discordId?: string;
+    discordAccessToken?: string;
+    discordUserId?: string;
+    discordTokenError?: string;
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT {
-    accessToken?: string;
-    discordId?: string;
+    discordAccessToken?: string;
+    discordUserId?: string;
+    discordRefreshToken?: string;
+    discordTokenExpiresAt?: number;
+    discordTokenError?: string;
   }
 }

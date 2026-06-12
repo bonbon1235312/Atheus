@@ -1,44 +1,26 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Barlow_Condensed, Manrope } from "next/font/google";
+
 import "./globals.css";
 
-const sans = Geist({
+const display = Barlow_Condensed({
+  variable: "--font-display",
   subsets: ["latin"],
-  variable: "--font-sans",
-  display: "swap",
+  weight: ["500", "600", "700"],
 });
 
-const mono = Geist_Mono({
+const body = Manrope({
+  variable: "--font-body",
   subsets: ["latin"],
-  variable: "--font-mono",
-  display: "swap",
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://atheus.dev"),
   title: {
-    default: "atheus — one bot for your whole Discord server",
-    template: "%s | atheus",
+    default: "Atheus League Platform",
+    template: "%s | Atheus",
   },
   description:
-    "atheus is a Discord Community OS: roles, tickets, forms, giveaways, events and analytics in one bot, configured from a real web dashboard. Replace half your bots with one.",
-  applicationName: "atheus",
-  creator: "atheus",
-  publisher: "atheus",
-  openGraph: {
-    title: "atheus — one bot for your whole Discord server",
-    description:
-      "Roles, tickets, forms, giveaways, events and analytics in one bot. Replace half your Discord bots with one.",
-    url: "https://atheus.dev",
-    siteName: "atheus",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "atheus — one bot for your whole Discord server",
-    description:
-      "Roles, tickets, forms, giveaways, events and analytics in one bot.",
-  },
+    "League operations, fixtures, results and verified EA FC statistics in one platform.",
 };
 
 export default function RootLayout({
@@ -47,8 +29,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${sans.variable} ${mono.variable}`}>
-      <body>{children}</body>
+    <html lang="en">
+      <body className={`${display.variable} ${body.variable}`}>{children}</body>
     </html>
   );
 }
