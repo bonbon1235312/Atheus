@@ -11,6 +11,7 @@ yarn-error.log*
 pnpm-debug.log*
 .vercel/
 logs/
+.codex-dev.*.log
 supabase/.temp/
 *.tsbuildinfo
 .DS_Store
