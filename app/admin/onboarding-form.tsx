@@ -146,6 +146,54 @@ export function OnboardingForm({
       <div className="form-section">
         <div>
           <p className="step-index">04</p>
+          <h2>Site administration</h2>
+        </div>
+        <div className="field-grid">
+          <label className="field field-wide">
+            <span>Administrator username</span>
+            <input
+              autoComplete="username"
+              maxLength={32}
+              minLength={3}
+              name="siteUsername"
+              pattern="[A-Za-z0-9][A-Za-z0-9._-]{2,31}"
+              placeholder="league.admin"
+              required
+            />
+          </label>
+          <label className="field">
+            <span>Administrator password</span>
+            <input
+              autoComplete="new-password"
+              maxLength={128}
+              minLength={12}
+              name="sitePassword"
+              required
+              type="password"
+            />
+          </label>
+          <label className="field">
+            <span>Confirm password</span>
+            <input
+              autoComplete="new-password"
+              maxLength={128}
+              minLength={12}
+              name="sitePasswordConfirm"
+              required
+              type="password"
+            />
+          </label>
+          <p className="field-help field-wide">
+            This shared login opens only this league&apos;s website workspace as
+            an administrator. Discord remains required for ownership, billing,
+            activation and staff access.
+          </p>
+        </div>
+      </div>
+
+      <div className="form-section">
+        <div>
+          <p className="step-index">05</p>
           <h2>Colour system</h2>
         </div>
         <div className="colour-grid">

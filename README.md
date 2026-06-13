@@ -34,6 +34,9 @@ The clean foundation, league onboarding, fixture generation and automated
 collection slices are complete:
 
 - Discord OAuth with refreshed guild access;
+- one salted, server-only site administrator credential per league;
+- league-scoped username/password sessions with lockout protection;
+- owner-only credential rotation without exposing stored passwords;
 - manager-only Discord guild selection;
 - operational bot-presence detection;
 - league identity, timezone, EA platform and theme controls;
@@ -83,3 +86,7 @@ The Discord OAuth application and operational Discord bot can be separate
 applications. Set `AUTH_DISCORD_ID` / `AUTH_DISCORD_SECRET` for website login and
 `ATHEUS_BOT_CLIENT_ID` / `ATHEUS_DISCORD_BOT_TOKEN` for the bot that league owners
 install.
+
+Discord remains the only ownership identity. A league site credential receives an
+isolated `admin` membership for its own league and cannot activate the league,
+change billing, or manage owner/staff access.

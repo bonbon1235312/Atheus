@@ -6,6 +6,16 @@ declare module "next-auth" {
     discordAccessToken?: string;
     discordUserId?: string;
     discordTokenError?: string;
+    authMethod?: "discord" | "league-admin";
+    siteLeagueId?: string;
+    siteLeagueSlug?: string;
+  }
+
+  interface User {
+    authMethod?: "league-admin";
+    siteLeagueId?: string;
+    siteLeagueSlug?: string;
+    siteCredentialVersion?: string;
   }
 }
 
@@ -16,5 +26,9 @@ declare module "next-auth/jwt" {
     discordRefreshToken?: string;
     discordTokenExpiresAt?: number;
     discordTokenError?: string;
+    authMethod?: "discord" | "league-admin";
+    siteLeagueId?: string;
+    siteLeagueSlug?: string;
+    siteCredentialVersion?: string;
   }
 }

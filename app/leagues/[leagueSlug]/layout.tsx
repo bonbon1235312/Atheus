@@ -64,7 +64,10 @@ export default async function LeagueLayout({
           <Link href={`/leagues/${leagueSlug}/stats`}>Stats</Link>
         </nav>
 
-        <Link className="league-admin-link" href="/admin">
+        <Link
+          className="league-admin-link"
+          href={`/admin/site-login?league=${encodeURIComponent(leagueSlug)}`}
+        >
           Admin
         </Link>
       </header>

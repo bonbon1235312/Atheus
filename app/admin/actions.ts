@@ -16,6 +16,11 @@ import {
   getPlatformEntitlement,
   hasActivePremium,
 } from "@/lib/entitlements";
+import {
+  hashSitePassword,
+  validateSitePassword,
+  validateSiteUsername,
+} from "@/lib/site-credentials";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export type CreateLeagueState = {
@@ -61,6 +66,11 @@ export async function createLeague(
   const primaryColour = text(formData, "primaryColour").toUpperCase();
   const secondaryColour = text(formData, "secondaryColour").toUpperCase();
   const accentColour = text(formData, "accentColour").toUpperCase();
+  const siteUsername = text(formData, "siteUsername");
+  const sitePassword = String(formData.get("sitePassword") ?? "");
+  const sitePasswordConfirm = String(
+    formData.get("sitePasswordConfirm") ?? "",
+  );
 
   if (!name || name.length > 80 || !slug) {
     return { error: "Enter a league name of 80 characters or fewer." };
@@ -72,6 +82,21 @@ export async function createLeague(
     !validHex(accentColour)
   ) {
     return { error: "Theme colours must be complete six-digit hex codes." };
+  }
+
+  if (!validateSiteUsername(siteUsername)) {
+    return {
+      error:
+        "The site username must be 3-32 characters using letters, numbers, dots, dashes or underscores.",
+    };
+  }
+
+  if (!validateSitePassword(sitePassword)) {
+    return { error: "The site password must be 12-128 characters." };
+  }
+
+  if (sitePassword !== sitePasswordConfirm) {
+    return { error: "The two site passwords do not match." };
   }
 
   const managedGuilds = await getManagedDiscordGuilds(
@@ -174,6 +199,21 @@ export async function createLeague(
       };
     }
     return { error: error.message };
+  }
+
+  const passwordHash = await hashSitePassword(sitePassword);
+  const { error: credentialError } = await database.rpc(
+    "set_league_site_credential",
+    {
+      p_league_id: data,
+      p_actor_discord_user_id: session.discordUserId,
+      p_username: siteUsername,
+      p_password_hash: passwordHash,
+    },
+  );
+
+  if (credentialError) {
+    redirect(`/admin/${data}/site-access?setup=required`);
   }
 
   redirect(`/admin/${data}`);

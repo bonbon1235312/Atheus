@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
-import { auth } from "@/auth";
+import { auth, signOut } from "@/auth";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { ActivationForm } from "./activation-form";
 
@@ -115,9 +115,22 @@ export default async function LeagueWorkspacePage({
           <span className="wordmark-mark">A</span>
           <span>ATHEUS</span>
         </Link>
-        <Link className="header-link" href="/admin">
-          All leagues
-        </Link>
+        {session.authMethod === "league-admin" ? (
+          <form
+            action={async () => {
+              "use server";
+              await signOut({ redirectTo: "/admin/site-login" });
+            }}
+          >
+            <button className="text-button" type="submit">
+              Sign out
+            </button>
+          </form>
+        ) : (
+          <Link className="header-link" href="/admin">
+            All leagues
+          </Link>
+        )}
       </header>
 
       <section className="workspace-intro">
@@ -306,6 +319,22 @@ export default async function LeagueWorkspacePage({
             <span className="status-chip">Reviewer access required</span>
           )}
         </article>
+        {membership.role === "owner" ? (
+          <article>
+            <span>10</span>
+            <h2>Site access</h2>
+            <p>
+              Create or rotate the league-specific administrator login without
+              sharing your Discord account.
+            </p>
+            <Link
+              className="button button-primary"
+              href={`/admin/${leagueId}/site-access`}
+            >
+              Manage site login
+            </Link>
+          </article>
+        ) : null}
       </section>
 
       <section className="readiness-shell">

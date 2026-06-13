@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 
 import { auth, signIn, signOut } from "@/auth";
 import {
@@ -20,6 +21,10 @@ export const dynamic = "force-dynamic";
 
 export default async function AdminPage() {
   const session = await auth();
+
+  if (session?.authMethod === "league-admin" && session.siteLeagueId) {
+    redirect(`/admin/${session.siteLeagueId}`);
+  }
 
   if (!session) {
     return (
@@ -46,6 +51,9 @@ export default async function AdminPage() {
               Continue with Discord
             </button>
           </form>
+          <Link className="site-login-link" href="/admin/site-login">
+            Sign in with a league site account
+          </Link>
         </section>
       </main>
     );
