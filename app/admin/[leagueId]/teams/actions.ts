@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 import { verifyEaSelectionToken } from "@/lib/ea-selection-token";
+import { localKickoffToUtc } from "@/lib/fixture-generator";
 import { requireLeagueAccess } from "@/lib/league-access";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
@@ -164,4 +165,81 @@ export async function unlinkTeamEaClub(formData: FormData) {
 
   revalidatePath(`/admin/${leagueId}`);
   revalidatePath(`/admin/${leagueId}/teams`);
+}
+
+export async function replaceTeam(
+  _state: TeamActionState,
+  formData: FormData,
+): Promise<TeamActionState> {
+  const leagueId = text(formData, "leagueId");
+  const seasonId = text(formData, "seasonId");
+  const outgoingTeamId = text(formData, "outgoingTeamId");
+  const incomingTeamId = text(formData, "incomingTeamId");
+  const effectiveLocal = text(formData, "effectiveLocal");
+  const reason = text(formData, "reason");
+  const access = await requireLeagueAccess(leagueId, ["owner", "admin"]);
+
+  if (!access) {
+    return { error: "League owner or admin access is required." };
+  }
+  if (
+    !seasonId ||
+    !outgoingTeamId ||
+    !incomingTeamId ||
+    outgoingTeamId === incomingTeamId ||
+    !reason
+  ) {
+    return {
+      error:
+        "Choose the season, outgoing team and incoming team, then enter a reason.",
+    };
+  }
+
+  const match = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})$/.exec(effectiveLocal);
+  if (!match) {
+    return { error: "Choose a valid effective date and time." };
+  }
+
+  let effectiveAt: string;
+  try {
+    effectiveAt = localKickoffToUtc(match[1], match[2], access.timezone);
+  } catch (error) {
+    return {
+      error:
+        error instanceof Error
+          ? error.message
+          : "The effective time could not be converted.",
+    };
+  }
+
+  const { data, error } = await supabaseAdmin().rpc("replace_league_team", {
+    p_league_id: leagueId,
+    p_season_id: seasonId,
+    p_outgoing_team_id: outgoingTeamId,
+    p_incoming_team_id: incomingTeamId,
+    p_discord_user_id: access.discordUserId,
+    p_effective_at: effectiveAt,
+    p_transfer_future_fixtures:
+      formData.get("transferFutureFixtures") === "on",
+    p_transfer_table_record: formData.get("transferTableRecord") === "on",
+    p_reason: reason,
+  });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  const result = data as {
+    transferred_future_fixtures?: number;
+  } | null;
+  const transferred = Number(result?.transferred_future_fixtures ?? 0);
+
+  revalidatePath(`/admin/${leagueId}`);
+  revalidatePath(`/admin/${leagueId}/teams`);
+  revalidatePath(`/admin/${leagueId}/fixtures`);
+  revalidatePath(`/leagues/${access.leagueSlug}`, "layout");
+
+  return {
+    success: `Team replaced. ${transferred} future fixture${transferred === 1 ? "" : "s"} transferred.`,
+  };
 }

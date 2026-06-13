@@ -116,6 +116,41 @@ export type TeamEaClubLink = {
   created_at: string;
 };
 
+export type TeamReplacement = {
+  id: string;
+  league_id: string;
+  season_id: string;
+  outgoing_team_id: string;
+  incoming_team_id: string;
+  effective_at: string;
+  transfer_fixture_ownership: boolean;
+  transfer_table_record: boolean;
+  reason: string | null;
+  approved_by_discord_user_id: string;
+  created_at: string;
+};
+
+export type PlayerIdentity = {
+  id: string;
+  league_id: string;
+  canonical_name: string;
+  normalized_name: string;
+  discord_user_id: string | null;
+  current_team_id: string | null;
+  created_at: string;
+  updated_at: string;
+};
+
+export type PlayerAlias = {
+  id: string;
+  league_id: string;
+  player_identity_id: string;
+  alias: string;
+  normalized_alias: string;
+  source: string;
+  created_at: string;
+};
+
 export type Fixture = {
   id: string;
   league_id: string;

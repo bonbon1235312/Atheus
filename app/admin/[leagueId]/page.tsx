@@ -288,6 +288,24 @@ export default async function LeagueWorkspacePage({
             <span className="status-chip">Available after activation</span>
           )}
         </article>
+        <article>
+          <span>09</span>
+          <h2>Player registry</h2>
+          <p>
+            Search aliases, correct canonical gamertags, connect Discord
+            identities and safely merge duplicate careers.
+          </p>
+          {["owner", "admin", "reviewer"].includes(membership.role) ? (
+            <Link
+              className="button button-primary"
+              href={`/admin/${leagueId}/players`}
+            >
+              Manage players
+            </Link>
+          ) : (
+            <span className="status-chip">Reviewer access required</span>
+          )}
+        </article>
       </section>
 
       <section className="readiness-shell">

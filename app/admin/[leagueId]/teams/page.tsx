@@ -4,9 +4,29 @@ import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { requireLeagueAccess } from "@/lib/league-access";
 import { supabaseAdmin } from "@/lib/supabase-admin";
-import { TeamCreationForm, TeamList } from "./team-manager";
+import {
+  TeamCreationForm,
+  TeamList,
+  TeamReplacementForm,
+} from "./team-manager";
 
 export const dynamic = "force-dynamic";
+
+function localDateTimeInput(value: Date, timezone: string) {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: timezone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+    hourCycle: "h23",
+  }).formatToParts(value);
+  const part = (type: Intl.DateTimeFormatPartTypes) =>
+    parts.find((entry) => entry.type === type)?.value ?? "";
+
+  return `${part("year")}-${part("month")}-${part("day")}T${part("hour")}:${part("minute")}`;
+}
 
 export default async function TeamsPage({
   params,
@@ -25,11 +45,12 @@ export default async function TeamsPage({
   }
 
   const database = supabaseAdmin();
-  const [{ data: teams }, { data: links }] = await Promise.all([
+  const [{ data: teams }, { data: links }, { data: seasons }] =
+    await Promise.all([
     database
       .from("teams")
       .select(
-        "id, name, abbreviation, discord_role_id, primary_colour, secondary_colour, created_at",
+        "id, name, abbreviation, status, discord_role_id, primary_colour, secondary_colour, created_at",
       )
       .eq("league_id", leagueId)
       .order("created_at"),
@@ -41,6 +62,12 @@ export default async function TeamsPage({
       .eq("league_id", leagueId)
       .is("inactive_at", null)
       .order("active_from", { ascending: false }),
+    database
+      .from("seasons")
+      .select("id, name, status")
+      .eq("league_id", leagueId)
+      .in("status", ["draft", "active"])
+      .order("created_at", { ascending: false }),
   ]);
 
   const activeLinkByTeam = new Map(
@@ -50,6 +77,7 @@ export default async function TeamsPage({
     id: team.id as string,
     name: team.name as string,
     abbreviation: team.abbreviation as string | null,
+    status: team.status as string,
     discord_role_id: team.discord_role_id as string | null,
     primary_colour: team.primary_colour as string | null,
     secondary_colour: team.secondary_colour as string | null,
@@ -66,6 +94,7 @@ export default async function TeamsPage({
       : null,
   }));
   const linkedCount = teamRows.filter((team) => team.activeLink).length;
+  const activeTeams = teamRows.filter((team) => team.status === "active");
 
   return (
     <main className="workspace-page teams-page">
@@ -91,7 +120,7 @@ export default async function TeamsPage({
       <section className="team-readiness" aria-label="Team readiness">
         <div>
           <span>Total teams</span>
-          <strong>{teamRows.length}</strong>
+          <strong>{activeTeams.length}</strong>
         </div>
         <div>
           <span>EA ready</span>
@@ -99,8 +128,35 @@ export default async function TeamsPage({
         </div>
         <div>
           <span>Need links</span>
-          <strong>{teamRows.length - linkedCount}</strong>
+          <strong>
+            {activeTeams.filter((team) => !team.activeLink).length}
+          </strong>
         </div>
+      </section>
+
+      <section className="teams-shell">
+        <div className="section-title-row">
+          <p className="step-index">Mid-season control</p>
+          <h2>Replace a team safely</h2>
+        </div>
+        <TeamReplacementForm
+          defaultEffectiveLocal={localDateTimeInput(
+            new Date(),
+            access.timezone,
+          )}
+          leagueId={leagueId}
+          seasons={(seasons ?? []).map((season) => ({
+            id: season.id as string,
+            name: season.name as string,
+          }))}
+          teams={teamRows.map((team) => ({
+            id: team.id,
+            name: team.name,
+            status: team.status,
+            eaReady: Boolean(team.activeLink),
+          }))}
+          timezone={access.timezone}
+        />
       </section>
 
       <section className="teams-shell">

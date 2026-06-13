@@ -2163,6 +2163,132 @@ footer {
   color: #9c2117;
 }
 
+.team-replacement-form,
+.identity-merge-form {
+  display: grid;
+  gap: 24px;
+  padding: 42px 0;
+  border-bottom: 1px solid var(--ink);
+}
+
+.replacement-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border: 1px solid var(--line);
+}
+
+.replacement-options label {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  min-height: 58px;
+  padding: 14px 18px;
+  border-right: 1px solid var(--line);
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.replacement-options label:last-child {
+  border-right: 0;
+}
+
+.player-search-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  gap: 14px;
+  align-items: end;
+  padding: 38px 0;
+  border-bottom: 1px solid var(--ink);
+}
+
+.player-identity-list {
+  border-bottom: 1px solid var(--ink);
+}
+
+.player-identity-list > article {
+  padding: 28px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.player-identity-heading {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.45fr);
+  gap: 24px;
+}
+
+.player-identity-heading > span {
+  display: grid;
+  gap: 4px;
+}
+
+.player-identity-heading strong {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.45rem, 2.5vw, 2.2rem);
+  line-height: 1;
+}
+
+.player-identity-heading small,
+.alias-list small {
+  color: var(--muted);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.player-identity-details {
+  margin-top: 22px;
+}
+
+.player-identity-details summary {
+  width: fit-content;
+  color: var(--accent-dark);
+  cursor: pointer;
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.player-identity-panel {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.65fr);
+  gap: 34px;
+  margin-top: 22px;
+  padding: 28px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.identity-form,
+.identity-aliases,
+.alias-form {
+  display: grid;
+  gap: 18px;
+}
+
+.alias-list {
+  border-top: 1px solid var(--line);
+}
+
+.alias-list > div {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 11px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.alias-list > div > span {
+  display: grid;
+  gap: 3px;
+}
+
+.alias-form {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  align-items: end;
+}
+
 .fixture-generator-form {
   display: grid;
   gap: 30px;
@@ -2764,6 +2890,18 @@ footer {
   .review-controls {
     grid-template-columns: 1fr;
   }
+
+  .player-identity-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .alias-form {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .alias-form .button {
+    grid-column: 1 / -1;
+  }
 }
 
 @media (max-width: 560px) {
@@ -2953,6 +3091,26 @@ footer {
   .team-card-heading .status-chip {
     grid-column: 2;
     justify-self: start;
+  }
+
+  .replacement-options,
+  .player-search-form,
+  .player-identity-heading,
+  .alias-form {
+    grid-template-columns: 1fr;
+  }
+
+  .replacement-options label {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .replacement-options label:last-child {
+    border-bottom: 0;
+  }
+
+  .player-identity-panel {
+    padding: 20px;
   }
 
   .team-colour-swatch {

@@ -54,7 +54,7 @@ export default async function FixturesAdminPage({
   const [
     { data: seasons },
     { data: competitions },
-    { data: teams },
+    { data: allTeams },
     { data: links },
     { data: fixtures, count: fixtureCount },
   ] = await Promise.all([
@@ -71,9 +71,8 @@ export default async function FixturesAdminPage({
       .order("created_at"),
     database
       .from("teams")
-      .select("id, name, abbreviation")
+      .select("id, name, abbreviation, status")
       .eq("league_id", leagueId)
-      .eq("status", "active")
       .order("name"),
     database
       .from("team_ea_club_links")
@@ -103,8 +102,9 @@ export default async function FixturesAdminPage({
     (seasons ?? []).map((season) => [season.id as string, season]),
   );
   const teamById = new Map(
-    (teams ?? []).map((team) => [team.id as string, team.name as string]),
+    (allTeams ?? []).map((team) => [team.id as string, team.name as string]),
   );
+  const teams = (allTeams ?? []).filter((team) => team.status === "active");
   const linkedTeams = new Set((links ?? []).map((link) => link.team_id));
   const matchByFixtureId = new Map(
     (matches ?? []).map((match) => [match.fixture_id as string, match]),

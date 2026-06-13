@@ -5,6 +5,7 @@ import { useActionState, useState } from "react";
 import {
   createTeam,
   linkTeamEaClub,
+  replaceTeam,
   type TeamActionState,
   unlinkTeamEaClub,
 } from "@/app/admin/[leagueId]/teams/actions";
@@ -32,6 +33,7 @@ type TeamSummary = {
   id: string;
   name: string;
   abbreviation: string | null;
+  status: string;
   discord_role_id: string | null;
   primary_colour: string | null;
   secondary_colour: string | null;
@@ -295,10 +297,16 @@ function TeamLinkEditor({
         </div>
         <span
           className={`status-chip ${
-            team.activeLink ? "" : "status-chip-warning"
+            team.status !== "active" || !team.activeLink
+              ? "status-chip-warning"
+              : ""
           }`}
         >
-          {team.activeLink ? "EA ready" : "Link required"}
+          {team.status !== "active"
+            ? team.status
+            : team.activeLink
+              ? "EA ready"
+              : "Link required"}
         </span>
       </div>
 
@@ -407,5 +415,129 @@ export function TeamList({
         />
       ))}
     </div>
+  );
+}
+
+export function TeamReplacementForm({
+  defaultEffectiveLocal,
+  leagueId,
+  seasons,
+  teams,
+  timezone,
+}: {
+  defaultEffectiveLocal: string;
+  leagueId: string;
+  seasons: { id: string; name: string }[];
+  teams: { id: string; name: string; status: string; eaReady: boolean }[];
+  timezone: string;
+}) {
+  const [state, action, pending] = useActionState(replaceTeam, initialState);
+  const outgoingTeams = teams.filter((team) => team.status === "active");
+  const incomingTeams = teams.filter(
+    (team) => ["active", "inactive"].includes(team.status) && team.eaReady,
+  );
+
+  if (!seasons.length || !outgoingTeams.length || incomingTeams.length < 2) {
+    return (
+      <p className="empty-state">
+        Create the incoming team and verify its EA club first. An active season
+        and two eligible teams are required.
+      </p>
+    );
+  }
+
+  return (
+    <form
+      action={action}
+      className="team-replacement-form"
+      onSubmit={(event) => {
+        if (
+          !window.confirm(
+            "Replace this team and update eligible future fixtures? Completed matches will remain unchanged.",
+          )
+        ) {
+          event.preventDefault();
+        }
+      }}
+    >
+      <input name="leagueId" type="hidden" value={leagueId} />
+      <div className="field-grid">
+        <label className="field">
+          <span>Season</span>
+          <select name="seasonId" required>
+            {seasons.map((season) => (
+              <option key={season.id} value={season.id}>
+                {season.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="field">
+          <span>Outgoing team</span>
+          <select name="outgoingTeamId" required>
+            <option value="">Choose outgoing team</option>
+            {outgoingTeams.map((team) => (
+              <option key={team.id} value={team.id}>
+                {team.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="field">
+          <span>Incoming team</span>
+          <select name="incomingTeamId" required>
+            <option value="">Choose EA-ready replacement</option>
+            {incomingTeams.map((team) => (
+              <option key={team.id} value={team.id}>
+                {team.name}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label className="field">
+          <span>Effective in {timezone}</span>
+          <input
+            defaultValue={defaultEffectiveLocal}
+            name="effectiveLocal"
+            required
+            type="datetime-local"
+          />
+        </label>
+        <label className="field field-wide">
+          <span>Audit reason</span>
+          <textarea
+            name="reason"
+            placeholder="Why this team is being replaced"
+            required
+            rows={3}
+          />
+        </label>
+      </div>
+      <div className="replacement-options">
+        <label>
+          <input defaultChecked name="transferFutureFixtures" type="checkbox" />
+          <span>Move scheduled and postponed future fixtures</span>
+        </label>
+        <label>
+          <input defaultChecked name="transferTableRecord" type="checkbox" />
+          <span>Carry the outgoing team&apos;s league record forward</span>
+        </label>
+      </div>
+      <div className="team-form-footer">
+        <p>
+          Completed fixtures and historical player rows stay attached to the
+          original team.
+        </p>
+        <button
+          className="button button-primary"
+          disabled={pending}
+          type="submit"
+        >
+          {pending ? "Replacing team..." : "Replace team"}
+        </button>
+      </div>
+      {state.error ? <p className="form-error">{state.error}</p> : null}
+      {state.success ? <p className="form-success">{state.success}</p> : null}
+    </form>
   );
 }
