@@ -7,7 +7,9 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "beta:vxn:dry-run": "node scripts/migrate-legacy-vxn.mjs",
+    "beta:vxn:apply": "node scripts/migrate-legacy-vxn.mjs --apply --confirm-production-import"
   },
   "dependencies": {
     "@supabase/supabase-js": "2.106.2",

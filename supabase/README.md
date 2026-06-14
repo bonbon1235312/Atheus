@@ -56,3 +56,26 @@ rejection, duplicate-key rejection and unauthorized-role rejection.
 
 The old `league_bot_*` tables remain available while the Python bot is moved behind
 league-aware repository adapters. They are not the final source of truth.
+
+# Legacy VXN beta import
+
+The migration `20260614160000_legacy_vxn_canonical_import.sql` installs a
+service-role-only, transactional importer for the legacy VXN `league_*` tables.
+It does not update or delete any legacy rows.
+
+After applying the migration, validate the source without writing:
+
+```powershell
+npm run beta:vxn:dry-run
+```
+
+To perform the live import, provide the real VXN headquarters guild ID and owner
+Discord user ID through `ATHEUS_VXN_DISCORD_GUILD_ID` and
+`ATHEUS_VXN_OWNER_DISCORD_USER_ID`, then run:
+
+```powershell
+npm run beta:vxn:apply
+```
+
+The importer is idempotent and reconciles teams, fixtures, approved results,
+player identities, and per-match player stats into the canonical Atheus schema.
