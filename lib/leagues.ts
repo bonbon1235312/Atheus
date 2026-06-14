@@ -10,6 +10,7 @@ export type LeagueSummary = {
   status: string;
   timezone: string;
   role: string;
+  siteCredentialConfigured: boolean;
 };
 
 export async function getLeaguesForDiscordUser(
@@ -37,18 +38,34 @@ export async function getLeaguesForDiscordUser(
     ]),
   );
 
-  const { data: leagues, error: leagueError } = await database
-    .from("leagues")
-    .select("id, name, slug, short_name, status, timezone")
-    .in("id", [...roleByLeague.keys()])
-    .order("created_at", { ascending: false });
+  const leagueIds = [...roleByLeague.keys()];
+  const [{ data: leagues, error: leagueError }, { data: credentials }] =
+    await Promise.all([
+      database
+        .from("leagues")
+        .select("id, name, slug, short_name, status, timezone")
+        .in("id", leagueIds)
+        .order("created_at", { ascending: false }),
+      database
+        .from("league_site_credentials")
+        .select("league_id")
+        .in("league_id", leagueIds),
+    ]);
 
   if (leagueError) {
     throw leagueError;
   }
 
+  const credentialLeagueIds = new Set(
+    (credentials ?? []).map((credential) => credential.league_id as string),
+  );
+
   return (leagues ?? []).map((league) => ({
-    ...(league as Omit<LeagueSummary, "role">),
+    ...(league as Omit<
+      LeagueSummary,
+      "role" | "siteCredentialConfigured"
+    >),
     role: roleByLeague.get(league.id as string) ?? "member",
+    siteCredentialConfigured: credentialLeagueIds.has(league.id as string),
   }));
 }

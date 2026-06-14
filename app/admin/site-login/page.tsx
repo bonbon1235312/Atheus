@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { auth } from "@/auth";
+import { leaguePublicUrl } from "@/lib/public-url";
 import { SiteLoginForm } from "./site-login-form";
 
 export const metadata = {
@@ -14,8 +15,8 @@ export default async function SiteLoginPage({
   searchParams: Promise<{ league?: string }>;
 }) {
   const session = await auth();
-  if (session?.siteLeagueId) {
-    redirect(`/admin/${session.siteLeagueId}`);
+  if (session?.siteLeagueId && session.siteLeagueSlug) {
+    redirect(leaguePublicUrl(session.siteLeagueSlug, "admin"));
   }
   const { league = "" } = await searchParams;
 
@@ -27,7 +28,7 @@ export default async function SiteLoginPage({
           <span>A</span>
           <strong>atheus</strong>
         </Link>
-        <Link href="/admin">Discord owner access</Link>
+        <Link href="https://www.atheus.dev/admin">Discord owner access</Link>
       </header>
 
       <section className="site-access-grid">
@@ -48,7 +49,7 @@ export default async function SiteLoginPage({
             <span>Secure site access</span>
             <small>One league / one boundary</small>
           </div>
-          <SiteLoginForm leagueSlug={league} />
+          <SiteLoginForm leagueSlug={league} lockLeague={Boolean(league)} />
         </div>
       </section>
     </main>

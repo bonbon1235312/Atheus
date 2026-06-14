@@ -99,3 +99,9 @@ Add `*.atheus.dev` to the same Vercel project as `atheus.dev` and configure the
 wildcard DNS record Vercel provides. Set `ATHEUS_ROOT_DOMAIN=atheus.dev` in the
 Production environment. League creation reserves the chosen slug as a subdomain
 and displays the final customer URL immediately after the workspace is created.
+
+`atheus.dev/admin` is the Discord-owned account surface for billing, entitlement,
+league creation and league-site credential rotation. Operational controls live at
+`<league>.atheus.dev/admin` and require that league's separate site username and
+password. Tenant sessions are bound to one league and cannot access another
+league's control room.

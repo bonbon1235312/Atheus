@@ -11,6 +11,7 @@ import {
   getPlatformEntitlement,
   hasActivePremium,
 } from "@/lib/entitlements";
+import { leaguePublicUrl } from "@/lib/public-url";
 import { OnboardingForm } from "./onboarding-form";
 
 export const metadata = {
@@ -19,11 +20,17 @@ export const metadata = {
 
 export const dynamic = "force-dynamic";
 
-export default async function AdminPage() {
+export default async function AdminPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ created?: string }>;
+}) {
   const session = await auth();
 
   if (session?.authMethod === "league-admin" && session.siteLeagueId) {
-    redirect(`/admin/${session.siteLeagueId}`);
+    redirect(
+      leaguePublicUrl(session.siteLeagueSlug ?? "", "admin"),
+    );
   }
 
   if (!session) {
@@ -71,6 +78,8 @@ export default async function AdminPage() {
   const premium = hasActivePremium(entitlement);
   const creationBlocked = Boolean(entitlement?.creation_blocked_at);
   const freeClaimUsed = Boolean(entitlement?.free_claimed_at);
+  const { created } = await searchParams;
+  const createdLeague = leagues.find((league) => league.slug === created);
 
   return (
     <main className="admin-page">
@@ -103,6 +112,26 @@ export default async function AdminPage() {
         </p>
       </section>
 
+      {createdLeague ? (
+        <section className="league-created-banner">
+          <div>
+            <p className="eyebrow">League created</p>
+            <h2>Your league website is ready.</h2>
+            <p>
+              League operations now live behind the administrator login on the
+              league website, separate from this Atheus account area.
+            </p>
+          </div>
+          <a
+            href={leaguePublicUrl(createdLeague.slug, "admin")}
+            rel="noreferrer"
+            target="_blank"
+          >
+            {leaguePublicUrl(createdLeague.slug, "admin")}
+          </a>
+        </section>
+      ) : null}
+
       {leagues.length ? (
         <section className="league-list" aria-labelledby="existing-leagues">
           <div className="section-title-row">
@@ -113,13 +142,21 @@ export default async function AdminPage() {
             {leagues.map((league) => (
               <Link
                 className="league-row"
-                href={`/admin/${league.id}`}
+                href={
+                  league.siteCredentialConfigured
+                    ? leaguePublicUrl(league.slug, "admin")
+                    : `/admin/${league.id}/site-access?setup=required`
+                }
                 key={league.id}
               >
                 <span>{league.short_name ?? league.name.slice(0, 3)}</span>
                 <strong>{league.name}</strong>
                 <small>{league.role}</small>
-                <small>{league.status}</small>
+                <small>
+                  {league.siteCredentialConfigured
+                    ? "Open site admin"
+                    : "Set admin login"}
+                </small>
               </Link>
             ))}
           </div>

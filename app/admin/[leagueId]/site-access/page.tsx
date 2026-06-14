@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { requireLeagueAccess } from "@/lib/league-access";
+import { leaguePublicUrl } from "@/lib/public-url";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { SiteAccessForm } from "./site-access-form";
 
@@ -36,8 +37,8 @@ export default async function SiteAccessSettingsPage({
           <span className="wordmark-mark">A</span>
           <span>ATHEUS</span>
         </Link>
-        <Link className="header-link" href={`/admin/${leagueId}`}>
-          Back to workspace
+        <Link className="header-link" href="/admin">
+          Back to Atheus account
         </Link>
       </header>
 
@@ -85,6 +86,21 @@ export default async function SiteAccessSettingsPage({
           </strong>
         </div>
       </section>
+
+      {credential ? (
+        <section className="site-access-launch">
+          <div>
+            <p className="eyebrow">League control room</p>
+            <h2>Operations live on the league website.</h2>
+          </div>
+          <a
+            className="button button-primary"
+            href={leaguePublicUrl(access.leagueSlug, "admin")}
+          >
+            Open {access.leagueSlug}.atheus.dev/admin
+          </a>
+        </section>
+      ) : null}
 
       <section className="teams-shell">
         <SiteAccessForm

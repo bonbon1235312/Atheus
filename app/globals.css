@@ -1515,6 +1515,29 @@ body:has(.admin-page) .text-button {
   border: 0;
 }
 
+.site-login-league {
+  display: grid;
+  gap: 6px;
+  padding: 14px 16px;
+  border: 1px solid rgba(194, 201, 236, 0.2);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.site-login-league span {
+  color: #777a8d;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.site-login-league strong {
+  color: #c7cbff;
+  font-family: monospace;
+  font-size: 0.88rem;
+}
+
 .site-login-error {
   margin: 0;
   padding: 13px 14px;
@@ -1556,6 +1579,22 @@ body:has(.admin-page) .text-button {
 
 .site-access-summary strong {
   overflow-wrap: anywhere;
+}
+
+.site-access-launch {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.site-access-launch h2 {
+  margin: 8px 0 0;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(1.8rem, 3vw, 3rem);
+  text-transform: uppercase;
 }
 
 .site-credential-form {
@@ -3113,6 +3152,11 @@ body:has(.admin-page) .text-button {
     padding: 20px 0;
     border-right: 0;
     border-bottom: 1px solid var(--line);
+  }
+
+  .site-access-launch {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .hero {

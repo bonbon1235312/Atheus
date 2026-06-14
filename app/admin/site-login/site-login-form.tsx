@@ -9,7 +9,13 @@ import {
 
 const initialState: SiteLoginState = {};
 
-export function SiteLoginForm({ leagueSlug = "" }: { leagueSlug?: string }) {
+export function SiteLoginForm({
+  leagueSlug = "",
+  lockLeague = false,
+}: {
+  leagueSlug?: string;
+  lockLeague?: boolean;
+}) {
   const [state, action, pending] = useActionState(
     siteAdminSignIn,
     initialState,
@@ -17,20 +23,30 @@ export function SiteLoginForm({ leagueSlug = "" }: { leagueSlug?: string }) {
 
   return (
     <form action={action} className="site-login-form">
-      <label>
-        <span>League address</span>
-        <div className="slug-input">
-          <small>/leagues/</small>
-          <input
-            autoCapitalize="none"
-            autoComplete="organization"
-            defaultValue={leagueSlug}
-            name="leagueSlug"
-            placeholder="northstar-pro-league"
-            required
-          />
-        </div>
-      </label>
+      {lockLeague ? (
+        <>
+          <input name="leagueSlug" type="hidden" value={leagueSlug} />
+          <div className="site-login-league">
+            <span>League control room</span>
+            <strong>{leagueSlug}.atheus.dev</strong>
+          </div>
+        </>
+      ) : (
+        <label>
+          <span>League address</span>
+          <div className="slug-input">
+            <input
+              autoCapitalize="none"
+              autoComplete="organization"
+              defaultValue={leagueSlug}
+              name="leagueSlug"
+              placeholder="northstar-pro-league"
+              required
+            />
+            <small>.atheus.dev</small>
+          </div>
+        </label>
+      )}
       <label>
         <span>Administrator username</span>
         <input

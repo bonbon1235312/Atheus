@@ -223,5 +223,5 @@ export async function createLeague(
     redirect(`/admin/${data}/site-access?setup=required`);
   }
 
-  redirect(`/admin/${data}?created=${encodeURIComponent(slug)}`);
+  redirect(`/admin?created=${encodeURIComponent(slug)}`);
 }

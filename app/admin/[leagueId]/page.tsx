@@ -19,6 +19,9 @@ export default async function LeagueWorkspacePage({
   if (!session?.discordUserId) {
     redirect("/admin");
   }
+  if (session.authMethod !== "league-admin") {
+    redirect("/admin");
+  }
 
   const { leagueId } = await params;
   const database = supabaseAdmin();
