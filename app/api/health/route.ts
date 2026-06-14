@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 
 export function GET() {
   const checks = {
-    authSecret: Boolean(process.env.AUTH_SECRET),
+    authSecret: Boolean(
+      process.env.AUTH_SECRET?.trim() ||
+        process.env.NEXTAUTH_SECRET?.trim(),
+    ),
     discordOAuth: Boolean(
       process.env.AUTH_DISCORD_ID && process.env.AUTH_DISCORD_SECRET,
     ),

@@ -10,6 +10,10 @@ import {
 } from "@/lib/site-credentials";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
+const authSecret =
+  process.env.AUTH_SECRET?.trim() ||
+  process.env.NEXTAUTH_SECRET?.trim();
+
 async function refreshDiscordToken(token: {
   discordRefreshToken?: string;
   discordAccessToken?: string;
@@ -54,7 +58,7 @@ async function refreshDiscordToken(token: {
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   trustHost: true,
-  secret: process.env.AUTH_SECRET,
+  secret: authSecret,
   providers: [
     Discord({
       clientId: process.env.AUTH_DISCORD_ID,
