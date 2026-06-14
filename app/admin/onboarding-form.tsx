@@ -47,7 +47,10 @@ export function OnboardingForm({
           </label>
           <label className="field">
             <span>Public address</span>
-            <input name="slug" placeholder="northstar-pro-league" />
+            <div className="subdomain-field">
+              <input name="slug" placeholder="northstar-pro-league" />
+              <span>.atheus.dev</span>
+            </div>
           </label>
           <label className="field field-wide">
             <span>Description</span>

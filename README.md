@@ -63,6 +63,8 @@ collection slices are complete:
 - collector run telemetry, EA access-denied cooldowns and an owner/admin master switch;
 - a protected operations dashboard at `/admin/[leagueId]/collector`.
 - league-branded public home pages at `/leagues/[leagueSlug]`;
+- clean league subdomains such as `vxn.atheus.dev`, with legacy path URLs
+  redirected to the tenant domain;
 - approved-only fixture and result archives with season, competition and club filters;
 - full zero-game-safe standings, club pages and consolidated player profiles;
 - multi-position leaderboards with attacking, defensive, goalkeeping and overall sorts;
@@ -90,3 +92,10 @@ install.
 Discord remains the only ownership identity. A league site credential receives an
 isolated `admin` membership for its own league and cannot activate the league,
 change billing, or manage owner/staff access.
+
+## League subdomains
+
+Add `*.atheus.dev` to the same Vercel project as `atheus.dev` and configure the
+wildcard DNS record Vercel provides. Set `ATHEUS_ROOT_DOMAIN=atheus.dev` in the
+Production environment. League creation reserves the chosen slug as a subdomain
+and displays the final customer URL immediately after the workspace is created.

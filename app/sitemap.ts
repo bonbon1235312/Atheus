@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 
+import { leaguePublicUrl } from "@/lib/public-url";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
@@ -20,7 +21,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       .eq("status", "active");
 
     for (const league of leagues ?? []) {
-      const root = `${baseUrl}/leagues/${league.slug}`;
+      const root = leaguePublicUrl(league.slug as string);
       entries.push(
         {
           url: root,

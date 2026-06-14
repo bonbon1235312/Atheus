@@ -21,6 +21,7 @@ import {
   validateSitePassword,
   validateSiteUsername,
 } from "@/lib/site-credentials";
+import { RESERVED_LEAGUE_SLUGS } from "@/lib/public-url";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export type CreateLeagueState = {
@@ -74,6 +75,12 @@ export async function createLeague(
 
   if (!name || name.length > 80 || !slug) {
     return { error: "Enter a league name of 80 characters or fewer." };
+  }
+
+  if (RESERVED_LEAGUE_SLUGS.has(slug)) {
+    return {
+      error: "That public address is reserved by Atheus. Choose another.",
+    };
   }
 
   if (
@@ -216,5 +223,5 @@ export async function createLeague(
     redirect(`/admin/${data}/site-access?setup=required`);
   }
 
-  redirect(`/admin/${data}`);
+  redirect(`/admin/${data}?created=${encodeURIComponent(slug)}`);
 }

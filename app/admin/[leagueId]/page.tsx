@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 
 import { auth, signOut } from "@/auth";
+import { leaguePublicUrl } from "@/lib/public-url";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 import { ActivationForm } from "./activation-form";
 
@@ -9,8 +10,10 @@ export const dynamic = "force-dynamic";
 
 export default async function LeagueWorkspacePage({
   params,
+  searchParams,
 }: {
   params: Promise<{ leagueId: string }>;
+  searchParams: Promise<{ created?: string }>;
 }) {
   const session = await auth();
   if (!session?.discordUserId) {
@@ -40,6 +43,8 @@ export default async function LeagueWorkspacePage({
   if (!league) {
     notFound();
   }
+  const { created } = await searchParams;
+  const publicUrl = leaguePublicUrl(league.slug as string);
 
   const { data: seasons } = await database
     .from("seasons")
@@ -143,6 +148,22 @@ export default async function LeagueWorkspacePage({
         </p>
       </section>
 
+      {created === league.slug ? (
+        <section className="league-created-banner">
+          <div>
+            <p className="eyebrow">League created</p>
+            <h2>Your league address is ready.</h2>
+            <p>
+              Share this address after activation. It remains attached to this
+              league workspace.
+            </p>
+          </div>
+          <a href={publicUrl} rel="noreferrer" target="_blank">
+            {publicUrl}
+          </a>
+        </section>
+      ) : null}
+
       <section className="workspace-grid">
         <article>
           <span>01</span>
@@ -150,7 +171,11 @@ export default async function LeagueWorkspacePage({
           <dl>
             <div>
               <dt>Address</dt>
-              <dd>/{league.slug}</dd>
+              <dd>
+                <a href={publicUrl} rel="noreferrer" target="_blank">
+                  {league.slug}.atheus.dev
+                </a>
+              </dd>
             </div>
             <div>
               <dt>Timezone</dt>
@@ -293,7 +318,7 @@ export default async function LeagueWorkspacePage({
           {league.status === "active" ? (
             <Link
               className="button button-primary"
-              href={`/leagues/${league.slug}`}
+              href={publicUrl}
             >
               Open public site
             </Link>

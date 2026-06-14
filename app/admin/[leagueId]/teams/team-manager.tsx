@@ -59,20 +59,37 @@ function record(candidate: SearchCandidate) {
 function EaClubSearch({
   leagueId,
   defaultPlatform,
+  defaultClubName,
+  clubName: controlledClubName,
+  onClubNameChange,
   selected,
   onSelect,
 }: {
   leagueId: string;
   defaultPlatform: string;
+  defaultClubName?: string;
+  clubName?: string;
+  onClubNameChange?: (clubName: string) => void;
   selected: SearchCandidate | null;
   onSelect: (candidate: SearchCandidate | null) => void;
 }) {
-  const [clubName, setClubName] = useState("");
+  const [internalClubName, setInternalClubName] = useState(
+    defaultClubName ?? "",
+  );
   const [platform, setPlatform] = useState(defaultPlatform);
   const [results, setResults] = useState<SearchCandidate[]>([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [searched, setSearched] = useState(false);
+  const clubName = controlledClubName ?? internalClubName;
+
+  function updateClubName(nextClubName: string) {
+    if (onClubNameChange) {
+      onClubNameChange(nextClubName);
+      return;
+    }
+    setInternalClubName(nextClubName);
+  }
 
   async function search() {
     const query = clubName.trim();
@@ -104,8 +121,18 @@ function EaClubSearch({
         throw new Error(payload.error || "EA club search failed.");
       }
 
-      setResults(payload.results ?? []);
+      const nextResults = payload.results ?? [];
+      setResults(nextResults);
       setSearched(true);
+      const normalizedQuery = query.toLowerCase().replace(/\s+/g, " ");
+      const exactMatches = nextResults.filter(
+        (candidate) =>
+          candidate.name.toLowerCase().replace(/\s+/g, " ") ===
+          normalizedQuery,
+      );
+      if (exactMatches.length === 1) {
+        onSelect(exactMatches[0]);
+      }
     } catch (searchError) {
       setResults([]);
       setError(
@@ -124,7 +151,7 @@ function EaClubSearch({
         <label className="field">
           <span>EA club name</span>
           <input
-            onChange={(event) => setClubName(event.target.value)}
+            onChange={(event) => updateClubName(event.target.value)}
             placeholder="Search the exact club name"
             value={clubName}
           />
@@ -204,6 +231,8 @@ export function TeamCreationForm({
 }) {
   const [state, action, pending] = useActionState(createTeam, initialState);
   const [selected, setSelected] = useState<SearchCandidate | null>(null);
+  const [teamName, setTeamName] = useState("");
+  const [eaClubName, setEaClubName] = useState("");
 
   return (
     <form action={action} className="team-create-form">
@@ -217,7 +246,21 @@ export function TeamCreationForm({
       <div className="field-grid">
         <label className="field field-wide">
           <span>Team name</span>
-          <input name="name" placeholder="Anarchy FC" required />
+          <input
+            name="name"
+            onChange={(event) => {
+              const nextTeamName = event.target.value;
+              setEaClubName((currentEaClubName) =>
+                currentEaClubName === teamName
+                  ? nextTeamName
+                  : currentEaClubName,
+              );
+              setTeamName(nextTeamName);
+            }}
+            placeholder="Anarchy FC"
+            required
+            value={teamName}
+          />
         </label>
         <label className="field">
           <span>Abbreviation</span>
@@ -242,8 +285,10 @@ export function TeamCreationForm({
       </div>
 
       <EaClubSearch
+        clubName={eaClubName}
         defaultPlatform={defaultPlatform}
         leagueId={leagueId}
+        onClubNameChange={setEaClubName}
         onSelect={setSelected}
         selected={selected}
       />
@@ -334,6 +379,7 @@ function TeamLinkEditor({
           value={selected?.selectionToken ?? ""}
         />
         <EaClubSearch
+          defaultClubName={team.name}
           defaultPlatform={team.activeLink?.platform ?? defaultPlatform}
           leagueId={leagueId}
           onSelect={setSelected}

@@ -1093,6 +1093,15 @@ footer {
 }
 
 @media (max-width: 900px) {
+  .league-created-banner {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .league-created-banner > a {
+    width: 100%;
+  }
+
   .landing-nav {
     grid-template-columns: 1fr auto;
   }
@@ -1466,6 +1475,39 @@ body:has(.admin-page) .text-button {
 
 .slug-input input:focus {
   box-shadow: none;
+}
+
+.subdomain-field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  overflow: hidden;
+  border: 1px solid rgba(194, 201, 236, 0.25);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.subdomain-field:focus-within {
+  border-color: #7782ff;
+  box-shadow: 0 0 0 3px rgba(119, 130, 255, 0.12);
+}
+
+.subdomain-field input {
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.subdomain-field input:focus {
+  box-shadow: none;
+}
+
+.subdomain-field span {
+  padding: 0 14px;
+  color: #777a8d;
+  font-family: monospace;
+  font-size: 0.78rem;
 }
 
 .site-login-form .landing-button {
@@ -1853,6 +1895,46 @@ body:has(.admin-page) .text-button {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   border-bottom: 1px solid var(--ink);
+}
+
+.league-created-banner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 32px;
+  align-items: end;
+  margin: 48px 0;
+  padding: clamp(24px, 4vw, 48px);
+  border: 1px solid rgba(119, 130, 255, 0.44);
+  background:
+    linear-gradient(135deg, rgba(119, 130, 255, 0.14), transparent 58%),
+    var(--surface);
+}
+
+.league-created-banner h2 {
+  margin: 8px 0 12px;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2.2rem, 4.5vw, 4.5rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+.league-created-banner p {
+  max-width: 58ch;
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.league-created-banner > a {
+  max-width: min(100%, 34rem);
+  overflow: hidden;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  color: #aeb5ff;
+  background: var(--background);
+  font-family: monospace;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .workspace-grid article {
