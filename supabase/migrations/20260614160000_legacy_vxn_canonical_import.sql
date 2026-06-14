@@ -499,10 +499,11 @@ begin
       when source_fixture.status = 'completed' then 'legacy_vxn'
       else null
     end,
-    case
-      when source_fixture.status = 'completed' then source_fixture.updated_at
-      else null
-    end
+    coalesce(
+      source_fixture.updated_at,
+      source_fixture.created_at,
+      now()
+    )
   from public.league_fixtures source_fixture
   join public.teams home_team
     on home_team.league_id = v_league_id
