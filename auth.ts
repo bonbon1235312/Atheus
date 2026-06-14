@@ -53,6 +53,8 @@ async function refreshDiscordToken(token: {
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  trustHost: true,
+  secret: process.env.AUTH_SECRET,
   providers: [
     Discord({
       clientId: process.env.AUTH_DISCORD_ID,
