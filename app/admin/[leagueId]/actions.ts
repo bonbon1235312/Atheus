@@ -7,7 +7,7 @@ import {
   getDiscordGuildVerification,
   getManagedDiscordGuilds,
 } from "@/lib/discord";
-import { enqueueDiscordJob } from "@/lib/discord-jobs";
+import { autoActivateLeague } from "@/lib/league-activation";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export type ActivationState = {
@@ -77,35 +77,21 @@ export async function activateLeague(
     return { error: "Install the Atheus bot before activating the league." };
   }
 
-  const { error } = await database.rpc("activate_league", {
-    p_league_id: leagueId,
-    p_discord_user_id: session.discordUserId,
-    p_discord_guild_id: binding.discord_guild_id,
-    p_owner_verified: true,
-    p_bot_verified: true,
-    p_guild_member_count: verification.memberCount,
+  const result = await autoActivateLeague({
+    leagueId,
+    discordUserId: session.discordUserId,
+    discordGuildId: binding.discord_guild_id as string,
+    guildMemberCount: verification.memberCount,
   });
 
-  if (error) {
-    return { error: error.message };
-  }
-
-  let setupQueued = true;
-  try {
-    await enqueueDiscordJob({
-      leagueId,
-      discordGuildId: binding.discord_guild_id as string,
-      jobType: "guild.setup",
-      idempotencyKey: `guild-setup:${binding.discord_guild_id}:v1`,
-    });
-  } catch {
-    setupQueued = false;
+  if (!result.ok) {
+    return { error: "Activation could not be completed. Please try again." };
   }
 
   revalidatePath(`/admin/${leagueId}`);
   revalidatePath("/admin");
   return {
-    success: setupQueued
+    success: result.setupQueued
       ? "League activated. Discord setup is queued automatically."
       : "League activated, but Discord setup needs an operator retry.",
   };

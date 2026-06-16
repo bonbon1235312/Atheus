@@ -16,6 +16,7 @@ import {
   getPlatformEntitlement,
   hasActivePremium,
 } from "@/lib/entitlements";
+import { autoActivateLeague } from "@/lib/league-activation";
 import {
   hashSitePassword,
   validateSitePassword,
@@ -207,6 +208,16 @@ export async function createLeague(
     }
     return { error: error.message };
   }
+
+  // Auto-activate immediately. The free/premium entitlement gate has already
+  // passed inside create_league_onboarding, so this league is within the
+  // account's allowance and goes live without a separate "Activate" click.
+  await autoActivateLeague({
+    leagueId: data as string,
+    discordUserId: session.discordUserId,
+    discordGuildId: guildId,
+    guildMemberCount: verification.memberCount,
+  });
 
   const passwordHash = await hashSitePassword(sitePassword);
   const { error: credentialError } = await database.rpc(

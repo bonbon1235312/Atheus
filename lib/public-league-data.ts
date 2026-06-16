@@ -47,13 +47,20 @@ function unwrap<T>(data: unknown): T[] {
   return (data ?? []) as T[];
 }
 
-export async function getPublicLeague(slug: string): Promise<PublicLeague> {
+/**
+ * Look up a league by slug regardless of status (draft/active/suspended/...).
+ * Returns null when no league owns the slug. Used by the public layout and the
+ * tenant not-found boundary so a not-yet-activated league can render a friendly
+ * "coming soon" page instead of a hard 404.
+ */
+export async function getPublicLeagueAnyStatus(
+  slug: string,
+): Promise<PublicLeague | null> {
   const database = supabaseAdmin();
   const { data: league, error } = await database
     .from("leagues")
     .select("*")
     .eq("slug", slug)
-    .eq("status", "active")
     .maybeSingle();
 
   if (error) {
@@ -61,7 +68,7 @@ export async function getPublicLeague(slug: string): Promise<PublicLeague> {
   }
 
   if (!league) {
-    notFound();
+    return null;
   }
 
   const [{ data: branding, error: brandingError }, { data: settings, error: settingsError }] =
@@ -96,6 +103,16 @@ export async function getPublicLeague(slug: string): Promise<PublicLeague> {
     },
     publicStatsEnabled: Boolean(settings?.public_stats_enabled ?? true),
   };
+}
+
+export async function getPublicLeague(slug: string): Promise<PublicLeague> {
+  const league = await getPublicLeagueAnyStatus(slug);
+
+  if (!league || league.status !== "active") {
+    notFound();
+  }
+
+  return league;
 }
 
 export async function getLeagueSeasons(leagueId: string): Promise<Season[]> {

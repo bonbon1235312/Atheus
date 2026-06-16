@@ -1014,3 +1014,41 @@
     padding-bottom: 10px;
   }
 }
+
+.league-coming-soon {
+  width: min(640px, 100%);
+  margin: 0 auto;
+  padding: 120px 24px 96px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 18px;
+  min-height: 60vh;
+  justify-content: center;
+}
+
+.league-coming-soon .league-mark {
+  width: 84px;
+  height: 84px;
+  font-size: 1.9rem;
+}
+
+.league-coming-soon h1 {
+  margin: 0;
+  font-size: clamp(2.2rem, 5vw, 3.4rem);
+  line-height: 1.05;
+  color: var(--league-text);
+}
+
+.league-coming-soon-lead {
+  margin: 0;
+  max-width: 46ch;
+  color: var(--league-muted);
+  font-size: 1.05rem;
+  line-height: 1.6;
+}
+
+.league-coming-soon .button {
+  margin-top: 10px;
+}

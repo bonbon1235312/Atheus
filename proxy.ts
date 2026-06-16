@@ -2,32 +2,10 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import {
   atheusRootDomain,
-  RESERVED_LEAGUE_SLUGS,
+  leagueSlugFromHostname,
 } from "@/lib/public-url";
 
 const PUBLIC_FILE = /\.[a-z0-9]+$/i;
-
-function leagueSlugFromHostname(hostname: string) {
-  const rootDomain = atheusRootDomain();
-  const normalized = hostname.toLowerCase().split(":")[0];
-  const suffix = `.${rootDomain}`;
-
-  if (!normalized.endsWith(suffix)) {
-    return null;
-  }
-
-  const slug = normalized.slice(0, -suffix.length);
-  if (
-    !slug ||
-    slug.includes(".") ||
-    RESERVED_LEAGUE_SLUGS.has(slug) ||
-    !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)
-  ) {
-    return null;
-  }
-
-  return slug;
-}
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;

@@ -2,7 +2,9 @@ import type { CSSProperties, ReactNode } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 
-import { getPublicLeague } from "@/lib/public-league-data";
+import { notFound } from "next/navigation";
+
+import { getPublicLeagueAnyStatus } from "@/lib/public-league-data";
 
 import { LeagueMark } from "./_components/league-mark";
 import "./public.css";
@@ -16,7 +18,19 @@ export async function generateMetadata({
   params,
 }: LeagueLayoutProps): Promise<Metadata> {
   const { leagueSlug } = await params;
-  const league = await getPublicLeague(leagueSlug);
+  const league = await getPublicLeagueAnyStatus(leagueSlug);
+
+  if (!league) {
+    return { title: "Atheus" };
+  }
+
+  if (league.status !== "active") {
+    return {
+      title: `${league.name} — Coming soon`,
+      description: `${league.name} is being set up on Atheus.`,
+      robots: { index: false, follow: false },
+    };
+  }
 
   return {
     title: league.name,
@@ -31,7 +45,13 @@ export default async function LeagueLayout({
   params,
 }: LeagueLayoutProps) {
   const { leagueSlug } = await params;
-  const league = await getPublicLeague(leagueSlug);
+  const league = await getPublicLeagueAnyStatus(leagueSlug);
+
+  if (!league) {
+    notFound();
+  }
+
+  const isActive = league.status === "active";
   const style = {
     "--league-primary": league.branding.primary_colour,
     "--league-secondary": league.branding.secondary_colour,
@@ -53,23 +73,27 @@ export default async function LeagueLayout({
           />
           <span>
             <strong>{league.short_name || league.name}</strong>
-            <small>League hub</small>
+            <small>{isActive ? "League hub" : "Coming soon"}</small>
           </span>
         </Link>
 
-        <nav aria-label={`${league.name} navigation`}>
-          <Link href="/">Home</Link>
-          <Link href="/fixtures">Fixtures</Link>
-          <Link href="/table">Table</Link>
-          <Link href="/stats">Stats</Link>
-        </nav>
+        {isActive ? (
+          <>
+            <nav aria-label={`${league.name} navigation`}>
+              <Link href="/">Home</Link>
+              <Link href="/fixtures">Fixtures</Link>
+              <Link href="/table">Table</Link>
+              <Link href="/stats">Stats</Link>
+            </nav>
 
-        <Link
-          className="league-admin-link"
-          href={`/admin/site-login?league=${encodeURIComponent(leagueSlug)}`}
-        >
-          Admin
-        </Link>
+            <Link
+              className="league-admin-link"
+              href={`/admin/site-login?league=${encodeURIComponent(leagueSlug)}`}
+            >
+              Admin
+            </Link>
+          </>
+        ) : null}
       </header>
 
       {children}
