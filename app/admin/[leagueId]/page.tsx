@@ -59,6 +59,7 @@ export default async function LeagueWorkspacePage({
     { count: teamCount },
     { count: linkedTeamCount },
     { count: scheduleSlotCount },
+    { count: divisionCount },
     { data: primaryGuild },
   ] = await Promise.all([
     database
@@ -76,6 +77,15 @@ export default async function LeagueWorkspacePage({
       .select("id", { count: "exact", head: true })
       .eq("league_id", leagueId)
       .eq("active", true),
+    currentSeason
+      ? database
+          .from("competitions")
+          .select("id", { count: "exact", head: true })
+          .eq("league_id", leagueId)
+          .eq("season_id", currentSeason.id)
+          .eq("kind", "league")
+          .eq("active", true)
+      : Promise.resolve({ count: 0 }),
     database
       .from("league_discord_guilds")
       .select("discord_guild_id")
@@ -145,24 +155,25 @@ export default async function LeagueWorkspacePage({
         <p className="eyebrow">League workspace / {membership.role}</p>
         <h1>{league.name}</h1>
         <p>
-          Configure the operating pieces below, then pass the activation gate.
-          Discord ownership and bot presence are rechecked at the exact moment
-          the league becomes active.
+          Set up the season, add teams, organise divisions and generate fixtures.
+          Your league is live — share the public address and keep this workspace
+          as your control centre.
         </p>
       </section>
 
       {created === league.slug ? (
         <section className="league-created-banner">
           <div>
-            <p className="eyebrow">League created</p>
-            <h2>Your league address is ready.</h2>
+            <p className="eyebrow">Your league is live</p>
+            <h2>{publicUrl.replace("https://", "")}</h2>
             <p>
-              Share this address after activation. It remains attached to this
-              league workspace.
+              Share this address with your community. Set up a season, add your
+              teams and create divisions — then generate fixtures to bring the
+              hub to life.
             </p>
           </div>
           <a href={publicUrl} rel="noreferrer" target="_blank">
-            {publicUrl}
+            Open public site →
           </a>
         </section>
       ) : null}
@@ -245,6 +256,25 @@ export default async function LeagueWorkspacePage({
         </article>
         <article>
           <span>04</span>
+          <h2>Divisions</h2>
+          <p>
+            {divisionCount
+              ? `${divisionCount} division${divisionCount === 1 ? "" : "s"} configured for this season. Assign teams to generate per-division fixtures and standings.`
+              : "Split the league into tiers — Division 1, Division 2, or any name you choose. Each division gets its own public table."}
+          </p>
+          {["owner", "admin"].includes(membership.role) ? (
+            <Link
+              className="button button-primary"
+              href={`/admin/${leagueId}/divisions`}
+            >
+              Manage divisions
+            </Link>
+          ) : (
+            <span className="status-chip">Owner setup required</span>
+          )}
+        </article>
+        <article>
+          <span>05</span>
           <h2>Fixtures</h2>
           <p>
             Preview a balanced league schedule across the configured local
@@ -262,7 +292,7 @@ export default async function LeagueWorkspacePage({
           )}
         </article>
         <article>
-          <span>05</span>
+          <span>06</span>
           <h2>Staff</h2>
           <p>
             Give admins, fixture managers and match reviewers only the access
@@ -280,7 +310,7 @@ export default async function LeagueWorkspacePage({
           )}
         </article>
         <article>
-          <span>06</span>
+          <span>07</span>
           <h2>Match review</h2>
           <p>
             Inspect discovered scores and player rows. Approval publishes one
@@ -298,7 +328,7 @@ export default async function LeagueWorkspacePage({
           )}
         </article>
         <article>
-          <span>07</span>
+          <span>08</span>
           <h2>Collector</h2>
           <p>
             Monitor fixture discovery, EA cooldowns, run counts and the review
@@ -312,7 +342,7 @@ export default async function LeagueWorkspacePage({
           </Link>
         </article>
         <article>
-          <span>08</span>
+          <span>09</span>
           <h2>Public league</h2>
           <p>
             Preview the league-branded home, fixtures, standings, club pages and
@@ -330,7 +360,7 @@ export default async function LeagueWorkspacePage({
           )}
         </article>
         <article>
-          <span>09</span>
+          <span>10</span>
           <h2>Player registry</h2>
           <p>
             Search aliases, correct canonical gamertags, connect Discord
@@ -349,7 +379,7 @@ export default async function LeagueWorkspacePage({
         </article>
         {membership.role === "owner" ? (
           <article>
-            <span>10</span>
+            <span>11</span>
             <h2>Site access</h2>
             <p>
               Create or rotate the league-specific administrator login without

@@ -100,6 +100,14 @@ export type Team = {
   updated_at: string;
 };
 
+export type CompetitionTeam = {
+  id: string;
+  league_id: string;
+  competition_id: string;
+  team_id: string;
+  created_at: string;
+};
+
 export type TeamEaClubLink = {
   id: string;
   league_id: string;

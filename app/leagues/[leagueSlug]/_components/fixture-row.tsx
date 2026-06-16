@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import Link from "next/link";
 
 import type { PublicFixture } from "@/lib/database.types";
@@ -20,7 +21,17 @@ export function FixtureRow({
     (fixture.gameday_number ? `Gameday ${fixture.gameday_number}` : "Fixture");
 
   return (
-    <article className="public-fixture-row">
+    <article
+      className="public-fixture-row"
+      style={
+        {
+          "--home-colour":
+            fixture.home_team_primary_colour ?? "transparent",
+          "--away-colour":
+            fixture.away_team_primary_colour ?? "transparent",
+        } as CSSProperties
+      }
+    >
       <div className="fixture-context">
         <strong>{formatKickoff(fixture.kickoff_at, timezone)}</strong>
         <span>

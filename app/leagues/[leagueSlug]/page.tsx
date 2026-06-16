@@ -22,17 +22,20 @@ export const revalidate = 60;
 
 type LeagueHomeProps = {
   params: Promise<{ leagueSlug: string }>;
+  searchParams: Promise<{ competition?: string }>;
 };
 
-export default async function LeagueHome({ params }: LeagueHomeProps) {
-  const { leagueSlug } = await params;
+export default async function LeagueHome({ params, searchParams }: LeagueHomeProps) {
+  const [{ leagueSlug }, query] = await Promise.all([params, searchParams]);
   const league = await getPublicLeague(leagueSlug);
   const seasons = await getLeagueSeasons(league.id);
   const season = seasons.find((item) => item.status === "active") || seasons[0];
-  const competitions = season
+  const allCompetitions = season
     ? await getLeagueCompetitions(league.id, season.id)
     : [];
-  const leagueCompetition = competitions.find((item) => item.kind === "league");
+  const divisions = allCompetitions.filter((item) => item.kind === "league");
+  const selectedDivision =
+    divisions.find((d) => d.id === query.competition) || divisions[0];
 
   const [fixtures, standings, players, teams] = await Promise.all([
     getPublicFixtures(leagueSlug, {
@@ -40,7 +43,7 @@ export default async function LeagueHome({ params }: LeagueHomeProps) {
       limit: 240,
       ascending: true,
     }),
-    getStandings(leagueSlug, season?.id, leagueCompetition?.id),
+    getStandings(leagueSlug, season?.id, selectedDivision?.id),
     league.publicStatsEnabled
       ? getPlayerTotals(leagueSlug, { seasonId: season?.id })
       : Promise.resolve([]),
@@ -143,6 +146,19 @@ export default async function LeagueHome({ params }: LeagueHomeProps) {
             </div>
             <Link href="/table">Full table</Link>
           </header>
+          {divisions.length > 1 ? (
+            <nav className="division-tabs">
+              {divisions.map((division) => (
+                <Link
+                  key={division.id}
+                  className={`division-tab${selectedDivision?.id === division.id ? " division-tab-active" : ""}`}
+                  href={`?competition=${division.id}`}
+                >
+                  {division.name}
+                </Link>
+              ))}
+            </nav>
+          ) : null}
           {standings.length ? (
             <StandingsTable
               compact

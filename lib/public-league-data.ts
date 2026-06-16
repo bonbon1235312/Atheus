@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 
 import type {
   Competition,
+  CompetitionTeam,
   League,
   LeagueBranding,
   PlayerMatchHistory,
@@ -153,6 +154,21 @@ export async function getLeagueCompetitions(
   }
 
   return unwrap<Competition>(data);
+}
+
+export async function getCompetitionTeams(
+  competitionId: string,
+): Promise<CompetitionTeam[]> {
+  const { data, error } = await supabaseAdmin()
+    .from("competition_teams")
+    .select("*")
+    .eq("competition_id", competitionId);
+
+  if (error) {
+    throw error;
+  }
+
+  return unwrap<CompetitionTeam>(data);
 }
 
 export async function getLeagueTeams(leagueId: string): Promise<Team[]> {

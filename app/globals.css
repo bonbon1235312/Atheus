@@ -3645,6 +3645,115 @@ body:has(.admin-page) .text-button {
   }
 }
 
+/* ── Divisions admin ─────────────────────────────────────────── */
+
+.divisions-shell {
+  display: grid;
+  gap: 32px;
+  padding-bottom: 80px;
+}
+
+.division-list {
+  display: grid;
+  gap: 16px;
+}
+
+.division-card {
+  display: grid;
+  gap: 0;
+  border: 1px solid var(--line);
+}
+
+.division-card-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 22px;
+  background: color-mix(in srgb, var(--surface) 60%, transparent);
+  border-bottom: 1px solid var(--line);
+}
+
+.division-card-head small {
+  color: var(--muted);
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-left: auto;
+}
+
+.division-rename-form {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+}
+
+.division-name-input {
+  flex: 1;
+  min-height: 38px;
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text);
+  font-family: var(--font-display), sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  transition: border-color 0.12s ease, background 0.12s ease;
+}
+
+.division-name-input:hover,
+.division-name-input:focus {
+  border-color: var(--line);
+  background: var(--surface);
+  outline: none;
+}
+
+.division-name-input:focus {
+  border-color: var(--accent);
+}
+
+.division-team-list {
+  display: grid;
+}
+
+.division-team-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 52px;
+  padding: 0 22px;
+  border-bottom: 1px solid color-mix(in srgb, var(--line) 50%, transparent);
+}
+
+.team-colour-dot {
+  flex: 0 0 auto;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.division-team-row > span:nth-child(2) {
+  flex: 1;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.division-add-form {
+  padding: 16px 22px;
+  border-top: 1px solid color-mix(in srgb, var(--line) 50%, transparent);
+}
+
+.division-add-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-end;
+}
+
+/* ─────────────────────────────────────────────────────────────── */
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

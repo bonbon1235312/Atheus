@@ -20,7 +20,7 @@
   gap: 28px;
   align-items: center;
   padding: 18px 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 18%, transparent);
+  border-bottom: 2px solid color-mix(in srgb, var(--league-primary) 30%, var(--league-text) 8%);
   background: color-mix(in srgb, var(--league-bg) 92%, transparent);
   backdrop-filter: blur(18px);
 }
@@ -80,8 +80,13 @@
 .league-admin-link {
   justify-self: end;
   padding: 10px 14px;
-  color: var(--league-bg);
-  background: var(--league-text);
+  color: white;
+  background: var(--league-primary);
+  transition: filter 0.15s ease;
+}
+
+.league-admin-link:hover {
+  filter: brightness(0.88);
 }
 
 .league-mark {
@@ -109,7 +114,12 @@
   display: grid;
   grid-template-columns: minmax(0, 1.6fr) minmax(340px, 0.65fr);
   min-height: 660px;
+  position: relative;
+  overflow: hidden;
   border-bottom: 1px solid color-mix(in srgb, var(--league-text) 25%, transparent);
+  background:
+    radial-gradient(ellipse at 8% 60%, color-mix(in srgb, var(--league-primary) 14%, transparent), transparent 52%),
+    var(--league-bg);
 }
 
 .league-public-hero > div {
@@ -153,6 +163,8 @@
   display: grid;
   margin: 0;
   border-left: 1px solid color-mix(in srgb, var(--league-text) 20%, transparent);
+  border-top: 4px solid var(--league-primary);
+  background: color-mix(in srgb, var(--league-primary) 5%, var(--league-bg));
 }
 
 .league-public-hero > dl div {
@@ -195,6 +207,11 @@
   margin-bottom: 32px;
 }
 
+.public-section-heading > div {
+  border-left: 4px solid var(--league-primary);
+  padding-left: 18px;
+}
+
 .public-section-heading h2 {
   margin: 0;
   font-size: clamp(3rem, 5vw, 5rem);
@@ -225,6 +242,11 @@
   align-items: center;
   min-height: 102px;
   border-bottom: 1px solid color-mix(in srgb, var(--league-text) 14%, transparent);
+  transition: background 0.12s ease;
+}
+
+.public-fixture-row:hover {
+  background: color-mix(in srgb, var(--league-primary) 4%, transparent);
 }
 
 .fixture-context {
@@ -257,6 +279,13 @@
 .fixture-team-home {
   justify-content: flex-end;
   text-align: right;
+  border-right: 3px solid color-mix(in srgb, var(--home-colour, transparent) 70%, transparent);
+  padding-right: 2px;
+}
+
+.fixture-team-away {
+  border-left: 3px solid color-mix(in srgb, var(--away-colour, transparent) 70%, transparent);
+  padding-left: 2px;
 }
 
 .fixture-score {
@@ -352,6 +381,28 @@
 .standings-row {
   min-height: 82px;
   border-top: 1px solid color-mix(in srgb, var(--league-text) 13%, transparent);
+  transition: background 0.12s ease;
+}
+
+.standings-row:hover {
+  background: color-mix(in srgb, var(--league-primary) 4%, transparent);
+}
+
+/* Top 3 position indicators */
+.standings-row:nth-child(2) .standings-position {
+  color: var(--league-bg);
+  background: var(--league-primary);
+  border-color: var(--league-primary);
+}
+
+.standings-row:nth-child(3) .standings-position {
+  border-color: var(--league-primary);
+  color: var(--league-primary);
+}
+
+.standings-row:nth-child(4) .standings-position {
+  border-color: color-mix(in srgb, var(--league-primary) 55%, transparent);
+  color: color-mix(in srgb, var(--league-primary) 55%, var(--league-text));
 }
 
 .standings-position {
@@ -425,10 +476,16 @@
   align-items: center;
   min-height: 74px;
   border-bottom: 1px solid color-mix(in srgb, var(--league-text) 14%, transparent);
+  transition: background 0.12s ease;
+}
+
+.performer-list > a:hover {
+  background: color-mix(in srgb, var(--league-primary) 4%, transparent);
 }
 
 .performer-list > a > b {
-  color: var(--league-muted);
+  color: var(--league-primary);
+  font-variant-numeric: tabular-nums;
 }
 
 .performer-list em,
@@ -454,6 +511,11 @@
   padding: 24px;
   border-right: 1px solid color-mix(in srgb, var(--league-text) 15%, transparent);
   border-bottom: 1px solid color-mix(in srgb, var(--league-text) 15%, transparent);
+  transition: background 0.12s ease;
+}
+
+.public-club-grid > a:hover {
+  background: color-mix(in srgb, var(--league-primary) 6%, var(--league-surface));
 }
 
 .public-club-grid > a > span:last-child {
@@ -1013,6 +1075,33 @@
     grid-column: 1 / -1;
     padding-bottom: 10px;
   }
+}
+
+.division-tabs {
+  display: flex;
+  border-bottom: 2px solid color-mix(in srgb, var(--league-text) 14%, transparent);
+  margin-bottom: 32px;
+}
+
+.division-tab {
+  padding: 12px 22px;
+  margin-bottom: -2px;
+  border-bottom: 2px solid transparent;
+  color: var(--league-muted);
+  font-size: 0.68rem;
+  font-weight: 850;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  transition: color 0.12s ease, border-color 0.12s ease;
+}
+
+.division-tab:hover {
+  color: var(--league-text);
+}
+
+.division-tab-active {
+  color: var(--league-primary);
+  border-bottom-color: var(--league-primary);
 }
 
 .league-coming-soon {

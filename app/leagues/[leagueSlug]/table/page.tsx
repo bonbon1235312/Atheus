@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import {
   getLeagueCompetitions,
   getLeagueSeasons,
@@ -50,29 +52,35 @@ export default async function TablePage({
         </p>
       </section>
 
-      <form className="public-filter-bar public-filter-bar-short">
-        <label>
-          <span>Season</span>
-          <select defaultValue={selectedSeason?.id || ""} name="season">
-            {seasons.map((season) => (
-              <option key={season.id} value={season.id}>
-                {season.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <label>
-          <span>Competition</span>
-          <select defaultValue={selectedCompetition?.id || ""} name="competition">
-            {competitions.map((competition) => (
-              <option key={competition.id} value={competition.id}>
-                {competition.name}
-              </option>
-            ))}
-          </select>
-        </label>
-        <button type="submit">Update table</button>
-      </form>
+      {seasons.length > 1 ? (
+        <form className="public-filter-bar public-filter-bar-short">
+          <label>
+            <span>Season</span>
+            <select defaultValue={selectedSeason?.id || ""} name="season">
+              {seasons.map((season) => (
+                <option key={season.id} value={season.id}>
+                  {season.name}
+                </option>
+              ))}
+            </select>
+          </label>
+          <button type="submit">Update table</button>
+        </form>
+      ) : null}
+
+      {competitions.length > 1 ? (
+        <nav className="division-tabs">
+          {competitions.map((competition) => (
+            <Link
+              key={competition.id}
+              className={`division-tab${selectedCompetition?.id === competition.id ? " division-tab-active" : ""}`}
+              href={`/${leagueSlug}/table?${selectedSeason ? `season=${selectedSeason.id}&` : ""}competition=${competition.id}`}
+            >
+              {competition.name}
+            </Link>
+          ))}
+        </nav>
+      ) : null}
 
       {rows.length ? (
         <StandingsTable rows={rows} />
