@@ -7,13 +7,11 @@ import { LeagueMark } from "./league-mark";
 
 type FixtureRowProps = {
   fixture: PublicFixture;
-  leagueSlug: string;
   timezone: string;
 };
 
 export function FixtureRow({
   fixture,
-  leagueSlug,
   timezone,
 }: FixtureRowProps) {
   const hasResult = fixture.has_approved_result;
@@ -32,7 +30,7 @@ export function FixtureRow({
 
       <Link
         className="fixture-team fixture-team-home"
-        href={`/leagues/${leagueSlug}/teams/${fixture.home_team_slug}`}
+        href={`/teams/${fixture.home_team_slug}`}
       >
         <span>{fixture.home_team_name}</span>
         <LeagueMark
@@ -58,7 +56,7 @@ export function FixtureRow({
 
       <Link
         className="fixture-team fixture-team-away"
-        href={`/leagues/${leagueSlug}/teams/${fixture.away_team_slug}`}
+        href={`/teams/${fixture.away_team_slug}`}
       >
         <LeagueMark
           compact

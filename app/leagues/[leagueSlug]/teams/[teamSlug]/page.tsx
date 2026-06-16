@@ -101,7 +101,7 @@ export default async function TeamPage({ params }: TeamPageProps) {
             <p className="public-kicker">Club schedule</p>
             <h2>Recent & upcoming</h2>
           </div>
-          <Link href={`/leagues/${leagueSlug}/fixtures?team=${team.id}`}>
+          <Link href={`/fixtures?team=${team.id}`}>
             Full club schedule
           </Link>
         </header>
@@ -110,7 +110,6 @@ export default async function TeamPage({ params }: TeamPageProps) {
             <FixtureRow
               fixture={fixture}
               key={fixture.id}
-              leagueSlug={leagueSlug}
               timezone={league.timezone}
             />
           ))}
@@ -129,14 +128,14 @@ export default async function TeamPage({ params }: TeamPageProps) {
             <p className="public-kicker">Current squad</p>
             <h2>Top performers</h2>
           </div>
-          <Link href={`/leagues/${leagueSlug}/stats?team=${team.id}`}>
+          <Link href={`/stats?team=${team.id}`}>
             All club stats
           </Link>
         </header>
         <div className="team-player-grid">
           {players.map((player) => (
             <Link
-              href={`/leagues/${leagueSlug}/players/${player.player_identity_id}`}
+              href={`/players/${player.player_identity_id}`}
               key={player.player_identity_id}
             >
               <span>{player.positions_played.join(" / ") || "N/A"}</span>

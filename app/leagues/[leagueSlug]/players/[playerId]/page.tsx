@@ -128,7 +128,7 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
           <div className="player-team-history">
             {teamHistory.map((team) => (
               <Link
-                href={`/leagues/${leagueSlug}/teams/${team.slug}`}
+                href={`/teams/${team.slug}`}
                 key={team.id}
               >
                 <span>{team.abbreviation || "Club"}</span>
@@ -182,10 +182,10 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
           {history.map((match) => (
             <div className="player-match-row" key={match.id}>
               <span>{formatKickoff(match.kickoff_at, league.timezone)}</span>
-              <Link href={`/leagues/${leagueSlug}/teams/${match.team_slug}`}>
+              <Link href={`/teams/${match.team_slug}`}>
                 {match.team_name}
               </Link>
-              <Link href={`/leagues/${leagueSlug}/teams/${match.opponent_team_slug}`}>
+              <Link href={`/teams/${match.opponent_team_slug}`}>
                 {match.opponent_team_name}
               </Link>
               <b>

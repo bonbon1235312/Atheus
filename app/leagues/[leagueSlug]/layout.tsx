@@ -45,7 +45,7 @@ export default async function LeagueLayout({
   return (
     <div className="league-public-shell" style={style}>
       <header className="league-public-header">
-        <Link className="league-public-brand" href={`/leagues/${leagueSlug}`}>
+        <Link className="league-public-brand" href="/">
           <LeagueMark
             colour={league.branding.primary_colour}
             logoUrl={league.branding.logo_url}
@@ -58,10 +58,10 @@ export default async function LeagueLayout({
         </Link>
 
         <nav aria-label={`${league.name} navigation`}>
-          <Link href={`/leagues/${leagueSlug}`}>Home</Link>
-          <Link href={`/leagues/${leagueSlug}/fixtures`}>Fixtures</Link>
-          <Link href={`/leagues/${leagueSlug}/table`}>Table</Link>
-          <Link href={`/leagues/${leagueSlug}/stats`}>Stats</Link>
+          <Link href="/">Home</Link>
+          <Link href="/fixtures">Fixtures</Link>
+          <Link href="/table">Table</Link>
+          <Link href="/stats">Stats</Link>
         </nav>
 
         <Link

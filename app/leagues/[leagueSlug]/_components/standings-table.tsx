@@ -5,13 +5,11 @@ import type { Standing } from "@/lib/database.types";
 import { LeagueMark } from "./league-mark";
 
 type StandingsTableProps = {
-  leagueSlug: string;
   rows: Standing[];
   compact?: boolean;
 };
 
 export function StandingsTable({
-  leagueSlug,
   rows,
   compact = false,
 }: StandingsTableProps) {
@@ -30,7 +28,7 @@ export function StandingsTable({
       {rows.map((row, index) => (
         <Link
           className="standings-row"
-          href={`/leagues/${leagueSlug}/teams/${row.team_slug}`}
+          href={`/teams/${row.team_slug}`}
           key={row.team_id}
         >
           <b className="standings-position">{index + 1}</b>

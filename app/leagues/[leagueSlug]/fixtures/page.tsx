@@ -128,7 +128,6 @@ export default async function FixturesPage({
                 <FixtureRow
                   fixture={fixture}
                   key={fixture.id}
-                  leagueSlug={leagueSlug}
                   timezone={league.timezone}
                 />
               ))}

@@ -109,7 +109,7 @@ export default async function LeagueHome({ params }: LeagueHomeProps) {
                 : "Latest results"}
           </h2>
           </div>
-          <Link href={`/leagues/${leagueSlug}/fixtures`}>View all fixtures</Link>
+          <Link href="/fixtures">View all fixtures</Link>
         </header>
 
         <div className="public-fixture-list">
@@ -122,7 +122,6 @@ export default async function LeagueHome({ params }: LeagueHomeProps) {
             <FixtureRow
               fixture={fixture}
               key={fixture.id}
-              leagueSlug={leagueSlug}
               timezone={league.timezone}
             />
           ))}
@@ -142,12 +141,11 @@ export default async function LeagueHome({ params }: LeagueHomeProps) {
               <p className="public-kicker">League table</p>
               <h2>Current order</h2>
             </div>
-            <Link href={`/leagues/${leagueSlug}/table`}>Full table</Link>
+            <Link href="/table">Full table</Link>
           </header>
           {standings.length ? (
             <StandingsTable
               compact
-              leagueSlug={leagueSlug}
               rows={standings.slice(0, 6)}
             />
           ) : (
@@ -164,12 +162,12 @@ export default async function LeagueHome({ params }: LeagueHomeProps) {
               <p className="public-kicker">Performance index</p>
               <h2>Players</h2>
             </div>
-            <Link href={`/leagues/${leagueSlug}/stats`}>All stats</Link>
+            <Link href="/stats">All stats</Link>
           </header>
           <div className="performer-list">
             {topPlayers.map((player, index) => (
               <Link
-                href={`/leagues/${leagueSlug}/players/${player.player_identity_id}`}
+                href={`/players/${player.player_identity_id}`}
                 key={`${player.competition_id}-${player.player_identity_id}`}
               >
                 <b>{String(index + 1).padStart(2, "0")}</b>
@@ -199,7 +197,7 @@ export default async function LeagueHome({ params }: LeagueHomeProps) {
         </header>
         <div className="public-club-grid">
           {teams.map((team) => (
-            <Link href={`/leagues/${leagueSlug}/teams/${team.slug}`} key={team.id}>
+            <Link href={`/teams/${team.slug}`} key={team.id}>
               <LeagueMark
                 colour={team.primary_colour}
                 logoUrl={team.logo_url}

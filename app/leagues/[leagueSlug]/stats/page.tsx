@@ -197,7 +197,7 @@ export default async function StatsPage({
         {sortedPlayers.map((player, index) => (
           <Link
             className="leaderboard-row"
-            href={`/leagues/${leagueSlug}/players/${player.player_identity_id}`}
+            href={`/players/${player.player_identity_id}`}
             key={player.player_identity_id}
           >
             <b>{String(index + 1).padStart(2, "0")}</b>

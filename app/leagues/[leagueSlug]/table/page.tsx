@@ -75,7 +75,7 @@ export default async function TablePage({
       </form>
 
       {rows.length ? (
-        <StandingsTable leagueSlug={leagueSlug} rows={rows} />
+        <StandingsTable rows={rows} />
       ) : (
         <div className="public-empty">
           <strong>No league table is available yet.</strong>
