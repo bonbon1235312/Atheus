@@ -94,9 +94,11 @@ export default async function StatsPage({
         teamId: teams.some((team) => team.id === query.team) ? query.team : undefined,
       })
     : [];
-  const players = selectedCompetition
-    ? rawPlayers
-    : combinePlayerTotals(rawPlayers);
+  // Always merge by identity so a player who turned out for more than one club
+  // (a transfer or a team swap) shows as a single leaderboard row, not one per
+  // club. With a competition selected, rawPlayers is already single-competition,
+  // so this just collapses the earned-team split.
+  const players = combinePlayerTotals(rawPlayers);
   const positions = [...new Set(players.flatMap((player) => player.positions_played))]
     .filter(Boolean)
     .sort();

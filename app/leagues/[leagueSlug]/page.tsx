@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import {
+  combinePlayerTotals,
   getLeagueCompetitions,
   getLeagueSeasons,
   getLeagueTeams,
@@ -64,7 +65,10 @@ export default async function LeagueHome({ params, searchParams }: LeagueHomePro
         new Date(b.kickoff_at).getTime() - new Date(a.kickoff_at).getTime(),
     )
     .slice(0, 5);
-  const topPlayers = sortPlayers(players, "overall").slice(0, 5);
+  const topPlayers = sortPlayers(combinePlayerTotals(players), "overall").slice(
+    0,
+    5,
+  );
 
   return (
     <main className="league-public-page">

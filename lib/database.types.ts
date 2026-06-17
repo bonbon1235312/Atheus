@@ -255,6 +255,11 @@ export type PlayerTotal = {
   competition_kind: CompetitionKind;
   player_identity_id: string;
   player_name: string;
+  team_id: string;
+  team_name: string;
+  team_slug: string;
+  team_abbreviation: string | null;
+  team_logo_url: string | null;
   current_team_id: string | null;
   current_team_name: string | null;
   current_team_slug: string | null;

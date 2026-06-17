@@ -3,6 +3,7 @@ import Link from "next/link";
 
 import {
   combinePlayerTotals,
+  combinePlayerTotalsByCompetition,
   formatKickoff,
   getLeagueSeasons,
   getPlayerHistory,
@@ -31,8 +32,8 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
     getPlayerTotals(leagueSlug, { seasonId: season?.id }),
     getPlayerHistory(leagueSlug, playerId),
   ]);
-  const competitionTotals = rawTotals.filter(
-    (player) => player.player_identity_id === playerId,
+  const competitionTotals = combinePlayerTotalsByCompetition(
+    rawTotals.filter((player) => player.player_identity_id === playerId),
   );
   const player = combinePlayerTotals(competitionTotals)[0];
 

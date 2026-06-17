@@ -284,7 +284,10 @@ export async function getPlayerTotals(
   }
 
   if (filters.teamId) {
-    query = query.eq("current_team_id", filters.teamId);
+    // Attribute by the team the stats were earned with, not where the player
+    // currently sits, so a moved/replaced player's history stays with the
+    // correct club.
+    query = query.eq("team_id", filters.teamId);
   }
 
   const { data, error } = await query;
@@ -446,6 +449,15 @@ export function combinePlayerTotals(players: PlayerTotal[]): PlayerTotal[] {
       ...current,
       competition_id: "all",
       competition_name: "All competitions",
+      // A combined row spans every team the player turned out for, so the
+      // earned-team columns are no longer meaningful — represent them as the
+      // player's current club (falling back to the first earned team).
+      team_id: current.current_team_id ?? current.team_id,
+      team_name: current.current_team_name ?? current.team_name,
+      team_slug: current.current_team_slug ?? current.team_slug,
+      team_abbreviation:
+        current.current_team_abbreviation ?? current.team_abbreviation,
+      team_logo_url: current.current_team_logo_url ?? current.team_logo_url,
       matches_played: matchesPlayed,
       goals: current.goals + player.goals,
       assists: current.assists + player.assists,
@@ -477,6 +489,31 @@ export function combinePlayerTotals(players: PlayerTotal[]): PlayerTotal[] {
   }
 
   return [...combined.values()];
+}
+
+/**
+ * Merge the earned-team split rows back down to one row per competition for a
+ * single player. The view now emits a row per (player, competition, team), so a
+ * player who moved clubs mid-competition has several rows sharing a
+ * competition_id; this collapses them while preserving the competition's
+ * identity (combinePlayerTotals would relabel it to "all").
+ */
+export function combinePlayerTotalsByCompetition(
+  players: PlayerTotal[],
+): PlayerTotal[] {
+  const byCompetition = new Map<string, PlayerTotal[]>();
+
+  for (const player of players) {
+    const group = byCompetition.get(player.competition_id) ?? [];
+    group.push(player);
+    byCompetition.set(player.competition_id, group);
+  }
+
+  return [...byCompetition.values()].map((group) => ({
+    ...combinePlayerTotals(group)[0],
+    competition_id: group[0].competition_id,
+    competition_name: group[0].competition_name,
+  }));
 }
 
 export function formatKickoff(date: string, timezone: string) {
