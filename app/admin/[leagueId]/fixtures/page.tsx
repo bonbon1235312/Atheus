@@ -56,6 +56,7 @@ export default async function FixturesAdminPage({
     { data: competitions },
     { data: allTeams },
     { data: links },
+    { data: competitionTeams },
     { data: fixtures, count: fixtureCount },
   ] = await Promise.all([
     database
@@ -79,6 +80,10 @@ export default async function FixturesAdminPage({
       .select("team_id")
       .eq("league_id", leagueId)
       .is("inactive_at", null),
+    database
+      .from("competition_teams")
+      .select("competition_id, team_id")
+      .eq("league_id", leagueId),
     database
       .from("fixtures")
       .select(
@@ -122,6 +127,13 @@ export default async function FixturesAdminPage({
         | string
         | undefined) ?? "Season",
   }));
+  const competitionAssignments = (competitionTeams ?? []).reduce<
+    Record<string, string[]>
+  >((map, row) => {
+    const competitionId = row.competition_id as string;
+    (map[competitionId] ??= []).push(row.team_id as string);
+    return map;
+  }, {});
   const defaultFirstDate =
     (seasons?.[0]?.starts_on as string | null | undefined) ?? today();
 
@@ -153,6 +165,7 @@ export default async function FixturesAdminPage({
         </div>
         {canManageSchedule && competitionOptions.length && teams?.length ? (
           <FixtureGeneratorForm
+            competitionAssignments={competitionAssignments}
             competitions={competitionOptions}
             defaultFirstDate={defaultFirstDate}
             leagueId={leagueId}

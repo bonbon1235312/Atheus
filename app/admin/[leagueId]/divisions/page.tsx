@@ -10,8 +10,10 @@ export const dynamic = "force-dynamic";
 
 export default async function DivisionsPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ leagueId: string }>;
+  searchParams: Promise<{ created?: string }>;
 }) {
   const session = await auth();
   if (!session?.discordUserId) {
@@ -19,6 +21,7 @@ export default async function DivisionsPage({
   }
 
   const { leagueId } = await params;
+  const { created } = await searchParams;
   const database = supabaseAdmin();
 
   const { data: membership } = await database
@@ -116,6 +119,22 @@ export default async function DivisionsPage({
           independently using the fixture manager.
         </p>
       </section>
+
+      {created === "season" ? (
+        <section className="league-created-banner">
+          <div>
+            <p className="eyebrow">Season created</p>
+            <h2>Now split it into divisions</h2>
+            <p>
+              Add as many divisions as you need — Division 1, Division 2, or any
+              name you like — then assign teams below. Prefer a single table?
+              Skip this and head straight to{" "}
+              <Link href={`/admin/${leagueId}/teams`}>teams</Link>.
+            </p>
+          </div>
+          <Link href={`/admin/${leagueId}`}>Back to workspace →</Link>
+        </section>
+      ) : null}
 
       {!currentSeason ? (
         <div className="setup-shell">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useMemo, useState } from "react";
 
 import {
   previewFixturePlan,
@@ -26,6 +26,24 @@ type TeamOption = {
 const initialPreview: FixturePreviewState = {};
 const initialPublish: FixturePublishState = {};
 
+/**
+ * Decide which teams should be ticked for a given competition. When a division
+ * has an explicit roster (competition_teams), default to exactly that roster.
+ * Divisions with no assignments fall back to every active team so the existing
+ * single-table behaviour is unchanged.
+ */
+function rosterForCompetition(
+  competitionId: string,
+  assignments: Record<string, string[]>,
+  teams: TeamOption[],
+): Set<string> {
+  const assigned = assignments[competitionId];
+  if (assigned && assigned.length > 0) {
+    return new Set(assigned);
+  }
+  return new Set(teams.map((team) => team.id));
+}
+
 function formatDate(value: string, timezone: string) {
   return new Intl.DateTimeFormat("en-GB", {
     timeZone: timezone,
@@ -43,11 +61,13 @@ export function FixtureGeneratorForm({
   competitions,
   teams,
   defaultFirstDate,
+  competitionAssignments,
 }: {
   leagueId: string;
   competitions: CompetitionOption[];
   teams: TeamOption[];
   defaultFirstDate: string;
+  competitionAssignments: Record<string, string[]>;
 }) {
   const [preview, previewAction, previewPending] = useActionState(
     previewFixturePlan,
@@ -57,7 +77,48 @@ export function FixtureGeneratorForm({
     publishFixturePlan,
     initialPublish,
   );
-  const [allSelected, setAllSelected] = useState(true);
+  const firstCompetitionId = competitions[0]?.id ?? "";
+  const [selectedCompetitionId, setSelectedCompetitionId] =
+    useState(firstCompetitionId);
+  const [selectedTeamIds, setSelectedTeamIds] = useState<Set<string>>(() =>
+    rosterForCompetition(firstCompetitionId, competitionAssignments, teams),
+  );
+
+  const assignedCount =
+    competitionAssignments[selectedCompetitionId]?.length ?? 0;
+  const divisionRostered = assignedCount > 0;
+
+  const orderedTeams = useMemo(() => {
+    // Surface a division's own teams first so the picker reads as that roster.
+    if (!divisionRostered) return teams;
+    const roster = new Set(competitionAssignments[selectedCompetitionId] ?? []);
+    return [...teams].sort((a, b) => {
+      const aIn = roster.has(a.id) ? 0 : 1;
+      const bIn = roster.has(b.id) ? 0 : 1;
+      return aIn - bIn || a.name.localeCompare(b.name);
+    });
+  }, [teams, divisionRostered, competitionAssignments, selectedCompetitionId]);
+
+  function onCompetitionChange(competitionId: string) {
+    setSelectedCompetitionId(competitionId);
+    setSelectedTeamIds(
+      rosterForCompetition(competitionId, competitionAssignments, teams),
+    );
+  }
+
+  function toggleTeam(teamId: string) {
+    setSelectedTeamIds((current) => {
+      const next = new Set(current);
+      if (next.has(teamId)) {
+        next.delete(teamId);
+      } else {
+        next.add(teamId);
+      }
+      return next;
+    });
+  }
+
+  const allChecked = selectedTeamIds.size === teams.length;
 
   return (
     <div className="fixture-generator">
@@ -67,7 +128,12 @@ export function FixtureGeneratorForm({
         <div className="field-grid">
           <label className="field field-wide">
             <span>Competition</span>
-            <select name="competitionId" required>
+            <select
+              name="competitionId"
+              onChange={(event) => onCompetitionChange(event.target.value)}
+              required
+              value={selectedCompetitionId}
+            >
               {competitions.map((competition) => (
                 <option key={competition.id} value={competition.id}>
                   {competition.seasonName} / {competition.name}
@@ -114,21 +180,42 @@ export function FixtureGeneratorForm({
 
         <fieldset className="team-picker">
           <div className="team-picker-heading">
-            <legend>Participating teams</legend>
+            <legend>
+              Participating teams
+              <small className="team-picker-count">
+                {selectedTeamIds.size} selected
+                {divisionRostered
+                  ? " / division roster applied"
+                  : ""}
+              </small>
+            </legend>
             <button
               className="text-button"
-              onClick={() => setAllSelected((selected) => !selected)}
+              onClick={() =>
+                setSelectedTeamIds(
+                  allChecked
+                    ? new Set()
+                    : new Set(teams.map((team) => team.id)),
+                )
+              }
               type="button"
             >
-              {allSelected ? "Clear all" : "Select all"}
+              {allChecked ? "Clear all" : "Select all"}
             </button>
           </div>
+          {divisionRostered ? (
+            <p className="team-picker-note">
+              Teams assigned to this division are ticked automatically. Adjust
+              the selection below if this run should differ.
+            </p>
+          ) : null}
           <div>
-            {teams.map((team) => (
-              <label key={`${team.id}:${allSelected}`}>
+            {orderedTeams.map((team) => (
+              <label key={team.id}>
                 <input
-                  defaultChecked={allSelected}
+                  checked={selectedTeamIds.has(team.id)}
                   name="teamIds"
+                  onChange={() => toggleTeam(team.id)}
                   type="checkbox"
                   value={team.id}
                 />

@@ -87,5 +87,5 @@ export async function configureSeason(
     return { error: error.message };
   }
 
-  redirect(`/admin/${leagueId}`);
+  redirect(`/admin/${leagueId}/divisions?created=season`);
 }

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import {
   getLeagueCompetitions,
   getLeagueSeasons,
@@ -40,6 +42,18 @@ export default async function FixturesPage({
   const selectedCompetition = competitions.find(
     (competition) => competition.id === query.competition,
   );
+  const divisions = competitions.filter(
+    (competition) => competition.kind === "league",
+  );
+  const buildTabHref = (competitionId: string) => {
+    const next = new URLSearchParams();
+    if (selectedSeason) next.set("season", selectedSeason.id);
+    if (competitionId) next.set("competition", competitionId);
+    if (query.team) next.set("team", query.team);
+    if (query.view) next.set("view", query.view);
+    const queryString = next.toString();
+    return `/${leagueSlug}/fixtures${queryString ? `?${queryString}` : ""}`;
+  };
   const fixtures = await getPublicFixtures(leagueSlug, {
     seasonId: selectedSeason?.id,
     competitionId: selectedCompetition?.id,
@@ -115,6 +129,26 @@ export default async function FixturesPage({
         </label>
         <button type="submit">Apply filters</button>
       </form>
+
+      {divisions.length > 1 ? (
+        <nav className="division-tabs">
+          <Link
+            className={`division-tab${!selectedCompetition ? " division-tab-active" : ""}`}
+            href={buildTabHref("")}
+          >
+            All divisions
+          </Link>
+          {divisions.map((division) => (
+            <Link
+              key={division.id}
+              className={`division-tab${selectedCompetition?.id === division.id ? " division-tab-active" : ""}`}
+              href={buildTabHref(division.id)}
+            >
+              {division.name}
+            </Link>
+          ))}
+        </nav>
+      ) : null}
 
       <div className="public-date-groups">
         {[...grouped.entries()].map(([date, dateFixtures]) => (
