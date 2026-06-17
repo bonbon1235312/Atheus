@@ -231,15 +231,22 @@ export async function replaceTeam(
 
   const result = data as {
     transferred_future_fixtures?: number;
+    transferred_division_slots?: number;
   } | null;
   const transferred = Number(result?.transferred_future_fixtures ?? 0);
+  const divisionSlots = Number(result?.transferred_division_slots ?? 0);
 
   revalidatePath(`/admin/${leagueId}`);
   revalidatePath(`/admin/${leagueId}/teams`);
   revalidatePath(`/admin/${leagueId}/fixtures`);
+  revalidatePath(`/admin/${leagueId}/divisions`);
   revalidatePath(`/leagues/${access.leagueSlug}`, "layout");
 
+  const divisionNote = divisionSlots
+    ? ` Division roster updated in ${divisionSlots} division${divisionSlots === 1 ? "" : "s"}.`
+    : "";
+
   return {
-    success: `Team replaced. ${transferred} future fixture${transferred === 1 ? "" : "s"} transferred.`,
+    success: `Team replaced. ${transferred} future fixture${transferred === 1 ? "" : "s"} transferred.${divisionNote}`,
   };
 }
