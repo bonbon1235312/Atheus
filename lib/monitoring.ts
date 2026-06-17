@@ -30,27 +30,65 @@ export function describeError(error: unknown): {
   return { message: String(error) };
 }
 
+function buildWebhookBody(alert: Required<Pick<DevBotAlert, "service" | "environment" | "level">> & DevBotAlert) {
+  const fields: { name: string; value: string }[] = [];
+  if (alert.context) {
+    fields.push({ name: "Where", value: String(alert.context).slice(0, 1024) });
+  }
+  if (alert.stack) {
+    const trimmed = String(alert.stack).replace(/```/g, "ʼʼʼ").slice(-1000);
+    fields.push({ name: "Stack", value: "```\n" + trimmed + "\n```" });
+  }
+
+  return {
+    username: "atheus monitor",
+    embeds: [
+      {
+        title: `🚨 ${alert.service} · ${alert.level}`.slice(0, 256),
+        description: (alert.message || "Unhandled error").slice(0, 4096),
+        color: 0xef4444,
+        timestamp: alert.timestamp ?? new Date().toISOString(),
+        footer: { text: `atheus | ${alert.environment}` },
+        ...(fields.length ? { fields } : {}),
+      },
+    ],
+  };
+}
+
 export async function forwardToDevBot(alert: DevBotAlert): Promise<void> {
+  const webhook = process.env.ATHEUS_ALERT_WEBHOOK;
   const url = process.env.ATHEUS_ALERT_URL;
   const secret = process.env.ATHEUS_ALERT_SECRET;
-  if (!url || !secret) return;
+  if (!webhook && !(url && secret)) return;
+
+  const enriched = {
+    service: "website",
+    environment: process.env.NODE_ENV ?? "production",
+    level: "error",
+    timestamp: new Date().toISOString(),
+    ...alert,
+  };
 
   try {
-    await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-atheus-alert-secret": secret,
-      },
-      body: JSON.stringify({
-        service: "website",
-        environment: process.env.NODE_ENV ?? "production",
-        level: "error",
-        timestamp: new Date().toISOString(),
-        ...alert,
-      }),
-      signal: AbortSignal.timeout(3000),
-    });
+    if (webhook) {
+      // Discord webhook — no host/port needed, works from anywhere.
+      await fetch(webhook, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(buildWebhookBody(enriched)),
+        signal: AbortSignal.timeout(3000),
+      });
+    } else {
+      await fetch(url as string, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-atheus-alert-secret": secret as string,
+        },
+        body: JSON.stringify(enriched),
+        signal: AbortSignal.timeout(3000),
+      });
+    }
   } catch {
     // Monitoring must never break the request path.
   }
