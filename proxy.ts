@@ -94,5 +94,7 @@ export function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image).*)"],
+  // Exclude the Sentry tunnel route (/monitoring) so tenant host rewrites never
+  // interfere with client-side error reporting.
+  matcher: ["/((?!monitoring|_next/static|_next/image).*)"],
 };
