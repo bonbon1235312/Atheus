@@ -4,6 +4,7 @@ import { notFound, redirect } from "next/navigation";
 import { auth } from "@/auth";
 import { requireLeagueAccess } from "@/lib/league-access";
 import { supabaseAdmin } from "@/lib/supabase-admin";
+import { ClearDivisionForm } from "./clear-division-form";
 import { FixtureControls } from "./fixture-controls";
 import { FixtureGeneratorForm } from "./fixture-generator-form";
 
@@ -94,6 +95,10 @@ export default async function FixturesAdminPage({
       .order("kickoff_at")
       .limit(120),
   ]);
+  const { data: allFixtureCompetitionRows } = await database
+    .from("fixtures")
+    .select("competition_id")
+    .eq("league_id", leagueId);
   const fixtureIds = (fixtures ?? []).map((fixture) => fixture.id as string);
   const { data: matches } = fixtureIds.length
     ? await database
@@ -134,6 +139,21 @@ export default async function FixturesAdminPage({
     (map[competitionId] ??= []).push(row.team_id as string);
     return map;
   }, {});
+  const fixtureCountByCompetition = (allFixtureCompetitionRows ?? []).reduce<
+    Record<string, number>
+  >((map, row) => {
+    const competitionId = row.competition_id as string;
+    map[competitionId] = (map[competitionId] ?? 0) + 1;
+    return map;
+  }, {});
+  const clearableDivisions = competitionOptions
+    .filter((competition) => (fixtureCountByCompetition[competition.id] ?? 0) > 0)
+    .map((competition) => ({
+      id: competition.id,
+      name: competition.name,
+      seasonName: competition.seasonName,
+      fixtureCount: fixtureCountByCompetition[competition.id] ?? 0,
+    }));
   const defaultFirstDate =
     (seasons?.[0]?.starts_on as string | null | undefined) ?? today();
 
@@ -187,6 +207,12 @@ export default async function FixturesAdminPage({
             Fixture generation remains limited to owners and fixture managers.
           </p>
         )}
+        {canManageSchedule && clearableDivisions.length ? (
+          <ClearDivisionForm
+            divisions={clearableDivisions}
+            leagueId={leagueId}
+          />
+        ) : null}
       </section>
 
       <section className="teams-shell">

@@ -374,6 +374,45 @@ export async function overrideFixtureResult(
   return { success: "Result saved and public views refreshed." };
 }
 
+export async function clearDivisionFixtures(
+  _state: FixtureControlState,
+  formData: FormData,
+): Promise<FixtureControlState> {
+  const leagueId = text(formData, "leagueId");
+  const competitionId = text(formData, "competitionId");
+  const confirmation = text(formData, "confirmation");
+  const access = await requireLeagueAccess(leagueId, [
+    "owner",
+    "admin",
+    "fixture_manager",
+  ]);
+
+  if (!access) {
+    return { error: "Fixture manager access is required." };
+  }
+  if (!competitionId) {
+    return { error: "Choose a division to clear." };
+  }
+  if (confirmation !== "CLEAR") {
+    return { error: "Type CLEAR to confirm." };
+  }
+
+  const { data, error } = await supabaseAdmin().rpc("clear_division_fixtures", {
+    p_league_id: leagueId,
+    p_competition_id: competitionId,
+    p_discord_user_id: access.discordUserId,
+  });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  refreshFixtureViews(leagueId, access.leagueSlug);
+  return {
+    success: `${Number(data)} fixture${Number(data) === 1 ? "" : "s"} cleared. This division can be regenerated.`,
+  };
+}
+
 export async function eraseFixturePlayerStats(
   _state: FixtureControlState,
   formData: FormData,

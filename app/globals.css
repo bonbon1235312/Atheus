@@ -2997,6 +2997,34 @@ body:has(.admin-page) .text-button {
   border-color: rgba(180, 35, 24, 0.35);
 }
 
+.clear-division {
+  margin-top: 24px;
+  padding-top: 20px;
+  border-top: 1px dashed var(--line);
+}
+
+.clear-division summary {
+  width: fit-content;
+  margin-bottom: 16px;
+  color: #8b241b;
+  cursor: pointer;
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.clear-division .fixture-control-form {
+  max-width: 560px;
+}
+
+.clear-division .fixture-control-form > p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
 .button-danger {
   color: #8b241b;
   border-color: rgba(180, 35, 24, 0.5);
