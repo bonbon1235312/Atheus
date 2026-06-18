@@ -133,16 +133,16 @@ export default function Home() {
       </section>
 
       <section className="landing-statement">
-        <p>Most leagues are held together by</p>
+        <h2>
+          Atheus connects <span>all of it.</span>
+        </h2>
+        <p>Most leagues are still held together by</p>
         <div className="statement-tools" aria-label="Replaced tools">
           <s>spreadsheets</s>
           <s>Discord messages</s>
           <s>manual tables</s>
           <s>separate stat tools</s>
         </div>
-        <h2>
-          Atheus connects <span>all of it.</span>
-        </h2>
       </section>
 
       <section className="landing-section" id="features">
@@ -167,7 +167,31 @@ export default function Home() {
               </div>
               <h3>{feature.title}</h3>
               <p>{feature.text}</p>
-              <b>{feature.meta}</b>
+              {feature.mark === "01" ? (
+                <div className="feature-mini-steps">
+                  <span className="fms-step is-done">Identity</span>
+                  <span className="fms-arrow" aria-hidden="true">→</span>
+                  <span className="fms-step is-done">Discord</span>
+                  <span className="fms-arrow" aria-hidden="true">→</span>
+                  <span className="fms-step is-done">Match ops</span>
+                  <span className="fms-arrow" aria-hidden="true">→</span>
+                  <span className="fms-step is-active">Live</span>
+                </div>
+              ) : feature.mark === "06" ? (
+                <div className="feature-mini-site">
+                  <div className="fms-url">
+                    <i />
+                    northstar-pro-league.atheus.dev
+                  </div>
+                  <div className="fms-stat-row">
+                    <div>Season <b>S1</b></div>
+                    <div>Teams <b>12</b></div>
+                    <div>Matchday <b>06 / 22</b></div>
+                  </div>
+                </div>
+              ) : (
+                <b>{feature.meta}</b>
+              )}
             </article>
           ))}
         </div>

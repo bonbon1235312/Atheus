@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 
 import {
   createLeague,
@@ -9,6 +9,14 @@ import {
 import type { ManagedDiscordGuild } from "@/lib/discord";
 
 const initialState: CreateLeagueState = {};
+
+const STEPS = [
+  "League identity",
+  "Discord home",
+  "Match ops",
+  "Site admin",
+  "Colours",
+];
 
 export function OnboardingForm({
   guilds,
@@ -22,10 +30,44 @@ export function OnboardingForm({
   const [state, action, pending] = useActionState(createLeague, initialState);
   const [selectedGuildId, setSelectedGuildId] = useState(guilds[0]?.id ?? "");
   const selectedGuild = guilds.find((guild) => guild.id === selectedGuildId);
+  const [currentStep, setCurrentStep] = useState(0);
+  const sectionRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const observers = sectionRefs.current.map((el, i) => {
+      if (!el) return null;
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setCurrentStep(i);
+        },
+        { threshold: 0.2, rootMargin: "-80px 0px -30% 0px" },
+      );
+      obs.observe(el);
+      return obs;
+    });
+    return () => observers.forEach((obs) => obs?.disconnect());
+  }, []);
 
   return (
     <form action={action} className="onboarding-form">
-      <div className="form-section">
+      <nav className="onboarding-progress" aria-label="Setup progress">
+        {STEPS.map((step, i) => (
+          <div
+            key={step}
+            className={`onboarding-progress-step${i <= currentStep ? " is-reached" : ""}`}
+          >
+            <div className="onboarding-progress-track" />
+            <span className="onboarding-progress-label">{step}</span>
+          </div>
+        ))}
+      </nav>
+
+      <div
+        className="form-section"
+        ref={(el) => {
+          sectionRefs.current[0] = el;
+        }}
+      >
         <div>
           <p className="step-index">01</p>
           <h2>League identity</h2>
@@ -64,7 +106,12 @@ export function OnboardingForm({
         </div>
       </div>
 
-      <div className="form-section">
+      <div
+        className="form-section"
+        ref={(el) => {
+          sectionRefs.current[1] = el;
+        }}
+      >
         <div>
           <p className="step-index">02</p>
           <h2>Discord home</h2>
@@ -118,7 +165,12 @@ export function OnboardingForm({
         </div>
       </div>
 
-      <div className="form-section">
+      <div
+        className="form-section"
+        ref={(el) => {
+          sectionRefs.current[2] = el;
+        }}
+      >
         <div>
           <p className="step-index">03</p>
           <h2>Match operations</h2>
@@ -146,7 +198,12 @@ export function OnboardingForm({
         </div>
       </div>
 
-      <div className="form-section">
+      <div
+        className="form-section"
+        ref={(el) => {
+          sectionRefs.current[3] = el;
+        }}
+      >
         <div>
           <p className="step-index">04</p>
           <h2>Site administration</h2>
@@ -194,7 +251,12 @@ export function OnboardingForm({
         </div>
       </div>
 
-      <div className="form-section">
+      <div
+        className="form-section"
+        ref={(el) => {
+          sectionRefs.current[4] = el;
+        }}
+      >
         <div>
           <p className="step-index">05</p>
           <h2>Colour system</h2>
@@ -213,6 +275,10 @@ export function OnboardingForm({
             <input defaultValue="#21C7A8" name="accentColour" type="color" />
           </label>
         </div>
+        <p className="field-help" style={{ marginTop: "16px" }}>
+          These colours style your league&apos;s public site. They can be
+          updated any time from the league workspace after creation.
+        </p>
       </div>
 
       {state.error ? <p className="form-error">{state.error}</p> : null}

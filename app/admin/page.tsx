@@ -173,14 +173,29 @@ export default async function AdminPage({
           <div>
             <span>Current plan</span>
             <strong>{premium ? "Premium" : "Free"}</strong>
+            <small>
+              {premium
+                ? "Unlimited leagues, priority support"
+                : "One active league, full feature set"}
+            </small>
           </div>
           <div>
             <span>League allowance</span>
             <strong>{premium ? "Unlimited" : "One lifetime"}</strong>
+            <small>
+              {premium
+                ? "Create as many leagues as you need"
+                : "Your free league does not reset if deleted"}
+            </small>
           </div>
           <div>
             <span>Free claim</span>
             <strong>{freeClaimUsed ? "Used" : "Available"}</strong>
+            <small>
+              {freeClaimUsed
+                ? "Your free league has been created"
+                : "Create your first league below"}
+            </small>
           </div>
         </div>
 
