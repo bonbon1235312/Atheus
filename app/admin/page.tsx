@@ -211,9 +211,10 @@ export default async function AdminPage({
           </p>
         ) : freeClaimUsed && !premium ? (
           <p className="empty-state">
-            Your lifetime free league has already been claimed. Deleting or archiving
-            it does not reset the allowance. Premium league creation will be enabled
-            through verified billing, not a client-side switch.
+              Your lifetime free league has already been claimed. Deleting or archiving
+            it does not reset the allowance.{" "}
+            <Link href="/upgrade">Upgrade to Premium</Link> to create additional
+            leagues.
           </p>
         ) : guilds.length ? (
           <OnboardingForm

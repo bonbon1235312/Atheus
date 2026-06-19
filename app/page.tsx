@@ -278,8 +278,8 @@ export default function Home() {
               <li>One account across every league</li>
               <li>Priority platform support</li>
             </ul>
-            <Link className="landing-button landing-button-primary" href="/admin">
-              Open league control
+            <Link className="landing-button landing-button-primary" href="/upgrade">
+              Get Premium
             </Link>
           </article>
         </div>

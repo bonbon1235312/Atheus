@@ -2,11 +2,14 @@ import { notFound, redirect } from "next/navigation";
 
 import { auth } from "@/auth";
 import CollectorPage from "@/app/admin/[leagueId]/collector/page";
+import DivisionsPage from "@/app/admin/[leagueId]/divisions/page";
 import FixturesAdminPage from "@/app/admin/[leagueId]/fixtures/page";
 import ImportsPage from "@/app/admin/[leagueId]/imports/page";
 import LeagueWorkspacePage from "@/app/admin/[leagueId]/page";
 import PlayerIdentitiesPage from "@/app/admin/[leagueId]/players/page";
 import LeagueSetupPage from "@/app/admin/[leagueId]/setup/page";
+import SiteAccessSettingsPage from "@/app/admin/[leagueId]/site-access/page";
+import StaffPage from "@/app/admin/[leagueId]/staff/page";
 import TeamsPage from "@/app/admin/[leagueId]/teams/page";
 import SiteLoginPage from "@/app/admin/site-login/page";
 import { supabaseAdmin } from "@/lib/supabase-admin";
@@ -75,6 +78,18 @@ export default async function TenantAdminPage({
       return PlayerIdentitiesPage({
         params: routeParams,
         searchParams,
+      });
+    case "divisions":
+      return DivisionsPage({
+        params: routeParams,
+        searchParams,
+      });
+    case "staff":
+      return StaffPage({ params: routeParams });
+    case "site-access":
+      return SiteAccessSettingsPage({
+        params: routeParams,
+        searchParams: Promise.resolve({}),
       });
     default:
       notFound();
