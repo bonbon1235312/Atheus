@@ -1,3 +1,13 @@
+/*
+  public.css — atheus league website
+
+  Design direction: match programme meets sports broadcast.
+  Raw, typographic, data as the voice. Each league's primary color is the
+  singular committed accent — used at full weight, never diluted into decoration.
+*/
+
+/* ─────────────────────────────────────────────────── Foundation */
+
 .league-public-shell {
   min-height: 100dvh;
   color: var(--league-text);
@@ -7,9 +17,11 @@
 .league-public-header,
 .league-public-page,
 .league-public-footer {
-  width: min(100% - 40px, 1440px);
-  margin: 0 auto;
+  width: min(100% - 48px, 1440px);
+  margin-inline: auto;
 }
+
+/* ─────────────────────────────────────────────────── Navigation */
 
 .league-public-header {
   position: sticky;
@@ -17,12 +29,13 @@
   top: 0;
   display: grid;
   grid-template-columns: minmax(180px, 1fr) auto minmax(100px, 1fr);
-  gap: 28px;
+  gap: 32px;
   align-items: center;
   padding: 18px 0;
-  border-bottom: 2px solid color-mix(in srgb, var(--league-primary) 30%, var(--league-text) 8%);
-  background: color-mix(in srgb, var(--league-bg) 92%, transparent);
-  backdrop-filter: blur(18px);
+  background: color-mix(in srgb, var(--league-bg) 90%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 10%, transparent);
 }
 
 .league-public-brand {
@@ -34,107 +47,126 @@
 
 .league-public-brand > span:last-child {
   display: grid;
-  gap: 2px;
+  gap: 3px;
 }
 
 .league-public-brand strong {
   font-family: var(--font-display), sans-serif;
-  font-size: 1.3rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
   line-height: 1;
   text-transform: uppercase;
 }
 
-.league-public-brand small,
-.league-public-footer,
-.fixture-context span {
+.league-public-brand small {
   color: var(--league-muted);
-  font-size: 0.62rem;
+  font-size: 0.57rem;
   font-weight: 800;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.17em;
   text-transform: uppercase;
 }
 
 .league-public-header nav {
   display: flex;
-  gap: 28px;
-}
-
-.league-public-header nav a,
-.league-admin-link,
-.public-section-heading > a {
-  font-size: 0.7rem;
-  font-weight: 850;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
 }
 
 .league-public-header nav a {
-  padding: 8px 0;
-  border-bottom: 2px solid transparent;
+  padding: 10px 16px;
+  color: var(--league-muted);
+  font-size: 0.6rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transition: color 0.1s;
 }
 
 .league-public-header nav a:hover {
-  border-color: var(--league-primary);
+  color: var(--league-text);
 }
 
 .league-admin-link {
   justify-self: end;
-  padding: 10px 14px;
-  color: white;
+  display: inline-flex;
+  align-items: center;
+  padding: 9px 16px;
   background: var(--league-primary);
-  transition: filter 0.15s ease;
+  color: var(--league-bg);
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  transition: opacity 0.12s;
 }
 
 .league-admin-link:hover {
-  filter: brightness(0.88);
+  opacity: 0.8;
 }
+
+/* ─────────────────────────────────────────────────── Club badge */
 
 .league-mark {
   display: inline-grid;
-  width: 52px;
-  height: 52px;
+  width: 48px;
+  height: 48px;
   flex: 0 0 auto;
   place-items: center;
-  border: 1px solid color-mix(in srgb, white 22%, transparent);
-  color: white;
+  background: var(--league-primary);
   background-position: center;
   background-size: cover;
+  color: white;
   font-family: var(--font-display), sans-serif;
-  font-size: 1rem;
-  font-weight: 700;
+  font-size: 0.88rem;
+  font-weight: 800;
 }
 
 .league-mark-compact {
-  width: 38px;
-  height: 38px;
-  font-size: 0.75rem;
+  width: 32px;
+  height: 32px;
+  font-size: 0.68rem;
 }
+
+/* ─────────────────────────────────────────────────── Hero */
 
 .league-public-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(340px, 0.65fr);
-  min-height: 660px;
+  grid-template-columns: minmax(0, 1.5fr) 256px;
+  min-height: 680px;
   position: relative;
   overflow: hidden;
-  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 25%, transparent);
-  background:
-    radial-gradient(ellipse at 8% 60%, color-mix(in srgb, var(--league-primary) 14%, transparent), transparent 52%),
-    var(--league-bg);
+  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 12%, transparent);
+}
+
+/* Atmospheric bloom from bottom-left corner */
+.league-public-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 50% 65% at 0% 100%,
+    color-mix(in srgb, var(--league-primary) 18%, transparent),
+    transparent 58%
+  );
+  pointer-events: none;
+  z-index: 0;
 }
 
 .league-public-hero > div {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  padding: 80px clamp(30px, 7vw, 110px) 72px 0;
+  padding: 100px clamp(32px, 6vw, 96px) 80px 0;
+  position: relative;
+  z-index: 1;
 }
 
 .public-kicker {
+  display: block;
   margin: 0 0 18px;
   color: var(--league-primary);
-  font-size: 0.68rem;
+  font-size: 0.58rem;
   font-weight: 900;
-  letter-spacing: 0.16em;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
 }
 
@@ -143,36 +175,52 @@
 .team-profile-hero h1,
 .player-profile-hero h1 {
   margin: 0;
-  font-size: clamp(5rem, 10vw, 10rem);
-  font-weight: 600;
-  letter-spacing: -0.045em;
-  line-height: 0.8;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(4.5rem, 9.5vw, 9.5rem);
+  font-weight: 700;
+  letter-spacing: -0.048em;
+  line-height: 0.82;
 }
 
 .league-public-hero > div > p:last-child,
 .public-page-heading > p:last-child,
 .team-profile-hero > div > p:last-child,
 .player-profile-hero > div > p:last-child {
-  max-width: 690px;
-  margin: 30px 0 0;
+  max-width: 56ch;
+  margin: 26px 0 0;
   color: var(--league-muted);
-  line-height: 1.75;
+  font-size: 0.9rem;
+  line-height: 1.74;
 }
 
+/* Stats column */
 .league-public-hero > dl {
+  position: relative;
   display: grid;
+  align-content: end;
   margin: 0;
-  border-left: 1px solid color-mix(in srgb, var(--league-text) 20%, transparent);
-  border-top: 4px solid var(--league-primary);
-  background: color-mix(in srgb, var(--league-primary) 5%, var(--league-bg));
+  background: color-mix(in srgb, var(--league-primary) 7%, var(--league-bg));
+  border-left: 1px solid color-mix(in srgb, var(--league-primary) 28%, transparent);
+  z-index: 1;
+}
+
+/* Primary accent stripe at top of stats column — 3px, committed */
+.league-public-hero > dl::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -1px;
+  right: 0;
+  height: 3px;
+  background: var(--league-primary);
 }
 
 .league-public-hero > dl div {
   display: grid;
   align-content: end;
-  gap: 16px;
-  padding: 34px;
-  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 20%, transparent);
+  gap: 10px;
+  padding: 30px 26px;
+  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 8%, transparent);
 }
 
 .league-public-hero dt,
@@ -181,49 +229,108 @@
 .player-overall span,
 .team-player-grid dt {
   color: var(--league-muted);
-  font-size: 0.62rem;
-  font-weight: 850;
-  letter-spacing: 0.13em;
+  font-size: 0.54rem;
+  font-weight: 900;
+  letter-spacing: 0.22em;
   text-transform: uppercase;
 }
 
 .league-public-hero dd {
   margin: 0;
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(3.4rem, 6vw, 5.8rem);
-  line-height: 0.75;
+  font-size: clamp(3rem, 5.5vw, 5.5rem);
+  font-weight: 700;
+  letter-spacing: -0.045em;
+  line-height: 0.82;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─────────────────────────────────────────────────── Section rhythm */
+
+.league-public-page {
+  counter-reset: league-section;
+}
+
+/* Three main sections get a counter */
+.public-matchday-section {
+  counter-increment: league-section;
+}
+
+.public-split-section {
+  counter-increment: league-section;
+}
+
+.public-clubs-section {
+  counter-increment: league-section;
 }
 
 .public-section {
-  padding: 90px 0;
-  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 25%, transparent);
+  padding: 96px 0;
+  border-top: 1px solid color-mix(in srgb, var(--league-text) 10%, transparent);
 }
 
+/* Section heading — no side stripe */
 .public-section-heading {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 30px;
-  margin-bottom: 32px;
+  gap: 28px;
+  margin-bottom: 44px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 8%, transparent);
+  position: relative;
+}
+
+/* Ghost section counter — large, structural, not decorative */
+.public-matchday-section > .public-section-heading::after,
+.public-clubs-section > .public-section-heading::after,
+.public-split-section .public-table-preview .public-section-heading::after {
+  content: "0" counter(league-section);
+  position: absolute;
+  right: 0;
+  bottom: 16px;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(4rem, 8vw, 7.5rem);
+  font-weight: 900;
+  letter-spacing: -0.07em;
+  line-height: 1;
+  color: var(--league-text);
+  opacity: 0.05;
+  pointer-events: none;
+  user-select: none;
 }
 
 .public-section-heading > div {
-  border-left: 4px solid var(--league-primary);
-  padding-left: 18px;
+  display: grid;
+  gap: 8px;
 }
 
 .public-section-heading h2 {
   margin: 0;
-  font-size: clamp(3rem, 5vw, 5rem);
-  font-weight: 600;
-  letter-spacing: -0.035em;
-  line-height: 0.86;
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(2.8rem, 5vw, 4.8rem);
+  font-weight: 700;
+  letter-spacing: -0.036em;
+  line-height: 0.88;
 }
 
 .public-section-heading > a {
+  flex-shrink: 0;
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--league-primary);
   padding-bottom: 3px;
-  border-bottom: 1px solid currentColor;
+  border-bottom: 1px solid var(--league-primary);
+  transition: opacity 0.12s;
 }
+
+.public-section-heading > a:hover {
+  opacity: 0.65;
+}
+
+/* ─────────────────────────────────────────────────── Fixture rows */
 
 .public-fixture-list,
 .standings-table,
@@ -237,35 +344,54 @@
 
 .public-fixture-row {
   display: grid;
-  grid-template-columns: 210px minmax(0, 1fr) 100px minmax(0, 1fr);
-  gap: 24px;
-  align-items: center;
-  min-height: 102px;
-  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 14%, transparent);
-  transition: background 0.12s ease;
+  grid-template-columns: 186px minmax(0, 1fr) 100px minmax(0, 1fr);
+  align-items: stretch;
+  min-height: 88px;
+  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 9%, transparent);
+  transition: background 0.1s;
 }
 
 .public-fixture-row:hover {
-  background: color-mix(in srgb, var(--league-primary) 4%, transparent);
+  background: color-mix(in srgb, var(--league-primary) 5%, transparent);
 }
 
 .fixture-context {
-  display: grid;
-  gap: 6px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  padding: 0 22px 0 0;
+  border-right: 1px solid color-mix(in srgb, var(--league-text) 8%, transparent);
 }
 
 .fixture-context strong {
-  font-size: 0.78rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+/* Shared muted label style — override the brand selector collision */
+.league-public-brand small,
+.league-public-footer small,
+.fixture-context span {
+  color: var(--league-muted);
+}
+
+.fixture-context span {
+  font-size: 0.55rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
 
 .fixture-team {
   display: flex;
   align-items: center;
-  gap: 15px;
-  min-width: 0;
+  gap: 13px;
+  padding: 0 18px;
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(1.3rem, 2vw, 1.8rem);
-  font-weight: 600;
+  font-size: clamp(1.1rem, 1.7vw, 1.5rem);
+  font-weight: 700;
+  letter-spacing: -0.015em;
   line-height: 1;
   text-transform: uppercase;
 }
@@ -279,97 +405,106 @@
 .fixture-team-home {
   justify-content: flex-end;
   text-align: right;
-  border-right: 3px solid color-mix(in srgb, var(--home-colour, transparent) 70%, transparent);
-  padding-right: 2px;
+  /* No side stripe — colour lives in the badge only */
 }
 
-.fixture-team-away {
-  border-left: 3px solid color-mix(in srgb, var(--away-colour, transparent) 70%, transparent);
-  padding-left: 2px;
-}
-
+/* Score box — full row height, broadcast quality */
 .fixture-score {
-  position: relative;
   display: flex;
-  min-height: 52px;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 9px;
-  color: var(--league-muted);
-  border: 1px solid color-mix(in srgb, var(--league-text) 18%, transparent);
+  gap: 0;
+  position: relative;
   font-family: var(--font-display), sans-serif;
   font-size: 1.45rem;
-  font-weight: 700;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--league-muted);
+  border-left: 1px solid color-mix(in srgb, var(--league-text) 8%, transparent);
+  border-right: 1px solid color-mix(in srgb, var(--league-text) 8%, transparent);
 }
 
 .fixture-score-final {
-  color: white;
-  border-color: var(--league-secondary);
-  background: var(--league-secondary);
+  color: var(--league-text);
+  background: color-mix(in srgb, var(--league-primary) 9%, var(--league-bg));
+  border-left-color: color-mix(in srgb, var(--league-primary) 22%, transparent);
+  border-right-color: color-mix(in srgb, var(--league-primary) 22%, transparent);
 }
 
 .fixture-score small {
   position: absolute;
-  right: -1px;
-  bottom: -18px;
-  padding: 3px 6px;
-  color: white;
-  background: var(--league-primary);
+  bottom: 9px;
+  left: 50%;
+  transform: translateX(-50%);
   font-family: var(--font-body), sans-serif;
-  font-size: 0.5rem;
+  font-size: 0.44rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--league-primary);
+  white-space: nowrap;
 }
+
+/* ─────────────────────────────────────────────────── Empty states */
 
 .public-empty {
   display: grid;
-  gap: 8px;
-  padding: 30px 0;
+  gap: 6px;
+  padding: 44px 0;
   color: var(--league-muted);
-  border-top: 1px solid color-mix(in srgb, var(--league-text) 18%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--league-text) 8%, transparent);
 }
 
 .public-empty strong {
-  color: var(--league-text);
   font-family: var(--font-display), sans-serif;
-  font-size: 1.8rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
+  color: var(--league-text);
 }
+
+/* ─────────────────────────────────────────────────── Split (table + players) */
 
 .public-split-section {
   display: grid;
-  grid-template-columns: 1.25fr 0.75fr;
-  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 25%, transparent);
+  grid-template-columns: 1.3fr 0.7fr;
+  border-top: 1px solid color-mix(in srgb, var(--league-text) 10%, transparent);
 }
 
 .public-split-section > div {
   min-width: 0;
-  padding: 86px 0;
+  padding: 96px 0;
 }
 
 .public-split-section > div:first-child {
-  padding-right: clamp(30px, 5vw, 80px);
-  border-right: 1px solid color-mix(in srgb, var(--league-text) 18%, transparent);
+  padding-right: clamp(32px, 5vw, 80px);
+  border-right: 1px solid color-mix(in srgb, var(--league-text) 10%, transparent);
 }
 
 .public-split-section > div:last-child {
-  padding-left: clamp(30px, 5vw, 80px);
+  padding-left: clamp(32px, 5vw, 80px);
 }
+
+/* ─────────────────────────────────────────────────── Standings */
 
 .standings-head,
 .standings-row {
   display: grid;
-  grid-template-columns: 62px minmax(240px, 1fr) repeat(4, 58px) 70px 78px;
-  gap: 8px;
+  grid-template-columns: 52px minmax(240px, 1fr) repeat(4, 52px) 64px 74px;
+  gap: 6px;
   align-items: center;
 }
 
 .standings-head,
 .leaderboard-head,
 .player-match-head {
-  min-height: 46px;
+  min-height: 40px;
   color: var(--league-muted);
-  font-size: 0.58rem;
-  font-weight: 850;
-  letter-spacing: 0.12em;
+  font-size: 0.53rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
 }
 
@@ -379,44 +514,55 @@
 }
 
 .standings-row {
-  min-height: 82px;
-  border-top: 1px solid color-mix(in srgb, var(--league-text) 13%, transparent);
-  transition: background 0.12s ease;
+  min-height: 78px;
+  border-top: 1px solid color-mix(in srgb, var(--league-text) 9%, transparent);
+  transition: background 0.1s;
 }
 
 .standings-row:hover {
-  background: color-mix(in srgb, var(--league-primary) 4%, transparent);
+  background: color-mix(in srgb, var(--league-primary) 5%, transparent);
 }
 
-/* Top 3 position indicators */
-.standings-row:nth-child(2) .standings-position {
-  color: var(--league-bg);
-  background: var(--league-primary);
-  border-color: var(--league-primary);
+/* P1 — the league leader gets a full row color wash */
+.standings-row:nth-child(2) {
+  background: color-mix(in srgb, var(--league-primary) 10%, var(--league-bg));
 }
 
-.standings-row:nth-child(3) .standings-position {
-  border-color: var(--league-primary);
-  color: var(--league-primary);
-}
-
-.standings-row:nth-child(4) .standings-position {
-  border-color: color-mix(in srgb, var(--league-primary) 55%, transparent);
-  color: color-mix(in srgb, var(--league-primary) 55%, var(--league-text));
+.standings-row:nth-child(2):hover {
+  background: color-mix(in srgb, var(--league-primary) 15%, var(--league-bg));
 }
 
 .standings-position {
   display: grid;
-  width: 38px;
-  height: 38px;
+  width: 32px;
+  height: 32px;
   place-items: center;
-  border: 1px solid color-mix(in srgb, var(--league-text) 18%, transparent);
+  font-size: 0.72rem;
+  font-weight: 900;
+  color: var(--league-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* P1 position filled */
+.standings-row:nth-child(2) .standings-position {
+  background: var(--league-primary);
+  color: var(--league-bg);
+}
+
+/* P2 position outlined */
+.standings-row:nth-child(3) .standings-position {
+  color: var(--league-primary);
+}
+
+/* P3 muted accent */
+.standings-row:nth-child(4) .standings-position {
+  color: color-mix(in srgb, var(--league-primary) 60%, var(--league-muted));
 }
 
 .standings-club {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   min-width: 0;
 }
 
@@ -425,7 +571,7 @@
 .performer-list > a > span {
   display: grid;
   min-width: 0;
-  gap: 4px;
+  gap: 3px;
 }
 
 .standings-club strong,
@@ -433,7 +579,9 @@
 .performer-list strong {
   overflow: hidden;
   font-family: var(--font-display), sans-serif;
-  font-size: 1.25rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   text-overflow: ellipsis;
   text-transform: uppercase;
   white-space: nowrap;
@@ -443,126 +591,158 @@
 .leaderboard-player small,
 .performer-list small {
   color: var(--league-muted);
-  font-size: 0.58rem;
+  font-size: 0.53rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 .standings-points,
 .performer-list em,
 .leaderboard-row em {
   color: var(--league-primary);
+  font-weight: 900;
 }
 
 .metric-negative {
-  color: #b42318;
+  color: oklch(52% 0.14 25);
 }
 
 .standings-table-compact .standings-head,
 .standings-table-compact .standings-row {
-  grid-template-columns: 48px minmax(180px, 1fr) repeat(4, 40px) 52px 52px;
+  grid-template-columns: 44px minmax(160px, 1fr) repeat(4, 36px) 48px 52px;
 }
 
 .standings-table-compact .standings-row {
-  min-height: 70px;
+  min-height: 64px;
 }
 
 .standings-table-compact .league-mark {
   display: none;
 }
 
+/* ─────────────────────────────────────────────────── Performer ranking */
+
 .performer-list > a {
   display: grid;
-  grid-template-columns: 42px minmax(0, 1fr) auto;
-  gap: 15px;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  gap: 16px;
   align-items: center;
-  min-height: 74px;
-  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 14%, transparent);
-  transition: background 0.12s ease;
+  min-height: 70px;
+  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 9%, transparent);
+  transition: background 0.1s;
 }
 
 .performer-list > a:hover {
-  background: color-mix(in srgb, var(--league-primary) 4%, transparent);
+  background: color-mix(in srgb, var(--league-primary) 5%, transparent);
 }
 
+/* Rank number — large, ghost, structural */
 .performer-list > a > b {
-  color: var(--league-primary);
+  font-family: var(--font-display), sans-serif;
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.04em;
+  color: color-mix(in srgb, var(--league-text) 16%, transparent);
   font-variant-numeric: tabular-nums;
 }
 
 .performer-list em,
 .leaderboard-row em {
   font-family: var(--font-display), sans-serif;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
+  font-weight: 800;
   font-style: normal;
+  letter-spacing: -0.03em;
 }
+
+/* ─────────────────────────────────────────────────── Club grid */
 
 .public-club-grid,
 .team-player-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  border-top: 1px solid var(--league-text);
-  border-left: 1px solid color-mix(in srgb, var(--league-text) 15%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--league-text) 10%, transparent);
 }
 
 .public-club-grid > a {
   display: flex;
-  min-height: 145px;
   align-items: center;
-  gap: 18px;
-  padding: 24px;
-  border-right: 1px solid color-mix(in srgb, var(--league-text) 15%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 15%, transparent);
-  transition: background 0.12s ease;
+  gap: 15px;
+  min-height: 128px;
+  padding: 20px 18px;
+  border-right: 1px solid color-mix(in srgb, var(--league-text) 8%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 8%, transparent);
+  transition: background 0.12s;
 }
 
 .public-club-grid > a:hover {
-  background: color-mix(in srgb, var(--league-primary) 6%, var(--league-surface));
+  background: color-mix(in srgb, var(--league-primary) 7%, var(--league-bg));
 }
 
 .public-club-grid > a > span:last-child {
   display: grid;
-  gap: 6px;
+  gap: 5px;
 }
 
 .public-club-grid strong {
   font-family: var(--font-display), sans-serif;
-  font-size: 1.35rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   text-transform: uppercase;
 }
 
 .public-club-grid small {
   color: var(--league-muted);
-  font-size: 0.6rem;
-  font-weight: 850;
-  letter-spacing: 0.12em;
+  font-size: 0.54rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
+
+/* ─────────────────────────────────────────────────── Footer */
 
 .league-public-footer {
   display: flex;
   justify-content: space-between;
-  padding: 26px 0 40px;
+  align-items: center;
+  padding: 22px 0 36px;
+  border-top: 1px solid color-mix(in srgb, var(--league-text) 8%, transparent);
+  color: var(--league-muted);
+  font-size: 0.56rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
 }
+
+/* ─────────────────────────────────────────────────── Inner pages */
 
 .public-index-page {
   padding-bottom: 100px;
 }
 
 .public-page-heading {
-  max-width: 1080px;
+  max-width: 900px;
   padding: 110px 0 72px;
+  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 10%, transparent);
 }
 
 .public-page-heading h1 {
-  font-size: clamp(4.8rem, 9vw, 9rem);
+  font-size: clamp(4rem, 8.5vw, 8.5rem);
 }
+
+/* ─────────────────────────────────────────────────── Filters */
 
 .public-filter-bar {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
-  gap: 14px;
+  gap: 12px;
   align-items: end;
-  padding: 24px 0;
-  border-top: 1px solid var(--league-text);
-  border-bottom: 1px solid var(--league-text);
+  padding: 22px 0;
+  border-top: 1px solid color-mix(in srgb, var(--league-text) 10%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 10%, transparent);
 }
 
 .public-filter-bar-short {
@@ -571,27 +751,28 @@
 
 .public-filter-bar label {
   display: grid;
-  gap: 8px;
+  gap: 7px;
 }
 
 .public-filter-bar label > span {
   color: var(--league-muted);
-  font-size: 0.58rem;
-  font-weight: 850;
-  letter-spacing: 0.12em;
+  font-size: 0.52rem;
+  font-weight: 900;
+  letter-spacing: 0.2em;
   text-transform: uppercase;
 }
 
 .public-filter-bar select,
 .public-filter-bar input {
   width: 100%;
-  min-height: 48px;
-  padding: 10px 12px;
-  border: 1px solid color-mix(in srgb, var(--league-text) 24%, transparent);
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid color-mix(in srgb, var(--league-text) 18%, transparent);
   border-radius: 0;
   outline: 0;
   color: var(--league-text);
-  background: var(--league-surface);
+  background: color-mix(in srgb, var(--league-text) 3%, var(--league-bg));
+  font-size: 0.85rem;
 }
 
 .public-filter-bar select option {
@@ -602,64 +783,83 @@
 .public-filter-bar select:focus,
 .public-filter-bar input:focus {
   border-color: var(--league-primary);
-  box-shadow: inset 3px 0 0 var(--league-primary);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--league-primary) 22%, transparent);
 }
 
 .public-filter-bar button {
-  min-height: 48px;
+  min-height: 44px;
   padding: 0 18px;
-  border: 1px solid var(--league-text);
+  border: none;
+  background: var(--league-primary);
   color: var(--league-bg);
-  background: var(--league-text);
   cursor: pointer;
-  font-size: 0.66rem;
-  font-weight: 850;
-  letter-spacing: 0.1em;
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
+  transition: opacity 0.12s;
 }
+
+.public-filter-bar button:hover {
+  opacity: 0.82;
+}
+
+/* ─────────────────────────────────────────────────── Date groups */
 
 .public-date-groups {
   display: grid;
-  gap: 58px;
-  padding-top: 60px;
+  gap: 60px;
+  padding-top: 56px;
 }
 
 .public-date-groups > section > header {
   display: flex;
   justify-content: space-between;
-  padding-bottom: 13px;
+  align-items: baseline;
+  padding-bottom: 12px;
   color: var(--league-muted);
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
+  font-size: 0.56rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
   text-transform: uppercase;
+  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 10%, transparent);
 }
 
+/* ─────────────────────────────────────────────────── Stats page */
+
 .public-stats-filter {
-  grid-template-columns: minmax(220px, 1.2fr) repeat(4, minmax(145px, 0.7fr)) auto;
+  grid-template-columns: minmax(220px, 1.2fr) repeat(4, minmax(140px, 0.7fr)) auto;
 }
 
 .overall-note {
   margin: 18px 0 0;
   color: var(--league-muted);
-  font-size: 0.72rem;
-  line-height: 1.6;
+  font-size: 0.7rem;
+  line-height: 1.65;
 }
 
+/* ─────────────────────────────────────────────────── Leaderboard */
+
 .leaderboard-table {
-  margin-top: 42px;
+  margin-top: 44px;
 }
 
 .leaderboard-head,
 .leaderboard-row {
   display: grid;
-  grid-template-columns: 68px minmax(220px, 1.2fr) minmax(130px, 0.7fr) repeat(4, 72px) minmax(110px, 0.55fr);
-  gap: 10px;
+  grid-template-columns: 60px minmax(220px, 1.2fr) minmax(130px, 0.7fr) repeat(4, 68px) minmax(110px, 0.55fr);
+  gap: 8px;
   align-items: center;
 }
 
 .leaderboard-row {
-  min-height: 82px;
-  border-top: 1px solid color-mix(in srgb, var(--league-text) 14%, transparent);
+  min-height: 78px;
+  border-top: 1px solid color-mix(in srgb, var(--league-text) 9%, transparent);
+  transition: background 0.1s;
+}
+
+.leaderboard-row:hover {
+  background: color-mix(in srgb, var(--league-primary) 5%, transparent);
 }
 
 .leaderboard-head span:not(:nth-child(2)):not(:nth-child(3)),
@@ -670,72 +870,86 @@
 
 .leaderboard-row > span:not(.leaderboard-player) {
   color: var(--league-muted);
-  font-size: 0.68rem;
+  font-size: 0.65rem;
 }
+
+/* ─────────────────────────────────────────────────── Team profile */
 
 .team-profile-hero {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) minmax(320px, 0.55fr);
-  gap: 34px;
+  grid-template-columns: auto minmax(0, 1fr) minmax(300px, 0.5fr);
+  gap: 36px;
   align-items: end;
-  min-height: 520px;
-  padding: 80px 0 60px;
-  border-bottom: 1px solid var(--league-text);
+  min-height: 500px;
+  padding: 80px 0 56px;
+  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 10%, transparent);
 }
 
 .team-profile-hero > .league-mark {
-  width: 140px;
-  height: 140px;
-  font-size: 2.4rem;
+  width: 118px;
+  height: 118px;
+  font-size: 2.2rem;
 }
 
 .team-profile-hero h1 {
-  font-size: clamp(4.5rem, 8vw, 8.5rem);
+  font-size: clamp(3.8rem, 7vw, 8rem);
 }
 
 .team-profile-hero dl {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   margin: 0;
-  border-top: 1px solid color-mix(in srgb, var(--league-text) 20%, transparent);
+  border-top: 1px solid color-mix(in srgb, var(--league-text) 10%, transparent);
 }
 
 .team-profile-hero dl div {
   display: grid;
-  gap: 15px;
-  padding: 20px 12px;
-  border-right: 1px solid color-mix(in srgb, var(--league-text) 20%, transparent);
+  gap: 10px;
+  padding: 18px 12px;
+  border-right: 1px solid color-mix(in srgb, var(--league-text) 8%, transparent);
 }
 
 .team-profile-hero dd {
   margin: 0;
   font-family: var(--font-display), sans-serif;
-  font-size: 2.6rem;
+  font-size: 2.4rem;
+  font-weight: 700;
+  letter-spacing: -0.035em;
 }
+
+/* ─────────────────────────────────────────────────── Team player grid */
 
 .team-player-grid {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .team-player-grid > a {
-  min-height: 190px;
-  padding: 24px;
-  border-right: 1px solid color-mix(in srgb, var(--league-text) 15%, transparent);
-  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 15%, transparent);
+  min-height: 178px;
+  padding: 22px;
+  border-right: 1px solid color-mix(in srgb, var(--league-text) 8%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 8%, transparent);
+  transition: background 0.12s;
+}
+
+.team-player-grid > a:hover {
+  background: color-mix(in srgb, var(--league-primary) 6%, var(--league-bg));
 }
 
 .team-player-grid > a > span {
   color: var(--league-primary);
-  font-size: 0.6rem;
-  font-weight: 850;
-  letter-spacing: 0.12em;
+  font-size: 0.54rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
 .team-player-grid > a > strong {
   display: block;
-  margin: 32px 0;
+  margin: 26px 0;
   font-family: var(--font-display), sans-serif;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
   text-transform: uppercase;
 }
 
@@ -747,22 +961,25 @@
 
 .team-player-grid dl div {
   display: grid;
-  gap: 6px;
+  gap: 5px;
 }
 
 .team-player-grid dd {
   margin: 0;
+  font-size: 1rem;
   font-weight: 800;
 }
 
+/* ─────────────────────────────────────────────────── Player profile */
+
 .player-profile-hero {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 280px;
+  grid-template-columns: minmax(0, 1fr) 252px;
   gap: 60px;
   align-items: end;
-  min-height: 560px;
-  padding: 90px 0 68px;
-  border-bottom: 1px solid var(--league-text);
+  min-height: 540px;
+  padding: 90px 0 64px;
+  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 10%, transparent);
 }
 
 .player-profile-hero h1 {
@@ -771,41 +988,49 @@
 
 .player-overall {
   display: grid;
-  gap: 12px;
-  padding: 28px;
+  gap: 10px;
+  padding: 22px;
   color: white;
-  background: var(--league-secondary);
+  background: var(--league-secondary, var(--league-primary));
 }
 
 .player-overall span,
 .player-overall small {
-  color: color-mix(in srgb, white 70%, transparent);
+  font-size: 0.54rem;
+  font-weight: 900;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, white 52%, transparent);
 }
 
 .player-overall strong {
   font-family: var(--font-display), sans-serif;
-  font-size: 6rem;
-  line-height: 0.85;
+  font-size: 5.5rem;
+  font-weight: 700;
+  letter-spacing: -0.05em;
+  line-height: 0.88;
 }
 
 .player-metric-grid {
   display: grid;
   grid-template-columns: repeat(9, minmax(0, 1fr));
-  border-bottom: 1px solid var(--league-text);
+  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 10%, transparent);
 }
 
 .player-metric-grid > div {
   display: grid;
-  gap: 20px;
-  min-height: 150px;
+  gap: 18px;
+  min-height: 138px;
   align-content: end;
-  padding: 22px 15px;
-  border-right: 1px solid color-mix(in srgb, var(--league-text) 16%, transparent);
+  padding: 18px 14px;
+  border-right: 1px solid color-mix(in srgb, var(--league-text) 8%, transparent);
 }
 
 .player-metric-grid strong {
   font-family: var(--font-display), sans-serif;
-  font-size: clamp(1.8rem, 3vw, 3.2rem);
+  font-size: clamp(1.6rem, 2.8vw, 3rem);
+  font-weight: 700;
+  letter-spacing: -0.04em;
   line-height: 0.9;
 }
 
@@ -815,40 +1040,54 @@
 
 .player-team-history > a {
   display: grid;
-  grid-template-columns: 80px 1fr;
-  gap: 16px;
+  grid-template-columns: 72px 1fr;
+  gap: 14px;
   align-items: center;
-  min-height: 70px;
-  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 14%, transparent);
+  min-height: 64px;
+  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 8%, transparent);
+  transition: background 0.1s;
+}
+
+.player-team-history > a:hover {
+  background: color-mix(in srgb, var(--league-primary) 5%, transparent);
 }
 
 .player-team-history span {
-  color: var(--league-primary);
   font-family: var(--font-display), sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--league-primary);
 }
 
 .player-team-history strong {
   font-family: var(--font-display), sans-serif;
-  font-size: 1.35rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
   text-transform: uppercase;
 }
 
 .competition-total-list > div {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 70px 70px 90px;
-  gap: 12px;
+  grid-template-columns: minmax(0, 1fr) 64px 64px 88px;
+  gap: 10px;
   align-items: center;
-  min-height: 70px;
-  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 14%, transparent);
+  min-height: 64px;
+  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 8%, transparent);
 }
 
 .competition-total-list > div > span {
   display: grid;
-  gap: 4px;
+  gap: 3px;
 }
 
 .competition-total-list small {
   color: var(--league-muted);
+  font-size: 0.54rem;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
 }
 
 .player-match-table {
@@ -858,21 +1097,96 @@
 .player-match-head,
 .player-match-row {
   display: grid;
-  grid-template-columns: 170px minmax(150px, 1fr) minmax(150px, 1fr) 70px 60px 48px 48px 70px;
-  gap: 10px;
+  grid-template-columns: 160px minmax(140px, 1fr) minmax(140px, 1fr) 68px 56px 44px 44px 68px;
+  gap: 8px;
   align-items: center;
-  min-width: 920px;
+  min-width: 900px;
 }
 
 .player-match-row {
-  min-height: 66px;
-  border-top: 1px solid color-mix(in srgb, var(--league-text) 13%, transparent);
+  min-height: 60px;
+  border-top: 1px solid color-mix(in srgb, var(--league-text) 8%, transparent);
   font-size: 0.78rem;
+  transition: background 0.1s;
+}
+
+.player-match-row:hover {
+  background: color-mix(in srgb, var(--league-primary) 4%, transparent);
 }
 
 .player-match-row > b {
   text-align: center;
 }
+
+/* ─────────────────────────────────────────────────── Division tabs */
+
+.division-tabs {
+  display: flex;
+  margin-bottom: 36px;
+  border-bottom: 1px solid color-mix(in srgb, var(--league-text) 9%, transparent);
+}
+
+.division-tab {
+  padding: 12px 18px;
+  margin-bottom: -1px;
+  color: var(--league-muted);
+  font-size: 0.58rem;
+  font-weight: 900;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  border-bottom: 2px solid transparent;
+  transition: color 0.1s, border-color 0.1s;
+}
+
+.division-tab:hover {
+  color: var(--league-text);
+}
+
+.division-tab-active {
+  color: var(--league-primary);
+  border-bottom-color: var(--league-primary);
+}
+
+/* ─────────────────────────────────────────────────── Coming soon */
+
+.league-coming-soon {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 20px;
+  width: min(580px, 100%);
+  margin: 0 auto;
+  padding: 120px 24px 96px;
+  min-height: 60vh;
+}
+
+.league-coming-soon .league-mark {
+  width: 78px;
+  height: 78px;
+  font-size: 1.75rem;
+}
+
+.league-coming-soon h1 {
+  margin: 0;
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  line-height: 1.05;
+}
+
+.league-coming-soon-lead {
+  margin: 0;
+  max-width: 42ch;
+  color: var(--league-muted);
+  font-size: 0.95rem;
+  line-height: 1.68;
+}
+
+.league-coming-soon .button {
+  margin-top: 10px;
+}
+
+/* ─────────────────────────────────────────────────── Responsive: tablet */
 
 @media (max-width: 900px) {
   .league-public-header {
@@ -884,7 +1198,7 @@
     grid-row: 2;
     justify-content: space-between;
     padding-top: 12px;
-    border-top: 1px solid color-mix(in srgb, var(--league-text) 12%, transparent);
+    border-top: 1px solid color-mix(in srgb, var(--league-text) 8%, transparent);
   }
 
   .league-public-hero,
@@ -895,14 +1209,24 @@
 
   .league-public-hero > dl {
     grid-template-columns: repeat(3, 1fr);
-    border-top: 1px solid color-mix(in srgb, var(--league-text) 20%, transparent);
-    border-left: 0;
+    border-left: none;
+    border-top: 1px solid color-mix(in srgb, var(--league-text) 10%, transparent);
+  }
+
+  /* Reposition accent stripe to top on mobile */
+  .league-public-hero > dl::before {
+    left: 0;
+    right: auto;
+    top: -1px;
+    bottom: auto;
+    width: 100%;
+    height: 2px;
   }
 
   .public-split-section > div:first-child {
     padding-right: 0;
-    border-right: 0;
-    border-bottom: 1px solid color-mix(in srgb, var(--league-text) 18%, transparent);
+    border-right: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--league-text) 10%, transparent);
   }
 
   .public-split-section > div:last-child {
@@ -927,12 +1251,12 @@
 
   .leaderboard-head,
   .leaderboard-row {
-    min-width: 960px;
+    min-width: 920px;
   }
 
   .standings-head,
   .standings-row {
-    min-width: 800px;
+    min-width: 780px;
   }
 
   .team-profile-hero {
@@ -946,13 +1270,20 @@
   .player-metric-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+
+  .public-section-heading::after {
+    font-size: clamp(3rem, 6vw, 5rem);
+    bottom: 10px;
+  }
 }
+
+/* ─────────────────────────────────────────────────── Responsive: mobile */
 
 @media (max-width: 560px) {
   .league-public-header,
   .league-public-page,
   .league-public-footer {
-    width: min(100% - 28px, 1440px);
+    width: min(100% - 32px, 1440px);
   }
 
   .league-public-brand small {
@@ -960,12 +1291,12 @@
   }
 
   .league-public-header nav {
-    gap: 10px;
+    gap: 0;
   }
 
-  .league-public-header nav a,
-  .league-admin-link {
-    font-size: 0.58rem;
+  .league-public-header nav a {
+    padding: 8px 10px;
+    font-size: 0.54rem;
   }
 
   .league-public-hero {
@@ -973,15 +1304,15 @@
   }
 
   .league-public-hero > div {
-    min-height: 520px;
-    padding: 70px 0 48px;
+    min-height: 480px;
+    padding: 72px 0 52px;
   }
 
   .league-public-hero h1,
   .public-page-heading h1,
   .team-profile-hero h1,
   .player-profile-hero h1 {
-    font-size: clamp(4rem, 18vw, 6.4rem);
+    font-size: clamp(3.6rem, 16vw, 6rem);
   }
 
   .league-public-hero > dl,
@@ -994,8 +1325,8 @@
   }
 
   .league-public-hero > dl div {
-    min-height: 130px;
-    padding: 22px 0;
+    min-height: 108px;
+    padding: 20px 0;
   }
 
   .public-section,
@@ -1009,18 +1340,23 @@
   }
 
   .public-fixture-row {
-    grid-template-columns: 1fr 70px 1fr;
-    gap: 10px;
-    padding: 18px 0 24px;
+    grid-template-columns: 1fr 72px 1fr;
+    gap: 0;
+    padding: 16px 0 22px;
   }
 
   .fixture-context {
     grid-column: 1 / -1;
+    padding: 0 0 14px;
+    border-right: none;
+    border-bottom: 1px solid color-mix(in srgb, var(--league-text) 8%, transparent);
+    margin-bottom: 14px;
   }
 
   .fixture-team {
     flex-direction: column;
-    font-size: 1.05rem;
+    padding: 0 10px;
+    font-size: 1rem;
     text-align: center;
   }
 
@@ -1037,17 +1373,17 @@
   }
 
   .public-page-heading {
-    padding: 80px 0 50px;
+    padding: 80px 0 52px;
   }
 
   .team-profile-hero {
-    gap: 24px;
+    gap: 20px;
     min-height: auto;
   }
 
   .team-profile-hero > .league-mark {
-    width: 96px;
-    height: 96px;
+    width: 88px;
+    height: 88px;
   }
 
   .team-profile-hero dl {
@@ -1056,11 +1392,11 @@
 
   .player-profile-hero {
     min-height: auto;
-    padding: 80px 0 50px;
+    padding: 80px 0 52px;
   }
 
   .player-overall strong {
-    font-size: 4.8rem;
+    font-size: 4.5rem;
   }
 
   .player-metric-grid {
@@ -1068,76 +1404,11 @@
   }
 
   .competition-total-list > div {
-    grid-template-columns: 1fr 50px 50px;
+    grid-template-columns: 1fr 48px 48px;
   }
 
   .competition-total-list > div > b:last-child {
     grid-column: 1 / -1;
-    padding-bottom: 10px;
+    padding-bottom: 8px;
   }
-}
-
-.division-tabs {
-  display: flex;
-  border-bottom: 2px solid color-mix(in srgb, var(--league-text) 14%, transparent);
-  margin-bottom: 32px;
-}
-
-.division-tab {
-  padding: 12px 22px;
-  margin-bottom: -2px;
-  border-bottom: 2px solid transparent;
-  color: var(--league-muted);
-  font-size: 0.68rem;
-  font-weight: 850;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  transition: color 0.12s ease, border-color 0.12s ease;
-}
-
-.division-tab:hover {
-  color: var(--league-text);
-}
-
-.division-tab-active {
-  color: var(--league-primary);
-  border-bottom-color: var(--league-primary);
-}
-
-.league-coming-soon {
-  width: min(640px, 100%);
-  margin: 0 auto;
-  padding: 120px 24px 96px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 18px;
-  min-height: 60vh;
-  justify-content: center;
-}
-
-.league-coming-soon .league-mark {
-  width: 84px;
-  height: 84px;
-  font-size: 1.9rem;
-}
-
-.league-coming-soon h1 {
-  margin: 0;
-  font-size: clamp(2.2rem, 5vw, 3.4rem);
-  line-height: 1.05;
-  color: var(--league-text);
-}
-
-.league-coming-soon-lead {
-  margin: 0;
-  max-width: 46ch;
-  color: var(--league-muted);
-  font-size: 1.05rem;
-  line-height: 1.6;
-}
-
-.league-coming-soon .button {
-  margin-top: 10px;
 }

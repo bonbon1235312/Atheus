@@ -11,11 +11,11 @@ import type { ManagedDiscordGuild } from "@/lib/discord";
 const initialState: CreateLeagueState = {};
 
 const STEPS = [
-  "League identity",
-  "Discord home",
-  "Match ops",
-  "Site admin",
-  "Colours",
+  { label: "Identity", title: "01" },
+  { label: "Discord", title: "02" },
+  { label: "Match ops", title: "03" },
+  { label: "Site admin", title: "04" },
+  { label: "Colours", title: "05" },
 ];
 
 export function OnboardingForm({
@@ -53,24 +53,28 @@ export function OnboardingForm({
       <nav className="onboarding-progress" aria-label="Setup progress">
         {STEPS.map((step, i) => (
           <div
-            key={step}
+            key={step.label}
             className={`onboarding-progress-step${i <= currentStep ? " is-reached" : ""}`}
           >
             <div className="onboarding-progress-track" />
-            <span className="onboarding-progress-label">{step}</span>
+            <span className="onboarding-progress-label">{step.label}</span>
           </div>
         ))}
       </nav>
 
+      {/* Step 1 — League identity */}
       <div
         className="form-section"
-        ref={(el) => {
-          sectionRefs.current[0] = el;
-        }}
+        ref={(el) => { sectionRefs.current[0] = el; }}
       >
-        <div>
+        <div className="form-section-head">
           <p className="step-index">01</p>
           <h2>League identity</h2>
+          <p className="form-section-desc">
+            Your league name, short code, and public web address. The address
+            becomes <span className="form-code">yourleague.atheus.dev</span> —
+            it can be changed later from the workspace.
+          </p>
         </div>
         <div className="field-grid">
           <label className="field field-wide">
@@ -106,15 +110,19 @@ export function OnboardingForm({
         </div>
       </div>
 
+      {/* Step 2 — Discord home */}
       <div
         className="form-section"
-        ref={(el) => {
-          sectionRefs.current[1] = el;
-        }}
+        ref={(el) => { sectionRefs.current[1] = el; }}
       >
-        <div>
+        <div className="form-section-head">
           <p className="step-index">02</p>
           <h2>Discord home</h2>
+          <p className="form-section-desc">
+            Atheus ties every fixture, result and player record to one Discord
+            server. Data never crosses between leagues, and one server can only
+            host one league at a time.
+          </p>
         </div>
         <div className="field-grid">
           <label className="field field-wide">
@@ -136,14 +144,20 @@ export function OnboardingForm({
           </label>
 
           {selectedGuild && !selectedGuild.botInstalled && inviteBaseUrl ? (
-            <a
-              className="installation-note"
-              href={`${inviteBaseUrl}&guild_id=${selectedGuild.id}&disable_guild_select=true`}
-              rel="noreferrer"
-              target="_blank"
-            >
-              Install Atheus in {selectedGuild.name}, then refresh this page.
-            </a>
+            <div className="onboarding-callout onboarding-callout-action">
+              <p>
+                <strong>Atheus needs to be in {selectedGuild.name} first.</strong>{" "}
+                Install it to unlock this server, then come back and refresh this page.
+              </p>
+              <a
+                href={`${inviteBaseUrl}&guild_id=${selectedGuild.id}&disable_guild_select=true`}
+                rel="noreferrer"
+                target="_blank"
+                className="button button-secondary"
+              >
+                Install Atheus in {selectedGuild.name}
+              </a>
+            </div>
           ) : (
             <p className="installation-note installation-ready">
               {selectedGuild
@@ -151,29 +165,32 @@ export function OnboardingForm({
                 : "No manageable Discord servers were returned."}
             </p>
           )}
-          <p className="field-help field-wide">
-            Atheus resolves league data from this server&apos;s Discord ID. It
-            will never fall back to another league, and one Discord server
-            cannot actively host two leagues.
-          </p>
+
           {!premium && selectedGuild && !selectedGuild.owner ? (
-            <p className="installation-note">
-              Free leagues require the signed-in Discord account to own the
-              selected server. Manage Server permission alone is not enough.
-            </p>
+            <div className="onboarding-callout">
+              <p>
+                Free leagues require your Discord account to <strong>own</strong> the
+                selected server. Manage Server permission alone is not enough.
+                Select a server you own, or upgrade to Premium.
+              </p>
+            </div>
           ) : null}
         </div>
       </div>
 
+      {/* Step 3 — Match operations */}
       <div
         className="form-section"
-        ref={(el) => {
-          sectionRefs.current[2] = el;
-        }}
+        ref={(el) => { sectionRefs.current[2] = el; }}
       >
-        <div>
+        <div className="form-section-head">
           <p className="step-index">03</p>
           <h2>Match operations</h2>
+          <p className="form-section-desc">
+            Atheus collects real match data from EA. The timezone tells it when
+            to scan for results after each matchday window closes. The platform
+            sets which EA server pool to search.
+          </p>
         </div>
         <div className="field-grid">
           <label className="field">
@@ -191,22 +208,27 @@ export function OnboardingForm({
           <label className="field">
             <span>EA platform</span>
             <select defaultValue="common-gen5" name="platform">
-              <option value="common-gen5">New generation</option>
-              <option value="common-gen4">Old generation</option>
+              <option value="common-gen5">New generation (PS5, Xbox Series)</option>
+              <option value="common-gen4">Old generation (PS4, Xbox One)</option>
             </select>
           </label>
         </div>
       </div>
 
+      {/* Step 4 — Site administration */}
       <div
         className="form-section"
-        ref={(el) => {
-          sectionRefs.current[3] = el;
-        }}
+        ref={(el) => { sectionRefs.current[3] = el; }}
       >
-        <div>
+        <div className="form-section-head">
           <p className="step-index">04</p>
           <h2>Site administration</h2>
+          <p className="form-section-desc">
+            A separate login for your league's website workspace. Use it to
+            sign in directly at your league site without going through Discord.
+            Share it with co-admins, or keep it as a backup. Discord remains
+            required for ownership and billing.
+          </p>
         </div>
         <div className="field-grid">
           <label className="field field-wide">
@@ -244,56 +266,61 @@ export function OnboardingForm({
             />
           </label>
           <p className="field-help field-wide">
-            This shared login opens only this league&apos;s website workspace as
-            an administrator. Discord remains required for ownership, billing,
-            activation and staff access.
+            Minimum 12 characters. This password is for the league site only
+            and is stored separately from your Atheus account.
           </p>
         </div>
       </div>
 
+      {/* Step 5 — Colour system */}
       <div
         className="form-section"
-        ref={(el) => {
-          sectionRefs.current[4] = el;
-        }}
+        ref={(el) => { sectionRefs.current[4] = el; }}
       >
-        <div>
+        <div className="form-section-head">
           <p className="step-index">05</p>
           <h2>Colour system</h2>
+          <p className="form-section-desc">
+            These colours power your public league site. Primary is used for
+            highlights, ranked rows and badges. Secondary sets the background
+            and surface tones. Accent picks up secondary data points. All three
+            can be updated any time from the workspace.
+          </p>
         </div>
         <div className="colour-grid">
           <label className="colour-field">
-            <span>Primary</span>
             <input defaultValue="#156EE8" name="primaryColour" type="color" />
+            <span>Primary</span>
           </label>
           <label className="colour-field">
-            <span>Secondary</span>
             <input defaultValue="#0C1118" name="secondaryColour" type="color" />
+            <span>Secondary</span>
           </label>
           <label className="colour-field">
-            <span>Accent</span>
             <input defaultValue="#21C7A8" name="accentColour" type="color" />
+            <span>Accent</span>
           </label>
         </div>
-        <p className="field-help" style={{ marginTop: "16px" }}>
-          These colours style your league&apos;s public site. They can be
-          updated any time from the league workspace after creation.
-        </p>
       </div>
 
       {state.error ? <p className="form-error">{state.error}</p> : null}
 
-      <button
-        className="button button-primary submit-button"
-        disabled={
-          pending ||
-          !selectedGuild?.botInstalled ||
-          (!premium && !selectedGuild.owner)
-        }
-        type="submit"
-      >
-        {pending ? "Creating league..." : "Create league workspace"}
-      </button>
+      <div className="onboarding-submit-row">
+        <button
+          className="button button-primary submit-button"
+          disabled={
+            pending ||
+            !selectedGuild?.botInstalled ||
+            (!premium && !selectedGuild?.owner)
+          }
+          type="submit"
+        >
+          {pending ? "Creating league..." : "Create league workspace"}
+        </button>
+        <p className="onboarding-submit-note">
+          Your league site goes live immediately after creation.
+        </p>
+      </div>
     </form>
   );
 }

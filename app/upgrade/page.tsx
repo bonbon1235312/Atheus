@@ -50,7 +50,7 @@ export default function UpgradePage() {
 
           <a
             className="button button-primary"
-            href="https://discord.gg/atheus"
+            href="https://discord.gg/dPrMMc82bf"
             rel="noreferrer"
             target="_blank"
           >

@@ -36,31 +36,56 @@ export default async function AdminPage({
   if (!session) {
     return (
       <main className="access-page">
-        <Link className="wordmark" href="/" aria-label="Atheus home">
-          <span className="wordmark-mark">A</span>
-          <span>ATHEUS</span>
-        </Link>
-
         <section className="access-panel">
-          <p className="eyebrow">League administration</p>
-          <h1>Enter through Discord.</h1>
-          <p>
-            Your Discord identity proves which servers you manage and which
-            league workspaces you can access.
-          </p>
-          <form
-            action={async () => {
-              "use server";
-              await signIn("discord", { redirectTo: "/admin" });
-            }}
-          >
-            <button className="button button-primary" type="submit">
-              Continue with Discord
-            </button>
-          </form>
-          <Link className="site-login-link" href="/admin/site-login">
-            Sign in with a league site account
+          <Link className="wordmark access-wordmark-inline" href="/" aria-label="Atheus home">
+            <span className="wordmark-mark">A</span>
+            <span>ATHEUS</span>
           </Link>
+
+          <div className="access-panel-body">
+            <div className="access-copy">
+              <p className="eyebrow">League administration</p>
+              <h1>Your league starts here.</h1>
+              <p>
+                Sign in with Discord to access your league workspaces. Atheus
+                uses your server membership to verify which leagues you own and
+                manage — no extra accounts needed.
+              </p>
+              <ul className="access-value-list">
+                <li>Your public league site at yourleague.atheus.dev</li>
+                <li>Automatic EA result collection and verification</li>
+                <li>Live fixtures, standings and player stats</li>
+                <li>Scoped to your Discord server — nothing leaks between leagues</li>
+              </ul>
+            </div>
+
+            <div className="access-auth">
+              <form
+                action={async () => {
+                  "use server";
+                  await signIn("discord", { redirectTo: "/admin" });
+                }}
+              >
+                <button className="button button-primary access-discord-btn" type="submit">
+                  <svg width="20" height="15" viewBox="0 0 20 15" fill="none" aria-hidden="true">
+                    <path d="M16.942 1.556A16.3 16.3 0 0 0 12.82.295a.061.061 0 0 0-.064.03c-.175.311-.369.716-.505 1.033a15.049 15.049 0 0 0-4.5 0 10.508 10.508 0 0 0-.513-1.033.063.063 0 0 0-.064-.03 16.261 16.261 0 0 0-4.12 1.261.057.057 0 0 0-.026.022C.533 5.117-.32 8.577.099 11.99a.066.066 0 0 0 .025.045 16.4 16.4 0 0 0 4.94 2.488.063.063 0 0 0 .068-.022 11.69 11.69 0 0 0 1.01-1.641.061.061 0 0 0-.033-.085 10.8 10.8 0 0 1-1.543-.735.062.062 0 0 1-.006-.103c.104-.078.207-.158.307-.24a.061.061 0 0 1 .063-.008c3.24 1.478 6.745 1.478 9.945 0a.06.06 0 0 1 .064.007c.1.082.203.163.308.241a.062.062 0 0 1-.005.103c-.493.287-1.006.532-1.544.734a.061.061 0 0 0-.033.086c.298.579.64 1.127 1.01 1.64a.062.062 0 0 0 .068.023 16.36 16.36 0 0 0 4.95-2.488.063.063 0 0 0 .025-.044c.5-5.177-.838-9.674-3.549-13.667a.049.049 0 0 0-.025-.021Z" fill="currentColor"/>
+                  </svg>
+                  Continue with Discord
+                </button>
+              </form>
+              <Link className="site-login-link" href="/admin/site-login">
+                Sign in with a league site account instead
+              </Link>
+              <a
+                className="access-support-link"
+                href="https://discord.gg/dPrMMc82bf"
+                rel="noreferrer"
+                target="_blank"
+              >
+                Need help? Join the support Discord
+              </a>
+            </div>
+          </div>
         </section>
       </main>
     );
