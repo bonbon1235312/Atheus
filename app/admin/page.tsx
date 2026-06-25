@@ -92,7 +92,7 @@ export default async function AdminPage({
   }
 
   const [leagues, guilds, entitlement] =
-    session.discordUserId && session.discordAccessToken
+    session.discordUserId && session.discordAccessToken && !session.discordTokenError
       ? await Promise.all([
           getLeaguesForDiscordUser(session.discordUserId),
           getManagedDiscordGuilds(session.discordAccessToken),
