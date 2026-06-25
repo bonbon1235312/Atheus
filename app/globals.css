@@ -1871,10 +1871,10 @@ footer {
   margin: 12px 0 16px;
   color: #f4f5fb;
   font-family: var(--font-body), sans-serif;
-  font-size: clamp(2rem, 3.5vw, 3rem);
-  font-weight: 600;
-  letter-spacing: -0.055em;
-  line-height: 1.06;
+  font-size: clamp(2.4rem, 4vw, 3.5rem);
+  font-weight: 700;
+  letter-spacing: -0.06em;
+  line-height: 1.04;
   text-transform: none;
 }
 
@@ -2600,34 +2600,6 @@ body:has(.admin-page) .text-button {
 
 .site-credential-form {
   padding-bottom: 28px;
-}
-
-.access-page {
-  display: flex;
-  min-height: 100dvh;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 30px;
-}
-
-.access-panel {
-  width: min(100%, 780px);
-  margin: auto 0;
-  padding: clamp(36px, 7vw, 84px) 0;
-  border-top: 1px solid var(--ink);
-  border-bottom: 1px solid var(--ink);
-}
-
-.access-panel h1 {
-  margin-bottom: 24px;
-  font-size: clamp(4rem, 9vw, 8rem);
-}
-
-.access-panel > p:not(.eyebrow) {
-  max-width: 620px;
-  margin-bottom: 32px;
-  color: var(--muted);
-  line-height: 1.7;
 }
 
 .admin-page,
