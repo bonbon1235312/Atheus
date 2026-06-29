@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Barlow_Condensed, Manrope } from "next/font/google";
 
 import "./globals.css";
+import "./ai-studio.css";
 
 const display = Barlow_Condensed({
   variable: "--font-display",
@@ -16,11 +17,11 @@ const body = Manrope({
 
 export const metadata: Metadata = {
   title: {
-    default: "Atheus League Platform",
-    template: "%s | Atheus",
+    default: "Atheus Industries",
+    template: "%s | Atheus Industries",
   },
   description:
-    "League operations, fixtures, results and verified EA FC statistics in one platform.",
+    "Engineering intelligent systems across web, AI and robotics. An early-stage technology studio building websites, automation tools, AI systems and hardware prototypes.",
 };
 
 export default function RootLayout({

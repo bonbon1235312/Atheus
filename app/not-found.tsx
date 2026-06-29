@@ -9,7 +9,7 @@ export default function NotFound() {
       </Link>
       <section className="access-panel">
         <p className="eyebrow">404 / Not found</p>
-        <h1>That route is not in the fixture list.</h1>
+        <h1>This route does not exist.</h1>
         <Link className="button button-primary" href="/">
           Return home
         </Link>

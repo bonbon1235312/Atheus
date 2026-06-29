@@ -1,394 +1,276 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 
-const DISCORD_URL = "https://discord.gg/dPrMMc82bf";
+export const metadata: Metadata = {
+  title: "Atheus Industries",
+  description:
+    "Engineering intelligent systems across web, AI and robotics. An early-stage technology studio building websites, automation tools, AI systems and hardware prototypes.",
+};
 
-const capabilities = [
+const services = [
   {
     n: "01",
-    title: "Fixture generation",
-    body: "Build a full round-robin season in seconds. Set your match windows, configure divisions, publish — done before the kettle boils.",
-    badge: "Seconds, not hours",
+    title: "Web Design & Development",
+    body: "Full-stack websites and web applications. From landing pages to multi-tenant platforms, built with modern frameworks and attention to performance and accessibility.",
   },
   {
     n: "02",
-    title: "EA result verification",
-    body: "Atheus matches scheduled clubs to real EA data and surfaces each discovered result for admin review. Zero guesswork, zero manual entry.",
-    badge: "Human-approved",
+    title: "AI Automation Systems",
+    body: "Intelligent automation pipelines using LLMs and APIs. Custom agents, data processors and decision systems that reduce manual overhead and operate at scale.",
   },
   {
     n: "03",
-    title: "Live player statistics",
-    body: "Every approved match becomes a ranked leaderboard row and a player profile. Ratings, goals, assists — position-aware and always current.",
-    badge: "Always current",
+    title: "Discord Bots & Software Automation",
+    body: "Bots, integrations and automated workflows across platforms. Discord communities, data pipelines, scheduled tasks and custom tooling built to specification.",
   },
   {
     n: "04",
-    title: "Public league website",
-    body: "Your league gets a real home at yourleague.atheus.dev. Fixtures, results, table, player stats, club pages — all branded to your colours.",
-    badge: "Ready to share",
+    title: "Robotics & Embedded Systems",
+    body: "Physical computing with ESP32, Arduino and similar platforms. Sensor networks, actuator systems and hardware prototypes that bridge software and the real world.",
   },
   {
     n: "05",
-    title: "Discord operations",
-    body: "Commands, graphics and team data stay scoped to your Discord server. Multiple leagues never bleed into each other.",
-    badge: "Guild-isolated",
+    title: "Technical Prototyping",
+    body: "Early-stage exploration of new ideas. From concept to working prototype — systems that prove the idea before committing to scale.",
   },
 ];
 
-const steps = [
+const projects = [
   {
-    n: "01",
-    title: "Sign in with Discord",
-    body: "Your Discord account proves which servers you manage. No extra sign-up — one click and you're in.",
+    id: "league-platform",
+    status: "Case Study",
+    statusKey: "archived",
+    title: "League Platform",
+    sub: "Full-stack multi-tenant SaaS",
+    body: "A complete deployed software platform for EA FC Pro Clubs communities. Multi-tenant architecture, Discord OAuth, automated EA data collection, subdomain routing and real-time league statistics. Foundation of the engineering practices at Atheus Industries.",
+    tags: ["Next.js", "Supabase", "Discord OAuth", "EA FC API"],
+    featured: true,
   },
   {
-    n: "02",
-    title: "Name your league",
-    body: "Set the league name, pick your club colours and choose a public address. Your site at yourleague.atheus.dev goes live the moment you finish.",
+    id: "eden",
+    status: "Research",
+    statusKey: "research",
+    title: "EDEN",
+    sub: "AI civilisation simulation",
+    body: "Multi-agent civilisation simulator powered by Claude. Explores emergent behaviour, decision systems and AI-driven world state at scale.",
+    tags: ["Claude API", "Multi-agent", "Python"],
+    featured: false,
   },
   {
-    n: "03",
-    title: "Add your clubs",
-    body: "Link each club to its EA Pro Clubs ID. Atheus uses this to identify real match data automatically — no manual entry ever.",
-  },
-  {
-    n: "04",
-    title: "Generate the season",
-    body: "Set your match windows and Atheus builds a full round-robin fixture calendar. Publish it to your league site in one click.",
-  },
-  {
-    n: "05",
-    title: "Atheus runs the rest",
-    body: "After each matchday, Atheus finds results in EA's data and surfaces them for approval. Approve — and every leaderboard updates instantly.",
+    id: "acl-bot",
+    status: "Deployed",
+    statusKey: "deployed",
+    title: "ACL Bot",
+    sub: "Discord community tooling",
+    body: "Full-featured Discord bot for football league operations. Availability scheduling, stat tracking, lineup builder and AI session summaries.",
+    tags: ["Python", "discord.py", "Supabase"],
+    featured: false,
   },
 ];
 
-const standingsRows = [
-  { pos: "1", name: "Born 2 Say Wesh", p: "6", w: "5", pts: "15", highlight: true },
-  { pos: "2", name: "OG Black Mamba", p: "6", w: "4", pts: "12" },
-  { pos: "3", name: "EliteXII", p: "6", w: "3", pts: "11" },
-  { pos: "4", name: "Oscroh Dynasty", p: "6", w: "3", pts: "10" },
+const systems = [
+  { name: "atheus.dev", status: "live" as const },
+  { name: "League Platform", status: "live" as const },
+  { name: "ACL Bot", status: "live" as const },
+  { name: "EDEN", status: "active" as const },
 ];
 
 export default function Home() {
   return (
-    <main className="landing-shell">
-      <div className="landing-ambient" aria-hidden="true" />
-
-      <header className="landing-nav">
-        <Link className="landing-brand" href="/" aria-label="Atheus home">
-          <span>A</span>
-          <strong>atheus</strong>
+    <div className="ai-page">
+      <header className="ai-nav">
+        <Link className="ai-brand" href="/" aria-label="Atheus Industries home">
+          <span aria-hidden="true">AI</span>
+          <strong>Atheus Industries</strong>
         </Link>
-
         <nav aria-label="Primary navigation">
-          <a href="#capabilities">Features</a>
-          <a href="#how-it-works">How it works</a>
-          <a href="#pricing">Pricing</a>
-          <a href={DISCORD_URL} rel="noreferrer" target="_blank">Discord</a>
+          <Link href="/about">About</Link>
+          <Link href="/services">Services</Link>
+          <Link href="/projects">Projects</Link>
+          <Link href="/contact">Contact</Link>
         </nav>
-
-        <Link className="landing-nav-action" href="/admin">
-          Start your league
+        <Link className="ai-nav-action" href="/admin">
+          Platform login
         </Link>
       </header>
 
-      {/* ── Hero ───────────────────────────────────────────────────── */}
-      <section className="landing-hero">
-        <div className="landing-hero-copy">
-          <p className="landing-status">
-            <i />
-            Built for EA FC Pro Clubs leagues
+      <section className="ai-hero">
+        <div className="ai-hero-copy">
+          <p className="ai-status-pill">
+            <i aria-hidden="true" />
+            Systems engineering studio
           </p>
-          <h1>Give your league a proper home.</h1>
-          <p className="landing-lead">
-            Atheus handles everything — fixtures, verified EA results, live
-            player stats and a public website. One platform, built for
-            league owners who take it seriously.
+          <h1>
+            Atheus<br />
+            Industries
+          </h1>
+          <p className="ai-hero-lead">
+            Engineering intelligent systems across web, AI and robotics.
+            An early-stage technology studio building websites, automation
+            tools, AI pipelines and hardware prototypes.
           </p>
-          <div className="landing-actions">
-            <Link className="landing-button landing-button-primary" href="/admin">
-              Start for free
+          <div className="ai-hero-actions">
+            <Link className="ai-btn ai-btn-primary" href="/projects">
+              View projects
             </Link>
-            <a
-              className="landing-button landing-button-ghost"
-              href={DISCORD_URL}
-              rel="noreferrer"
-              target="_blank"
-            >
-              Join our Discord
-            </a>
+            <Link className="ai-btn ai-btn-ghost" href="/services">
+              Our services
+            </Link>
           </div>
         </div>
 
-        <div className="landing-site-preview" aria-label="Atheus league website preview">
-          <div className="site-preview-bar">
-            <span className="site-preview-dots">
+        <div className="ai-systems-panel" aria-label="Live systems status">
+          <div className="ai-panel-bar">
+            <span className="ai-panel-dots" aria-hidden="true">
               <i /><i /><i />
             </span>
-            <span className="site-preview-url">
-              <i />
-              northstar.atheus.dev
-            </span>
+            <span className="ai-panel-label">ATHEUS &middot; SYSTEMS STATUS</span>
           </div>
-          <div className="site-preview-body">
-            <div className="site-preview-nav">
-              <span className="site-preview-badge">NP</span>
-              <strong>NORTHSTAR PRO</strong>
-              <div className="site-preview-nav-links">
-                <span>Home</span>
-                <span>Fixtures</span>
-                <span>Table</span>
-                <span>Stats</span>
+          <ul className="ai-panel-list">
+            {systems.map((s) => (
+              <li key={s.name} className="ai-panel-row">
+                <span className="ai-panel-name">{s.name}</span>
+                <span className={`ai-panel-status is-${s.status}`}>
+                  <i aria-hidden="true" />
+                  {s.status === "live" ? "LIVE" : "ACTIVE"}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <div className="ai-panel-footer">
+            <span>4 systems operational</span>
+            <span>Est. 2025</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="ai-services-section" id="services">
+        <div className="ai-section-inner">
+          <div className="ai-section-head">
+            <span className="ai-kicker">What we build</span>
+            <h2>Services</h2>
+          </div>
+          <div className="ai-services-list">
+            {services.map((svc) => (
+              <div className="ai-service-row" key={svc.n}>
+                <span className="ai-service-n">{svc.n}</span>
+                <h3>{svc.title}</h3>
+                <p>{svc.body}</p>
               </div>
-            </div>
-            <div className="site-preview-hero">
-              <p>Season 2 / Europe/London</p>
-              <h3>
-                NORTHSTAR<br />
-                PRO LEAGUE
-              </h3>
-              <div className="site-preview-stats">
-                <div><b>12</b><small>Clubs</small></div>
-                <div><b>132</b><small>Fixtures</small></div>
-                <div><b>84</b><small>Approved</small></div>
-              </div>
-            </div>
-            <div className="site-preview-table">
-              {standingsRows.map((row) => (
-                <div
-                  key={row.pos}
-                  className={`site-preview-row${row.highlight ? " is-first" : ""}`}
-                >
-                  <b>{row.pos}</b>
-                  <span>{row.name}</span>
-                  <small>{row.p}</small>
-                  <small>{row.w}</small>
-                  <em>{row.pts}</em>
-                </div>
+            ))}
+          </div>
+          <div className="ai-section-action">
+            <Link className="ai-btn ai-btn-outline" href="/services">
+              Full services
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="ai-projects-section" id="projects">
+        <div className="ai-section-inner">
+          <div className="ai-section-head">
+            <span className="ai-kicker">Selected work</span>
+            <h2>Projects</h2>
+          </div>
+          <div className="ai-projects-grid">
+            {projects.filter((p) => p.featured).map((p) => (
+              <article className="ai-project-card ai-project-featured" key={p.id}>
+                <span className={`ai-project-status is-${p.statusKey}`}>{p.status}</span>
+                <h3>{p.title}</h3>
+                <p className="ai-project-sub">{p.sub}</p>
+                <p className="ai-project-body">{p.body}</p>
+                <footer>
+                  {p.tags.map((t) => (
+                    <span className="ai-tag" key={t}>{t}</span>
+                  ))}
+                </footer>
+              </article>
+            ))}
+            <div className="ai-projects-secondary">
+              {projects.filter((p) => !p.featured).map((p) => (
+                <article className="ai-project-card" key={p.id}>
+                  <span className={`ai-project-status is-${p.statusKey}`}>{p.status}</span>
+                  <h3>{p.title}</h3>
+                  <p className="ai-project-sub">{p.sub}</p>
+                  <p className="ai-project-body">{p.body}</p>
+                  <footer>
+                    {p.tags.map((t) => (
+                      <span className="ai-tag" key={t}>{t}</span>
+                    ))}
+                  </footer>
+                </article>
               ))}
             </div>
           </div>
+          <div className="ai-section-action">
+            <Link className="ai-btn ai-btn-outline" href="/projects">
+              All projects
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* ── Stats bar ──────────────────────────────────────────────── */}
-      <div className="landing-proof-bar">
-        <span><b>Free</b> for your first league</span>
-        <i />
-        <span><b>Automated</b> EA result collection</span>
-        <i />
-        <span><b>Live</b> website from day one</span>
-        <i />
-        <span><b>Zero</b> spreadsheets</span>
-      </div>
-
-      {/* ── Capabilities ───────────────────────────────────────────── */}
-      <section className="landing-section" id="capabilities">
-        <div className="landing-section-head">
-          <p className="landing-kicker">Everything included</p>
-          <h2>Less admin. Better matchdays.</h2>
-        </div>
-
-        <div className="landing-capabilities">
-          {capabilities.map((cap) => (
-            <div className="landing-cap" key={cap.n}>
-              <span className="cap-num">{cap.n}</span>
-              <div className="cap-content">
-                <h3>{cap.title}</h3>
-                <p>{cap.body}</p>
-              </div>
-              <span className="cap-badge">{cap.badge}</span>
+      <section className="ai-about-strip">
+        <div className="ai-section-inner">
+          <div className="ai-about-inner">
+            <div className="ai-about-copy">
+              <span className="ai-kicker">About</span>
+              <h2>We build things that work.</h2>
+              <p>
+                Atheus Industries is an early-stage technology studio founded by Evan, a
+                developer building across web, AI and hardware. The work here is real:
+                deployed systems, active experiments and genuine prototypes. No inflated
+                claims, no fake case studies.
+              </p>
+              <Link className="ai-btn ai-btn-outline" href="/about">
+                About us
+              </Link>
             </div>
-          ))}
+            <div className="ai-about-rule" aria-hidden="true" />
+          </div>
         </div>
       </section>
 
-      {/* ── How it works ───────────────────────────────────────────── */}
-      <section className="landing-section landing-steps-section" id="how-it-works">
-        <div className="landing-section-head">
-          <p className="landing-kicker">Get started</p>
-          <h2>Live in under ten minutes.</h2>
-          <p className="landing-section-sub">
-            No configuration maze. No waiting room. Atheus gives you a
-            real, working league operation the same day you sign up.
-          </p>
-        </div>
-
-        <div className="landing-steps">
-          {steps.map((step, i) => (
-            <div className="landing-step" key={step.n}>
-              <div className="step-left">
-                <span className="step-num">{step.n}</span>
-                {i < steps.length - 1 && <div className="step-line" />}
-              </div>
-              <div className="step-body">
-                <h3>{step.title}</h3>
-                <p>{step.body}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="steps-cta">
-          <Link className="landing-button landing-button-primary" href="/admin">
-            Create your league workspace
-          </Link>
-        </div>
-      </section>
-
-      {/* ── Community / Discord ────────────────────────────────────── */}
-      <section className="landing-community">
-        <div className="community-inner">
-          <div className="community-copy">
-            <p className="landing-kicker">Join the community</p>
-            <h2>Built alongside the people who run leagues.</h2>
+      <section className="ai-cta-section" id="contact">
+        <div className="ai-section-inner">
+          <div className="ai-cta-inner">
+            <span className="ai-kicker">Get in touch</span>
+            <h2>Building something? Let&apos;s talk.</h2>
             <p>
-              Every feature in Atheus came from real league owners — the
-              people who stay up late approving results and chasing
-              clubs for their squad photos. Join the Discord to share
-              feedback, see what&apos;s coming, and get help when you
-              need it.
+              Available for custom builds, consultations and collaborations.
+              Website projects, AI tooling, Discord bots and hardware prototyping.
             </p>
-            <a
-              className="landing-button landing-button-primary"
-              href={DISCORD_URL}
-              rel="noreferrer"
-              target="_blank"
-            >
-              Join Discord
-            </a>
-          </div>
-          <div className="community-panel">
-            <div className="discord-preview">
-              <div className="discord-preview-header">
-                <i className="discord-icon" aria-hidden="true" />
-                <span>atheus</span>
-                <small>discord server</small>
-              </div>
-              <div className="discord-channels">
-                <div className="discord-channel is-active">
-                  <span>#</span> general
-                </div>
-                <div className="discord-channel">
-                  <span>#</span> feedback
-                </div>
-                <div className="discord-channel">
-                  <span>#</span> announcements
-                </div>
-                <div className="discord-channel">
-                  <span>#</span> league-showcase
-                </div>
-              </div>
-              <div className="discord-messages">
-                <div className="discord-msg">
-                  <span>EvanR</span>
-                  <p>just set up my third league with atheus, took about 8 minutes</p>
-                </div>
-                <div className="discord-msg">
-                  <span>Kaiyo</span>
-                  <p>the EA verification is genuinely clean — zero manual work</p>
-                </div>
-              </div>
-            </div>
+            <Link className="ai-btn ai-btn-primary" href="/contact">
+              Contact us
+            </Link>
           </div>
         </div>
       </section>
 
-      {/* ── Pricing ────────────────────────────────────────────────── */}
-      <section className="landing-section landing-pricing" id="pricing">
-        <div className="landing-section-head">
-          <p className="landing-kicker">Pricing</p>
-          <h2>Start free. Stay free if one league is enough.</h2>
-          <p className="landing-section-sub">
-            No trial. No credit card. The free tier is fully featured — every
-            tool available from day one for your first league.
-          </p>
-        </div>
-
-        <div className="pricing-grid">
-          <article className="pricing-card">
-            <header>
-              <p>Starter</p>
-              <strong>£0</strong>
-              <span>One active league, forever.</span>
-            </header>
-            <ul>
-              <li>Full public league website</li>
-              <li>Automated fixture generation</li>
-              <li>EA result verification</li>
-              <li>Live player leaderboards</li>
-              <li>Discord bot operations</li>
-            </ul>
-            <Link className="landing-button landing-button-outline" href="/admin">
-              Create a league
+      <footer className="ai-footer">
+        <div className="ai-footer-inner">
+          <div className="ai-footer-brand">
+            <Link className="ai-brand" href="/">
+              <span aria-hidden="true">AI</span>
+              <strong>Atheus Industries</strong>
             </Link>
-          </article>
-
-          <article className="pricing-card is-featured">
-            <header>
-              <p>Premium</p>
-              <strong>
-                £8<small>/mo</small>
-              </strong>
-              <span>Unlimited leagues, one account.</span>
-            </header>
-            <ul>
-              <li>Everything in Starter</li>
-              <li>Unlimited active leagues</li>
-              <li>Single account across all leagues</li>
-              <li>Priority platform support</li>
-            </ul>
-            <Link className="landing-button landing-button-primary" href="/upgrade">
-              Upgrade to Premium
-            </Link>
-          </article>
-        </div>
-      </section>
-
-      {/* ── Final CTA ──────────────────────────────────────────────── */}
-      <section className="landing-final-cta">
-        <div className="final-cta-inner">
-          <p className="landing-kicker">Ready when you are</p>
-          <h2>Your league deserves better than a spreadsheet.</h2>
-          <div className="landing-actions">
-            <Link className="landing-button landing-button-primary" href="/admin">
-              Start your league free
-            </Link>
-            <a
-              className="landing-button landing-button-ghost"
-              href={DISCORD_URL}
-              rel="noreferrer"
-              target="_blank"
-            >
-              Talk to us on Discord
-            </a>
+            <p>Engineering intelligent systems across web, AI and robotics.</p>
           </div>
+          <nav aria-label="Studio navigation">
+            <p>Studio</p>
+            <Link href="/about">About</Link>
+            <Link href="/services">Services</Link>
+            <Link href="/projects">Projects</Link>
+            <Link href="/contact">Contact</Link>
+          </nav>
+          <nav aria-label="Platform navigation">
+            <p>Platform</p>
+            <Link href="/admin">League Dashboard</Link>
+          </nav>
+          <small>© Atheus Industries 2026</small>
         </div>
-      </section>
-
-      <footer className="landing-footer">
-        <div className="footer-brand">
-          <Link className="landing-brand" href="/">
-            <span>A</span>
-            <strong>atheus</strong>
-          </Link>
-          <p>League operations for EA FC Pro Clubs communities.</p>
-        </div>
-        <nav aria-label="Footer navigation">
-          <p>Platform</p>
-          <a href="#capabilities">Features</a>
-          <a href="#how-it-works">How it works</a>
-          <a href="#pricing">Pricing</a>
-          <Link href="/admin">Dashboard</Link>
-        </nav>
-        <nav>
-          <p>Community</p>
-          <a href={DISCORD_URL} rel="noreferrer" target="_blank">Discord server</a>
-          <Link href="/upgrade">Premium</Link>
-        </nav>
-        <small>© Atheus 2026</small>
       </footer>
-    </main>
+    </div>
   );
 }

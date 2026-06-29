@@ -121,12 +121,22 @@ export async function searchEaClubs(
 
   try {
     const headers: HeadersInit = {
-      Accept: "application/json, text/plain, */*",
-      "Accept-Language": "en-GB,en;q=0.8",
+      Accept: "application/json",
+      "Accept-Encoding": "gzip, deflate, br, zstd",
+      "Accept-Language": "en-US,en;q=0.9",
+      "Cache-Control": "no-cache",
       Origin: "https://www.ea.com",
+      Pragma: "no-cache",
+      Priority: "u=1, i",
       Referer: "https://www.ea.com/",
+      "Sec-Ch-Ua": '"Google Chrome";v="149", "Chromium";v="149", "Not)A;Brand";v="24"',
+      "Sec-Ch-Ua-Mobile": "?1",
+      "Sec-Ch-Ua-Platform": '"Android"',
+      "Sec-Fetch-Dest": "empty",
+      "Sec-Fetch-Mode": "cors",
+      "Sec-Fetch-Site": "same-site",
       "User-Agent":
-        "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:139.0) Gecko/20100101 Firefox/139.0",
+        "Mozilla/5.0 (Linux; Android 15; Pixel 9) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Mobile Safari/537.36",
     };
 
     if (process.env.EA_PROCLUBS_COOKIE) {

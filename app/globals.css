@@ -28,6 +28,15 @@ body:has(.landing-shell) {
   background: #10111a;
 }
 
+body:has(.ai-page) {
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.014) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.014) 1px, transparent 1px),
+    #09090b;
+  background-size: 64px 64px;
+  background-attachment: fixed;
+}
+
 a {
   color: inherit;
   text-decoration: none;

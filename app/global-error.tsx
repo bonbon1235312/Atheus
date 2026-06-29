@@ -54,8 +54,8 @@ export default function GlobalError({
             Something went wrong
           </h1>
           <p style={{ color: "#616873", lineHeight: 1.6, margin: "0 0 1.5rem" }}>
-            An error occurred loading this page. If this keeps happening, join
-            the support Discord for help.
+            An unexpected error occurred loading this page. If this keeps
+            happening, get in touch.
           </p>
           {error.digest && (
             <p
@@ -85,9 +85,7 @@ export default function GlobalError({
               Return home
             </a>
             <a
-              href="https://discord.gg/dPrMMc82bf"
-              rel="noreferrer"
-              target="_blank"
+              href="mailto:nicholsone140@gmail.com"
               style={{
                 padding: "0.5rem 1.25rem",
                 border: "1px solid rgba(12,17,24,0.18)",
