@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Atheus Industries",
   description:
-    "Engineering intelligent systems across web, AI and robotics. An early-stage technology studio building websites, automation tools, AI systems and hardware prototypes.",
+    "Engineering intelligent systems across web, AI and robotics. An early-stage technology studio.",
 };
 
 const services = [
@@ -42,7 +42,7 @@ const projects = [
     statusKey: "archived",
     title: "League Platform",
     sub: "Full-stack multi-tenant SaaS",
-    body: "A complete deployed software platform for EA FC Pro Clubs communities. Multi-tenant architecture, Discord OAuth, automated EA data collection, subdomain routing and real-time league statistics. Foundation of the engineering practices at Atheus Industries.",
+    body: "A complete deployed software platform for EA FC Pro Clubs communities. Multi-tenant architecture, Discord OAuth, automated EA data collection, subdomain routing and real-time league statistics.",
     tags: ["Next.js", "Supabase", "Discord OAuth", "EA FC API"],
     featured: true,
   },
@@ -75,9 +75,22 @@ const systems = [
   { name: "EDEN", status: "active" as const },
 ];
 
+const tickerItems = [
+  "Web Development",
+  "AI Automation",
+  "Discord Bots",
+  "Robotics",
+  "Hardware Prototyping",
+  "Technical Research",
+  "Embedded Systems",
+  "Full-Stack Engineering",
+];
+
 export default function Home() {
   return (
     <div className="ai-page">
+      <div className="ai-grain" aria-hidden="true" />
+
       <header className="ai-nav">
         <Link className="ai-brand" href="/" aria-label="Atheus Industries home">
           <span aria-hidden="true">AI</span>
@@ -94,56 +107,77 @@ export default function Home() {
         </Link>
       </header>
 
+      {/* ── Hero ─────────────────────────────────────────────── */}
       <section className="ai-hero">
-        <div className="ai-hero-copy">
-          <p className="ai-status-pill">
-            <i aria-hidden="true" />
-            Systems engineering studio
-          </p>
-          <h1>
-            Atheus<br />
-            Industries
-          </h1>
-          <p className="ai-hero-lead">
-            Engineering intelligent systems across web, AI and robotics.
-            An early-stage technology studio building websites, automation
-            tools, AI pipelines and hardware prototypes.
-          </p>
-          <div className="ai-hero-actions">
-            <Link className="ai-btn ai-btn-primary" href="/projects">
-              View projects
-            </Link>
-            <Link className="ai-btn ai-btn-ghost" href="/services">
-              Our services
-            </Link>
-          </div>
-        </div>
+        <div className="ai-hero-glow" aria-hidden="true" />
 
-        <div className="ai-systems-panel" aria-label="Live systems status">
-          <div className="ai-panel-bar">
-            <span className="ai-panel-dots" aria-hidden="true">
-              <i /><i /><i />
+        <div className="ai-hero-inner">
+          {/* Title block — dominates the upper hero */}
+          <div className="ai-hero-title-block">
+            <span className="ai-hero-eyebrow">
+              <i aria-hidden="true" />
+              Studio · 2025 — Building
             </span>
-            <span className="ai-panel-label">ATHEUS &middot; SYSTEMS STATUS</span>
+            <h1 className="ai-hero-h1">
+              <span className="ai-h1-main">Atheus</span>
+              <span className="ai-h1-sub">Industries</span>
+            </h1>
           </div>
-          <ul className="ai-panel-list">
-            {systems.map((s) => (
-              <li key={s.name} className="ai-panel-row">
-                <span className="ai-panel-name">{s.name}</span>
-                <span className={`ai-panel-status is-${s.status}`}>
-                  <i aria-hidden="true" />
-                  {s.status === "live" ? "LIVE" : "ACTIVE"}
+
+          {/* Lower row — copy + systems status */}
+          <div className="ai-hero-lower">
+            <div className="ai-hero-copy">
+              <p className="ai-hero-lead">
+                Engineering intelligent systems across web, AI and robotics.
+                An early-stage studio building real things.
+              </p>
+              <div className="ai-hero-actions">
+                <Link className="ai-btn ai-btn-primary" href="/projects">
+                  View our work
+                </Link>
+                <Link className="ai-btn ai-btn-outline" href="/contact">
+                  Get in touch
+                </Link>
+              </div>
+            </div>
+
+            <div className="ai-systems-panel" aria-label="Live systems status">
+              <div className="ai-panel-bar">
+                <span className="ai-panel-dots" aria-hidden="true">
+                  <i /><i /><i />
                 </span>
-              </li>
-            ))}
-          </ul>
-          <div className="ai-panel-footer">
-            <span>4 systems operational</span>
-            <span>Est. 2025</span>
+                <span className="ai-panel-label">ATHEUS · SYSTEMS</span>
+              </div>
+              <ul className="ai-panel-list">
+                {systems.map((s) => (
+                  <li key={s.name} className="ai-panel-row">
+                    <span className="ai-panel-name">{s.name}</span>
+                    <span className={`ai-panel-status is-${s.status}`}>
+                      <i aria-hidden="true" />
+                      {s.status === "live" ? "LIVE" : "ACTIVE"}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <div className="ai-panel-footer">
+                <span>4 systems</span>
+                <span>OPERATIONAL</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
+      {/* ── Capabilities ticker ───────────────────────────────── */}
+      <div className="ai-ticker" aria-hidden="true">
+        <div className="ai-ticker-track">
+          {[...tickerItems, ...tickerItems, ...tickerItems].map((item, i) => (
+            <span key={i}>{item}&nbsp;·&nbsp;</span>
+          ))}
+        </div>
+      </div>
+
+      {/* ── Services ─────────────────────────────────────────── */}
       <section className="ai-services-section" id="services">
         <div className="ai-section-inner">
           <div className="ai-section-head">
@@ -167,6 +201,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Projects ─────────────────────────────────────────── */}
       <section className="ai-projects-section" id="projects">
         <div className="ai-section-inner">
           <div className="ai-section-head">
@@ -211,6 +246,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── About strip ───────────────────────────────────────── */}
       <section className="ai-about-strip">
         <div className="ai-section-inner">
           <div className="ai-about-inner">
@@ -218,10 +254,9 @@ export default function Home() {
               <span className="ai-kicker">About</span>
               <h2>We build things that work.</h2>
               <p>
-                Atheus Industries is an early-stage technology studio founded by Evan, a
-                developer building across web, AI and hardware. The work here is real:
-                deployed systems, active experiments and genuine prototypes. No inflated
-                claims, no fake case studies.
+                Atheus Industries is an early-stage technology studio founded by Evan.
+                The work here is real: deployed systems, active experiments and genuine
+                prototypes. No inflated claims, no fake case studies.
               </p>
               <Link className="ai-btn ai-btn-outline" href="/about">
                 About us
@@ -232,11 +267,12 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── CTA ──────────────────────────────────────────────── */}
       <section className="ai-cta-section" id="contact">
         <div className="ai-section-inner">
           <div className="ai-cta-inner">
             <span className="ai-kicker">Get in touch</span>
-            <h2>Building something? Let&apos;s talk.</h2>
+            <h2>Building something?</h2>
             <p>
               Available for custom builds, consultations and collaborations.
               Website projects, AI tooling, Discord bots and hardware prototyping.
@@ -248,6 +284,7 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ── Footer ───────────────────────────────────────────── */}
       <footer className="ai-footer">
         <div className="ai-footer-inner">
           <div className="ai-footer-brand">
