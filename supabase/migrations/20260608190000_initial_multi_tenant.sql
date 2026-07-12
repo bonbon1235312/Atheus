@@ -377,6 +377,15 @@ create index if not exists match_imports_review_queue_idx
 create index if not exists match_imports_fixture_idx
   on public.match_imports (league_id, fixture_id, collected_at desc);
 
+create unique index if not exists match_imports_ea_identity_uidx
+  on public.match_imports (
+    league_id,
+    lower(coalesce(nullif(btrim(platform), ''), 'unknown')),
+    lower(coalesce(nullif(btrim(match_type), ''), 'unknown')),
+    btrim(ea_match_id)
+  )
+  where nullif(btrim(ea_match_id), '') is not null;
+
 create table if not exists public.match_import_player_rows (
   id uuid primary key default gen_random_uuid(),
   league_id uuid not null,
@@ -450,6 +459,40 @@ create table if not exists public.player_aliases (
   constraint player_alias_normalized_not_blank check (btrim(normalized_alias) <> ''),
   unique (league_id, normalized_alias)
 );
+
+create table if not exists public.player_external_identities (
+  league_id uuid not null references public.leagues(id) on delete cascade,
+  platform text not null,
+  ea_player_id text not null,
+  player_identity_id uuid not null,
+  created_at timestamptz not null default now(),
+  primary key (league_id, platform, ea_player_id),
+  constraint player_external_identity_player_fk
+    foreign key (league_id, player_identity_id)
+    references public.player_identities(league_id, id) on delete restrict,
+  constraint player_external_identity_platform_normalized
+    check (platform = lower(btrim(platform)) and platform <> ''),
+  constraint player_external_identity_ea_id_normalized
+    check (ea_player_id = btrim(ea_player_id) and ea_player_id <> '')
+);
+
+create or replace function public.atheus_reject_external_player_identity_update()
+returns trigger
+language plpgsql
+set search_path = ''
+as $$
+begin
+  raise exception using
+    errcode = '23514',
+    message = 'External EA player identity mappings are immutable.';
+end;
+$$;
+
+drop trigger if exists player_external_identities_immutable
+  on public.player_external_identities;
+create trigger player_external_identities_immutable
+before update on public.player_external_identities
+for each row execute function public.atheus_reject_external_player_identity_update();
 
 create table if not exists public.matches (
   id uuid primary key default gen_random_uuid(),
@@ -661,6 +704,8 @@ alter table public.match_imports enable row level security;
 alter table public.match_import_player_rows enable row level security;
 alter table public.player_identities enable row level security;
 alter table public.player_aliases enable row level security;
+alter table public.player_external_identities enable row level security;
+alter table public.player_external_identities force row level security;
 alter table public.matches enable row level security;
 alter table public.player_match_stats enable row level security;
 alter table public.audit_logs enable row level security;
@@ -887,6 +932,10 @@ revoke all on public.match_imports from anon, authenticated;
 revoke all on public.match_import_player_rows from anon, authenticated;
 revoke all on public.player_identities from anon, authenticated;
 revoke all on public.player_aliases from anon, authenticated;
+revoke all on public.player_external_identities from public, anon, authenticated;
+grant select, insert on public.player_external_identities to service_role;
+revoke all on function public.atheus_reject_external_player_identity_update()
+  from public, anon, authenticated, service_role;
 revoke all on public.matches from anon, authenticated;
 revoke all on public.player_match_stats from anon, authenticated;
 revoke all on public.audit_logs from anon, authenticated;

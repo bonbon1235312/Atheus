@@ -38,14 +38,14 @@ export default async function ImportsPage({
 
   const fixtureIds = [...new Set((imports ?? []).map((item) => item.fixture_id as string))];
   const importIds = (imports ?? []).map((item) => item.id as string);
-  const [{ data: fixtures }, { data: rows }] = await Promise.all([
+  const [fixturesResult, rowsResult] = await Promise.all([
     fixtureIds.length
       ? database
           .from("fixtures")
           .select("id, kickoff_at, home_team_id, away_team_id")
           .eq("league_id", leagueId)
           .in("id", fixtureIds)
-      : Promise.resolve({ data: [] }),
+      : Promise.resolve({ data: [], error: null }),
     importIds.length
       ? database
           .from("match_import_player_rows")
@@ -55,8 +55,16 @@ export default async function ImportsPage({
           .eq("league_id", leagueId)
           .in("match_import_id", importIds)
           .order("rating", { ascending: false })
-      : Promise.resolve({ data: [] }),
+      : Promise.resolve({ data: [], error: null }),
   ]);
+  if (fixturesResult.error) {
+    throw fixturesResult.error;
+  }
+  if (rowsResult.error) {
+    throw rowsResult.error;
+  }
+  const fixtures = fixturesResult.data;
+  const rows = rowsResult.data;
   const teamIds = [
     ...new Set(
       (fixtures ?? []).flatMap((fixture) => [
@@ -65,13 +73,17 @@ export default async function ImportsPage({
       ]),
     ),
   ];
-  const { data: teams } = teamIds.length
+  const teamsResult = teamIds.length
     ? await database
         .from("teams")
         .select("id, name, abbreviation")
         .eq("league_id", leagueId)
         .in("id", teamIds)
-    : { data: [] };
+    : { data: [], error: null };
+  if (teamsResult.error) {
+    throw teamsResult.error;
+  }
+  const teams = teamsResult.data;
   const fixtureById = new Map((fixtures ?? []).map((fixture) => [fixture.id, fixture]));
   const teamById = new Map((teams ?? []).map((team) => [team.id, team]));
 
@@ -140,8 +152,12 @@ export default async function ImportsPage({
                   ))}
                 </div>
                 <ReviewControls
+                  canScoreOnlyOverride={
+                    access.role === "owner" || access.role === "admin"
+                  }
                   importId={item.id as string}
                   leagueId={leagueId}
+                  scoreOnly={playerRows.length === 0}
                 />
               </article>
             );

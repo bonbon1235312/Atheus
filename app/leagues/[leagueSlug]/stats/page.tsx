@@ -11,6 +11,7 @@ import {
   playerOverall,
   sortPlayers,
 } from "@/lib/public-league-data";
+import { getTenantUrlBuilder } from "@/lib/tenant-url";
 
 export const revalidate = 60;
 
@@ -72,7 +73,10 @@ export default async function StatsPage({
   searchParams,
 }: StatsPageProps) {
   const [{ leagueSlug }, query] = await Promise.all([params, searchParams]);
-  const league = await getPublicLeague(leagueSlug);
+  const [league, tenantUrl] = await Promise.all([
+    getPublicLeague(leagueSlug),
+    getTenantUrlBuilder(leagueSlug),
+  ]);
   const seasons = await getLeagueSeasons(league.id);
   const selectedSeason =
     seasons.find((season) => season.id === query.season) ||
@@ -199,7 +203,7 @@ export default async function StatsPage({
         {sortedPlayers.map((player, index) => (
           <Link
             className="leaderboard-row"
-            href={`/players/${player.player_identity_id}`}
+            href={tenantUrl(`/players/${player.player_identity_id}`)}
             key={player.player_identity_id}
           >
             <b>{String(index + 1).padStart(2, "0")}</b>

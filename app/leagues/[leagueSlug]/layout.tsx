@@ -4,7 +4,9 @@ import Link from "next/link";
 
 import { notFound } from "next/navigation";
 
+import { getWcagOnColour } from "@/lib/accessible-colour";
 import { getPublicLeagueAnyStatus } from "@/lib/public-league-data";
+import { getTenantUrlBuilder } from "@/lib/tenant-url";
 
 import { LeagueMark } from "./_components/league-mark";
 import "./public.css";
@@ -45,7 +47,10 @@ export default async function LeagueLayout({
   params,
 }: LeagueLayoutProps) {
   const { leagueSlug } = await params;
-  const league = await getPublicLeagueAnyStatus(leagueSlug);
+  const [league, tenantUrl] = await Promise.all([
+    getPublicLeagueAnyStatus(leagueSlug),
+    getTenantUrlBuilder(leagueSlug),
+  ]);
 
   if (!league) {
     notFound();
@@ -60,12 +65,19 @@ export default async function LeagueLayout({
     "--league-surface": league.branding.surface_colour,
     "--league-text": league.branding.text_colour,
     "--league-muted": league.branding.muted_text_colour,
+    "--league-on-primary": getWcagOnColour(league.branding.primary_colour),
+    "--league-on-secondary": getWcagOnColour(
+      league.branding.secondary_colour,
+    ),
+    "--league-on-accent": getWcagOnColour(league.branding.accent_colour),
+    "--league-on-bg": getWcagOnColour(league.branding.background_colour),
+    "--league-on-surface": getWcagOnColour(league.branding.surface_colour),
   } as CSSProperties;
 
   return (
     <div className="league-public-shell" style={style}>
       <header className="league-public-header">
-        <Link className="league-public-brand" href="/">
+        <Link className="league-public-brand" href={tenantUrl("/")}>
           <LeagueMark
             colour={league.branding.primary_colour}
             logoUrl={league.branding.logo_url}
@@ -80,10 +92,10 @@ export default async function LeagueLayout({
         {isActive ? (
           <>
             <nav aria-label={`${league.name} navigation`}>
-              <Link href="/">Home</Link>
-              <Link href="/fixtures">Fixtures</Link>
-              <Link href="/table">Table</Link>
-              <Link href="/stats">Stats</Link>
+              <Link href={tenantUrl("/")}>Home</Link>
+              <Link href={tenantUrl("/fixtures")}>Fixtures</Link>
+              <Link href={tenantUrl("/table")}>Table</Link>
+              <Link href={tenantUrl("/stats")}>Stats</Link>
             </nav>
 
             <Link

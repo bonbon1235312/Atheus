@@ -12,6 +12,7 @@ import {
   getStandings,
   sortPlayers,
 } from "@/lib/public-league-data";
+import { getTenantUrlBuilder } from "@/lib/tenant-url";
 
 import { FixtureRow } from "../../_components/fixture-row";
 import { LeagueMark } from "../../_components/league-mark";
@@ -24,7 +25,10 @@ type TeamPageProps = {
 
 export default async function TeamPage({ params }: TeamPageProps) {
   const { leagueSlug, teamSlug } = await params;
-  const league = await getPublicLeague(leagueSlug);
+  const [league, tenantUrl] = await Promise.all([
+    getPublicLeague(leagueSlug),
+    getTenantUrlBuilder(leagueSlug),
+  ]);
   const [teams, seasons] = await Promise.all([
     getLeagueTeams(league.id),
     getLeagueSeasons(league.id),
@@ -101,7 +105,7 @@ export default async function TeamPage({ params }: TeamPageProps) {
             <p className="public-kicker">Club schedule</p>
             <h2>Recent & upcoming</h2>
           </div>
-          <Link href={`/fixtures?team=${team.id}`}>
+          <Link href={tenantUrl("/fixtures", { team: team.id })}>
             Full club schedule
           </Link>
         </header>
@@ -110,6 +114,7 @@ export default async function TeamPage({ params }: TeamPageProps) {
             <FixtureRow
               fixture={fixture}
               key={fixture.id}
+              tenantUrl={tenantUrl}
               timezone={league.timezone}
             />
           ))}
@@ -128,14 +133,14 @@ export default async function TeamPage({ params }: TeamPageProps) {
             <p className="public-kicker">Current squad</p>
             <h2>Top performers</h2>
           </div>
-          <Link href={`/stats?team=${team.id}`}>
+          <Link href={tenantUrl("/stats", { team: team.id })}>
             All club stats
           </Link>
         </header>
         <div className="team-player-grid">
           {players.map((player) => (
             <Link
-              href={`/players/${player.player_identity_id}`}
+              href={tenantUrl(`/players/${player.player_identity_id}`)}
               key={player.player_identity_id}
             >
               <span>{player.positions_played.join(" / ") || "N/A"}</span>

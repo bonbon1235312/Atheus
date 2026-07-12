@@ -219,11 +219,16 @@ declare
   v_fixture public.fixtures%rowtype;
   v_import_id uuid;
   v_existing_status text;
+  v_existing_fixture_id uuid;
   v_idempotency_key text;
   v_row jsonb;
   v_team_id uuid;
+  v_ea_player_id text;
   v_gamertag text;
   v_normalized_gamertag text;
+  v_platform text := lower(btrim(coalesce(p_platform, '')));
+  v_match_type text := btrim(coalesce(p_match_type, ''));
+  v_score_only boolean := false;
 begin
   if btrim(coalesce(p_worker_id, '')) = '' then
     raise exception 'Collector worker ID is required.';
@@ -237,6 +242,14 @@ begin
     raise exception 'EA match ID is required.';
   end if;
 
+  if v_platform = '' then
+    raise exception 'EA platform is required.';
+  end if;
+
+  if v_match_type = '' then
+    raise exception 'EA match type is required.';
+  end if;
+
   if p_home_score is null or p_away_score is null
      or p_home_score < 0 or p_away_score < 0 then
     raise exception 'A valid scoreline is required.';
@@ -245,6 +258,21 @@ begin
   if jsonb_typeof(coalesce(p_player_rows, '[]'::jsonb)) <> 'array' then
     raise exception 'Player rows must be a JSON array.';
   end if;
+
+  v_score_only := jsonb_array_length(coalesce(p_player_rows, '[]'::jsonb)) = 0;
+
+  perform pg_catalog.pg_advisory_xact_lock(
+    pg_catalog.hashtextextended(
+      concat_ws(
+        ':',
+        p_league_id::text,
+        v_platform,
+        lower(v_match_type),
+        btrim(p_ea_match_id)
+      ),
+      0
+    )
+  );
 
   if not exists (
     select 1
@@ -276,20 +304,29 @@ begin
     concat_ws(
       ':',
       p_league_id::text,
-      p_fixture_id::text,
-      btrim(p_ea_match_id),
-      coalesce(nullif(btrim(p_match_type), ''), 'unknown')
+      v_platform,
+      lower(v_match_type),
+      btrim(p_ea_match_id)
     )
   );
 
-  select id, status
-  into v_import_id, v_existing_status
+  select id, status, fixture_id
+  into v_import_id, v_existing_status, v_existing_fixture_id
   from public.match_imports
   where league_id = p_league_id
-    and idempotency_key = v_idempotency_key
+    and lower(coalesce(nullif(btrim(platform), ''), 'unknown')) = v_platform
+    and lower(coalesce(nullif(btrim(match_type), ''), 'unknown')) = lower(v_match_type)
+    and btrim(ea_match_id) = btrim(p_ea_match_id)
   for update;
 
+  if v_existing_fixture_id is not null and v_existing_fixture_id <> p_fixture_id then
+    raise exception 'EA match is already attached to a different fixture.';
+  end if;
+
   if found and v_existing_status <> 'pending' then
+    if v_score_only then
+      raise exception 'A finalized import cannot be replaced by a score-only candidate.';
+    end if;
     return v_import_id;
   end if;
 
@@ -317,14 +354,26 @@ begin
       p_confidence,
       'pending',
       btrim(p_ea_match_id),
-      nullif(btrim(p_platform), ''),
-      nullif(btrim(p_match_type), ''),
+      v_platform,
+      v_match_type,
       p_played_at,
       p_home_score,
       p_away_score,
       coalesce(p_raw_payload, '{}'::jsonb),
       coalesce(p_diagnostics, '{}'::jsonb)
-        || jsonb_build_object('collector_worker_id', left(btrim(p_worker_id), 120)),
+        || jsonb_build_object('collector_worker_id', left(btrim(p_worker_id), 120))
+        || case
+          when v_score_only then jsonb_build_object(
+            'score_only_candidate', true,
+            'score_only_human_override_required', true,
+            'player_row_count', 0
+          )
+          else jsonb_build_object(
+            'score_only_candidate', false,
+            'score_only_human_override_required', false,
+            'player_row_count', jsonb_array_length(p_player_rows)
+          )
+        end,
       v_idempotency_key
     )
     returning id into v_import_id;
@@ -337,7 +386,19 @@ begin
       away_score = p_away_score,
       raw_payload = coalesce(p_raw_payload, '{}'::jsonb),
       diagnostics = coalesce(p_diagnostics, '{}'::jsonb)
-        || jsonb_build_object('collector_worker_id', left(btrim(p_worker_id), 120)),
+        || jsonb_build_object('collector_worker_id', left(btrim(p_worker_id), 120))
+        || case
+          when v_score_only then jsonb_build_object(
+            'score_only_candidate', true,
+            'score_only_human_override_required', true,
+            'player_row_count', 0
+          )
+          else jsonb_build_object(
+            'score_only_candidate', false,
+            'score_only_human_override_required', false,
+            'player_row_count', jsonb_array_length(p_player_rows)
+          )
+        end,
       collected_at = now()
     where id = v_import_id
       and league_id = p_league_id;
@@ -352,6 +413,7 @@ begin
     from jsonb_array_elements(coalesce(p_player_rows, '[]'::jsonb))
   loop
     v_team_id := nullif(v_row ->> 'team_id', '')::uuid;
+    v_ea_player_id := btrim(coalesce(v_row ->> 'ea_player_id', ''));
     v_gamertag := btrim(coalesce(v_row ->> 'gamertag', ''));
     v_normalized_gamertag := lower(
       regexp_replace(v_gamertag, '[^[:alnum:]]+', '', 'g')
@@ -364,6 +426,10 @@ begin
 
     if v_gamertag = '' or v_normalized_gamertag = '' then
       raise exception 'Every player row requires a valid gamertag.';
+    end if;
+
+    if v_ea_player_id = '' then
+      raise exception 'Every player row requires an EA player ID.';
     end if;
 
     insert into public.match_import_player_rows (
@@ -392,7 +458,7 @@ begin
       p_league_id,
       v_import_id,
       v_team_id,
-      nullif(btrim(v_row ->> 'ea_player_id'), ''),
+      v_ea_player_id,
       v_gamertag,
       v_normalized_gamertag,
       nullif(upper(btrim(v_row ->> 'position_code')), ''),
@@ -581,4 +647,4 @@ comment on function public.ingest_match_import(
   text, uuid, uuid, uuid, text, text, text, text, timestamptz,
   integer, integer, jsonb, jsonb, jsonb
 ) is
-  'Transactionally stores one idempotent EA match package and its player rows for website review.';
+  'Stores one durable EA match package; empty player arrays remain pending for explicit human override.';

@@ -3,16 +3,19 @@ import Link from "next/link";
 
 import type { PublicFixture } from "@/lib/database.types";
 import { formatKickoff } from "@/lib/public-league-data";
+import type { TenantUrlBuilder } from "@/lib/tenant-url";
 
 import { LeagueMark } from "./league-mark";
 
 type FixtureRowProps = {
   fixture: PublicFixture;
+  tenantUrl: TenantUrlBuilder;
   timezone: string;
 };
 
 export function FixtureRow({
   fixture,
+  tenantUrl,
   timezone,
 }: FixtureRowProps) {
   const hasResult = fixture.has_approved_result;
@@ -41,7 +44,7 @@ export function FixtureRow({
 
       <Link
         className="fixture-team fixture-team-home"
-        href={`/teams/${fixture.home_team_slug}`}
+        href={tenantUrl(`/teams/${fixture.home_team_slug}`)}
       >
         <span>{fixture.home_team_name}</span>
         <LeagueMark
@@ -67,7 +70,7 @@ export function FixtureRow({
 
       <Link
         className="fixture-team fixture-team-away"
-        href={`/teams/${fixture.away_team_slug}`}
+        href={tenantUrl(`/teams/${fixture.away_team_slug}`)}
       >
         <LeagueMark
           compact

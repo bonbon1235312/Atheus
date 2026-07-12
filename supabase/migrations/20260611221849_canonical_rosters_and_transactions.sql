@@ -187,6 +187,7 @@ grant select, insert, update on public.player_identities to service_role;
 grant insert on public.audit_logs to service_role;
 
 create or replace function public.atheus_mirror_discord_transaction(
+  p_expected_league_id uuid,
   p_payload jsonb
 )
 returns jsonb
@@ -203,6 +204,8 @@ declare
   v_normalized_name text;
   v_actor_id text := nullif(btrim(coalesce(p_payload ->> 'actor_discord_user_id', '')), '');
   v_league_id uuid;
+  v_mapping_league_ids uuid[];
+  v_mapping_count integer;
   v_season_id uuid;
   v_player_id uuid;
   v_source_team_id uuid;
@@ -214,6 +217,9 @@ declare
   v_event_id uuid;
   v_existing_event_id uuid;
 begin
+  if p_expected_league_id is null then
+    raise exception 'p_expected_league_id is required';
+  end if;
   if v_guild_id = '' then
     raise exception 'discord_guild_id is required';
   end if;
@@ -230,8 +236,10 @@ begin
     v_player_name := 'Discord ' || v_player_discord_id;
   end if;
 
-  select mapping.league_id
-  into v_league_id
+  select
+    count(*)::integer,
+    array_agg(mapping.league_id order by mapping.league_id)
+  into v_mapping_count, v_mapping_league_ids
   from (
     select guild.league_id
     from public.league_discord_guilds guild
@@ -242,11 +250,18 @@ begin
     from public.teams team
     where team.discord_guild_id = v_guild_id
       and team.status = 'active'
-  ) mapping
-  limit 1;
+  ) mapping;
 
-  if v_league_id is null then
+  if v_mapping_count = 0 then
     raise exception 'Discord guild is not linked to an Atheus league';
+  end if;
+  if v_mapping_count <> 1 then
+    raise exception 'Discord guild resolves to multiple Atheus leagues';
+  end if;
+
+  v_league_id := v_mapping_league_ids[1];
+  if v_league_id <> p_expected_league_id then
+    raise exception 'Discord guild league mapping does not match p_expected_league_id';
   end if;
 
   select id
@@ -283,8 +298,7 @@ begin
     from public.teams
     where league_id = v_league_id
       and discord_role_id = v_source_role_id
-      and status = 'active'
-    limit 1;
+      and status = 'active';
     if v_source_team_id is null then
       raise exception 'Source Discord role is not linked to an active Atheus team';
     end if;
@@ -295,8 +309,7 @@ begin
     from public.teams
     where league_id = v_league_id
       and discord_role_id = v_destination_role_id
-      and status = 'active'
-    limit 1;
+      and status = 'active';
     if v_destination_team_id is null then
       raise exception 'Destination Discord role is not linked to an active Atheus team';
     end if;
@@ -321,16 +334,14 @@ begin
   select id into v_player_id
   from public.player_identities
   where league_id = v_league_id
-    and discord_user_id = v_player_discord_id
-  limit 1;
+    and discord_user_id = v_player_discord_id;
 
   if v_player_id is null then
     select id into v_player_id
     from public.player_identities
     where league_id = v_league_id
       and normalized_name = v_normalized_name
-      and discord_user_id is null
-    limit 1;
+      and discord_user_id is null;
   end if;
 
   if v_player_id is null then
@@ -552,9 +563,9 @@ begin
 end;
 $$;
 
-revoke all on function public.atheus_mirror_discord_transaction(jsonb)
+revoke all on function public.atheus_mirror_discord_transaction(uuid, jsonb)
   from public, anon, authenticated;
-grant execute on function public.atheus_mirror_discord_transaction(jsonb)
+grant execute on function public.atheus_mirror_discord_transaction(uuid, jsonb)
   to service_role;
 
 comment on table public.roster_memberships is
@@ -563,5 +574,5 @@ comment on table public.player_loans is
   'Canonical active and historical player loans for each Atheus league.';
 comment on table public.transfer_events is
   'Immutable, idempotent transfer ledger sourced from Discord or website actions.';
-comment on function public.atheus_mirror_discord_transaction(jsonb) is
-  'Atomically mirrors one completed local Discord transaction into canonical league state.';
+comment on function public.atheus_mirror_discord_transaction(uuid, jsonb) is
+  'Atomically mirrors one completed local Discord transaction after exact expected-league validation.';

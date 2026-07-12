@@ -6,6 +6,7 @@ import {
   getPublicLeague,
   getStandings,
 } from "@/lib/public-league-data";
+import { getTenantUrlBuilder } from "@/lib/tenant-url";
 
 import { StandingsTable } from "../_components/standings-table";
 
@@ -21,7 +22,10 @@ export default async function TablePage({
   searchParams,
 }: TablePageProps) {
   const [{ leagueSlug }, query] = await Promise.all([params, searchParams]);
-  const league = await getPublicLeague(leagueSlug);
+  const [league, tenantUrl] = await Promise.all([
+    getPublicLeague(leagueSlug),
+    getTenantUrlBuilder(leagueSlug),
+  ]);
   const seasons = await getLeagueSeasons(league.id);
   const selectedSeason =
     seasons.find((season) => season.id === query.season) ||
@@ -74,7 +78,10 @@ export default async function TablePage({
             <Link
               key={competition.id}
               className={`division-tab${selectedCompetition?.id === competition.id ? " division-tab-active" : ""}`}
-              href={`/${leagueSlug}/table?${selectedSeason ? `season=${selectedSeason.id}&` : ""}competition=${competition.id}`}
+              href={tenantUrl("/table", {
+                competition: competition.id,
+                season: selectedSeason?.id,
+              })}
             >
               {competition.name}
             </Link>
@@ -83,7 +90,7 @@ export default async function TablePage({
       ) : null}
 
       {rows.length ? (
-        <StandingsTable rows={rows} />
+        <StandingsTable rows={rows} tenantUrl={tenantUrl} />
       ) : (
         <div className="public-empty">
           <strong>No league table is available yet.</strong>

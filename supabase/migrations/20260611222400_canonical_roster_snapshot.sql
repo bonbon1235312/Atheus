@@ -20,6 +20,7 @@ create index if not exists transfer_events_destination_team_fk_idx
   on public.transfer_events (league_id, destination_team_id);
 
 create or replace function public.atheus_sync_discord_roster_snapshot(
+  p_expected_league_id uuid,
   p_payload jsonb
 )
 returns jsonb
@@ -30,6 +31,8 @@ as $$
 declare
   v_guild_id text := btrim(coalesce(p_payload ->> 'discord_guild_id', ''));
   v_league_id uuid;
+  v_mapping_league_ids uuid[];
+  v_mapping_count integer;
   v_season_id uuid;
   v_team jsonb;
   v_member jsonb;
@@ -48,6 +51,9 @@ declare
   v_player_count integer := 0;
   v_loan_count integer := 0;
 begin
+  if p_expected_league_id is null then
+    raise exception 'p_expected_league_id is required';
+  end if;
   if v_guild_id = '' then
     raise exception 'discord_guild_id is required';
   end if;
@@ -58,8 +64,10 @@ begin
     raise exception 'loans must be a JSON array';
   end if;
 
-  select mapping.league_id
-  into v_league_id
+  select
+    count(*)::integer,
+    array_agg(mapping.league_id order by mapping.league_id)
+  into v_mapping_count, v_mapping_league_ids
   from (
     select guild.league_id
     from public.league_discord_guilds guild
@@ -70,11 +78,18 @@ begin
     from public.teams team
     where team.discord_guild_id = v_guild_id
       and team.status = 'active'
-  ) mapping
-  limit 1;
+  ) mapping;
 
-  if v_league_id is null then
+  if v_mapping_count = 0 then
     raise exception 'Discord guild is not linked to an Atheus league';
+  end if;
+  if v_mapping_count <> 1 then
+    raise exception 'Discord guild resolves to multiple Atheus leagues';
+  end if;
+
+  v_league_id := v_mapping_league_ids[1];
+  if v_league_id <> p_expected_league_id then
+    raise exception 'Discord guild league mapping does not match p_expected_league_id';
   end if;
 
   select id
@@ -99,8 +114,7 @@ begin
     from public.teams
     where league_id = v_league_id
       and discord_role_id = btrim(coalesce(v_team ->> 'discord_role_id', ''))
-      and status = 'active'
-    limit 1;
+      and status = 'active';
 
     if v_team_id is null then
       raise exception 'Snapshot team role % is not linked to an active Atheus team',
@@ -157,8 +171,7 @@ begin
       into v_player_id
       from public.player_identities
       where league_id = v_league_id
-        and discord_user_id = v_player_discord_id
-      limit 1;
+        and discord_user_id = v_player_discord_id;
 
       if v_player_id is null then
         select id
@@ -166,8 +179,7 @@ begin
         from public.player_identities
         where league_id = v_league_id
           and normalized_name = v_normalized_name
-          and discord_user_id is null
-        limit 1;
+          and discord_user_id is null;
       end if;
 
       if v_player_id is null then
@@ -290,22 +302,19 @@ begin
     select id into v_player_id
     from public.player_identities
     where league_id = v_league_id
-      and discord_user_id = v_player_discord_id
-    limit 1;
+      and discord_user_id = v_player_discord_id;
 
     select id into v_source_team_id
     from public.teams
     where league_id = v_league_id
       and discord_role_id = btrim(coalesce(v_loan ->> 'source_team_role_id', ''))
-      and status = 'active'
-    limit 1;
+      and status = 'active';
 
     select id into v_destination_team_id
     from public.teams
     where league_id = v_league_id
       and discord_role_id = btrim(coalesce(v_loan ->> 'destination_team_role_id', ''))
-      and status = 'active'
-    limit 1;
+      and status = 'active';
 
     if v_player_id is null
       or v_source_team_id is null
@@ -400,10 +409,10 @@ begin
 end;
 $$;
 
-revoke all on function public.atheus_sync_discord_roster_snapshot(jsonb)
+revoke all on function public.atheus_sync_discord_roster_snapshot(uuid, jsonb)
   from public, anon, authenticated;
-grant execute on function public.atheus_sync_discord_roster_snapshot(jsonb)
+grant execute on function public.atheus_sync_discord_roster_snapshot(uuid, jsonb)
   to service_role;
 
-comment on function public.atheus_sync_discord_roster_snapshot(jsonb) is
-  'Idempotently reconciles one linked Discord guild SQLite roster snapshot into canonical Atheus state.';
+comment on function public.atheus_sync_discord_roster_snapshot(uuid, jsonb) is
+  'Idempotently reconciles one guild snapshot after exact expected-league validation.';

@@ -21,6 +21,7 @@ export async function approveImport(
   const leagueId = value(formData, "leagueId");
   const importId = value(formData, "importId");
   const note = value(formData, "note");
+  const scoreOnlyOverride = value(formData, "scoreOnlyOverride") === "true";
   const access = await requireLeagueAccess(leagueId, [
     "owner",
     "admin",
@@ -31,11 +32,20 @@ export async function approveImport(
     return { error: "Match reviewer access is required." };
   }
 
+  if (scoreOnlyOverride && !["owner", "admin"].includes(access.role)) {
+    return { error: "Only a league owner or admin can publish a score-only result." };
+  }
+
+  if (scoreOnlyOverride && !note) {
+    return { error: "Enter a reason for the score-only override." };
+  }
+
   const { error } = await supabaseAdmin().rpc("approve_match_import", {
     p_league_id: leagueId,
     p_import_id: importId,
     p_discord_user_id: access.discordUserId,
     p_review_note: note || null,
+    p_score_only_override: scoreOnlyOverride,
   });
 
   if (error) {
@@ -44,7 +54,11 @@ export async function approveImport(
 
   revalidatePath(`/admin/${leagueId}`);
   revalidatePath(`/admin/${leagueId}/imports`);
-  return { success: "Stats approved and published." };
+  return {
+    success: scoreOnlyOverride
+      ? "Score published with an audited score-only override."
+      : "Stats approved and published.",
+  };
 }
 
 export async function rejectImport(

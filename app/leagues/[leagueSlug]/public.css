@@ -91,7 +91,7 @@
   align-items: center;
   padding: 9px 16px;
   background: var(--league-primary);
-  color: var(--league-bg);
+  color: var(--league-on-primary);
   font-size: 0.58rem;
   font-weight: 900;
   letter-spacing: 0.14em;
@@ -114,7 +114,7 @@
   background: var(--league-primary);
   background-position: center;
   background-size: cover;
-  color: white;
+  color: var(--league-on-primary);
   font-family: var(--font-display), sans-serif;
   font-size: 0.88rem;
   font-weight: 800;
@@ -489,12 +489,49 @@
 
 /* ─────────────────────────────────────────────────── Standings */
 
-.standings-head,
-.standings-row {
-  display: grid;
-  grid-template-columns: 52px minmax(240px, 1fr) repeat(4, 52px) 64px 74px;
-  gap: 6px;
-  align-items: center;
+.standings-table {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.standings-table:focus-visible {
+  outline: 2px solid var(--league-primary);
+  outline-offset: 4px;
+}
+
+.standings-grid {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
+
+.standings-caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.standings-col-position {
+  width: 52px;
+}
+
+.standings-col-result {
+  width: 52px;
+}
+
+.standings-col-difference {
+  width: 64px;
+}
+
+.standings-col-points {
+  width: 74px;
 }
 
 .standings-head,
@@ -508,14 +545,43 @@
   text-transform: uppercase;
 }
 
-.standings-head span:not(:nth-child(2)),
-.standings-row > b:not(.standings-position) {
+.standings-head > th {
+  height: 40px;
+  padding: 0 3px;
+  vertical-align: middle;
+}
+
+.standings-head > th:not(:nth-child(2)),
+.standings-row > td {
   text-align: center;
 }
 
-.standings-row {
-  min-height: 78px;
+.standings-head > th:nth-child(2),
+.standings-club-cell {
+  text-align: left;
+}
+
+.standings-head abbr {
+  text-decoration: none;
+}
+
+.standings-row > * {
+  height: 78px;
+  padding: 0 3px;
+  vertical-align: middle;
   border-top: 1px solid color-mix(in srgb, var(--league-text) 9%, transparent);
+}
+
+.standings-row > td {
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.standings-club-cell {
+  font-weight: inherit;
+}
+
+.standings-row {
   transition: background 0.1s;
 }
 
@@ -524,11 +590,11 @@
 }
 
 /* P1 — the league leader gets a full row color wash */
-.standings-row:nth-child(2) {
+.standings-row:nth-child(1) {
   background: color-mix(in srgb, var(--league-primary) 10%, var(--league-bg));
 }
 
-.standings-row:nth-child(2):hover {
+.standings-row:nth-child(1):hover {
   background: color-mix(in srgb, var(--league-primary) 15%, var(--league-bg));
 }
 
@@ -544,18 +610,18 @@
 }
 
 /* P1 position filled */
-.standings-row:nth-child(2) .standings-position {
+.standings-row:nth-child(1) .standings-position {
   background: var(--league-primary);
-  color: var(--league-bg);
+  color: var(--league-on-primary);
 }
 
 /* P2 position outlined */
-.standings-row:nth-child(3) .standings-position {
+.standings-row:nth-child(2) .standings-position {
   color: var(--league-primary);
 }
 
 /* P3 muted accent */
-.standings-row:nth-child(4) .standings-position {
+.standings-row:nth-child(3) .standings-position {
   color: color-mix(in srgb, var(--league-primary) 60%, var(--league-muted));
 }
 
@@ -564,6 +630,11 @@
   align-items: center;
   gap: 12px;
   min-width: 0;
+}
+
+.standings-club:focus-visible {
+  outline: 2px solid var(--league-primary);
+  outline-offset: 2px;
 }
 
 .standings-club > span:last-child,
@@ -608,13 +679,28 @@
   color: oklch(52% 0.14 25);
 }
 
-.standings-table-compact .standings-head,
-.standings-table-compact .standings-row {
-  grid-template-columns: 44px minmax(160px, 1fr) repeat(4, 36px) 48px 52px;
+.standings-table-compact .standings-grid {
+  min-width: 520px;
 }
 
-.standings-table-compact .standings-row {
-  min-height: 64px;
+.standings-table-compact .standings-col-position {
+  width: 44px;
+}
+
+.standings-table-compact .standings-col-result {
+  width: 36px;
+}
+
+.standings-table-compact .standings-col-difference {
+  width: 48px;
+}
+
+.standings-table-compact .standings-col-points {
+  width: 52px;
+}
+
+.standings-table-compact .standings-row > * {
+  height: 64px;
 }
 
 .standings-table-compact .league-mark {
@@ -791,7 +877,7 @@
   padding: 0 18px;
   border: none;
   background: var(--league-primary);
-  color: var(--league-bg);
+  color: var(--league-on-primary);
   cursor: pointer;
   font-size: 0.58rem;
   font-weight: 900;
@@ -990,7 +1076,7 @@
   display: grid;
   gap: 10px;
   padding: 22px;
-  color: white;
+  color: var(--league-on-secondary);
   background: var(--league-secondary, var(--league-primary));
 }
 
@@ -1244,8 +1330,7 @@
     grid-column: 1 / -1;
   }
 
-  .leaderboard-table,
-  .standings-table {
+  .leaderboard-table {
     overflow-x: auto;
   }
 
@@ -1254,8 +1339,7 @@
     min-width: 920px;
   }
 
-  .standings-head,
-  .standings-row {
+  .standings-table .standings-grid {
     min-width: 780px;
   }
 

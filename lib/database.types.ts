@@ -159,6 +159,14 @@ export type PlayerAlias = {
   created_at: string;
 };
 
+export type PlayerExternalIdentity = {
+  league_id: string;
+  platform: string;
+  ea_player_id: string;
+  player_identity_id: string;
+  created_at: string;
+};
+
 export type Fixture = {
   id: string;
   league_id: string;
@@ -194,7 +202,7 @@ export type MatchImport = {
   home_score: number | null;
   away_score: number | null;
   raw_payload: Record<string, unknown>;
-  diagnostics: Record<string, unknown>;
+  diagnostics: MatchImportDiagnostics;
   idempotency_key: string;
   collected_at: string;
   reviewed_at: string | null;
@@ -317,6 +325,37 @@ export type PublicFixture = {
   is_forfeit: boolean;
   is_void: boolean;
   approved_at: string | null;
+};
+
+export type MatchImportDiagnostics = Record<string, unknown> & {
+  score_only_candidate?: boolean;
+  score_only_human_override_required?: boolean;
+  player_row_count?: number;
+};
+
+export type IngestMatchImportRpcArgs = {
+  p_worker_id: string;
+  p_run_id: string;
+  p_league_id: string;
+  p_fixture_id: string;
+  p_confidence: "definite" | "possible";
+  p_ea_match_id: string;
+  p_platform: string;
+  p_match_type: string;
+  p_played_at: string | null;
+  p_home_score: number;
+  p_away_score: number;
+  p_raw_payload: Record<string, unknown> | null;
+  p_diagnostics: Record<string, unknown> | null;
+  p_player_rows: Array<Record<string, unknown>> | null;
+};
+
+export type ApproveMatchImportRpcArgs = {
+  p_league_id: string;
+  p_import_id: string;
+  p_discord_user_id: string;
+  p_review_note?: string | null;
+  p_score_only_override?: boolean;
 };
 
 export type PlayerMatchHistory = {

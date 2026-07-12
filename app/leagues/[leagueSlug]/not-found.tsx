@@ -3,17 +3,23 @@ import Link from "next/link";
 
 import { getPublicLeagueAnyStatus } from "@/lib/public-league-data";
 import { leagueSlugFromHostname } from "@/lib/public-url";
+import { getTenantUrlBuilder } from "@/lib/tenant-url";
 
 import { LeagueMark } from "./_components/league-mark";
 
 export default async function LeagueNotFound() {
   const requestHeaders = await headers();
   const host =
-    requestHeaders.get("x-forwarded-host") ||
     requestHeaders.get("host") ||
+    requestHeaders.get("x-forwarded-host") ||
     "";
   const slug = leagueSlugFromHostname(host.split(",")[0].trim());
-  const league = slug ? await getPublicLeagueAnyStatus(slug) : null;
+  const [league, tenantUrl] = slug
+    ? await Promise.all([
+        getPublicLeagueAnyStatus(slug),
+        getTenantUrlBuilder(slug, host),
+      ])
+    : [null, null];
 
   // A recognised but not-yet-activated league: show a friendly, branded
   // "coming soon" panel instead of the generic platform 404 so a prospective
@@ -50,7 +56,10 @@ export default async function LeagueNotFound() {
       <p className="league-coming-soon-lead">
         The page you are looking for could not be found.
       </p>
-      <Link className="button button-primary" href="/">
+      <Link
+        className="button button-primary"
+        href={tenantUrl ? tenantUrl("/") : "/"}
+      >
         Return home
       </Link>
     </main>

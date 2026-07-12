@@ -176,7 +176,7 @@ export function DivisionPanel({
       ) : (
         <p className="empty-state">
           No divisions yet. Create one below — the fixture generator and public
-          standings table will use each division's team list.
+          standings table will use each division&apos;s team list.
         </p>
       )}
 

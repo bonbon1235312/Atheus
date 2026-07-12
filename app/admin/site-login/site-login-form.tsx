@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useId } from "react";
 
 import {
   siteAdminSignIn,
@@ -20,9 +20,16 @@ export function SiteLoginForm({
     siteAdminSignIn,
     initialState,
   );
+  const statusId = useId();
+  const hasError = Boolean(state.error) && !pending;
+  const statusMessage = pending
+    ? "Checking access..."
+    : hasError
+      ? state.error
+      : "\u00A0";
 
   return (
-    <form action={action} className="site-login-form">
+    <form action={action} aria-busy={pending} className="site-login-form">
       {lockLeague ? (
         <>
           <input name="leagueSlug" type="hidden" value={leagueSlug} />
@@ -36,6 +43,8 @@ export function SiteLoginForm({
           <span>League address</span>
           <div className="slug-input">
             <input
+              aria-describedby={statusId}
+              aria-invalid={hasError}
               autoCapitalize="none"
               autoComplete="organization"
               defaultValue={leagueSlug}
@@ -50,6 +59,8 @@ export function SiteLoginForm({
       <label>
         <span>Administrator username</span>
         <input
+          aria-describedby={statusId}
+          aria-invalid={hasError}
           autoCapitalize="none"
           autoComplete="username"
           name="username"
@@ -59,13 +70,33 @@ export function SiteLoginForm({
       <label>
         <span>Password</span>
         <input
+          aria-describedby={statusId}
+          aria-invalid={hasError}
           autoComplete="current-password"
           name="password"
           required
           type="password"
         />
       </label>
-      {state.error ? <p className="site-login-error">{state.error}</p> : null}
+      <p
+        aria-atomic="true"
+        aria-live="polite"
+        className="site-login-error"
+        id={statusId}
+        role="status"
+        style={
+          hasError
+            ? { minBlockSize: "5.5rem" }
+            : {
+                background: "transparent",
+                borderLeftColor: "transparent",
+                color: pending ? "#c7cbff" : "transparent",
+                minBlockSize: "5.5rem",
+              }
+        }
+      >
+        {statusMessage}
+      </p>
       <button
         className="landing-button landing-button-primary"
         disabled={pending}

@@ -14,6 +14,7 @@ import {
   playerOverall,
   sortPlayers,
 } from "@/lib/public-league-data";
+import { getTenantUrlBuilder } from "@/lib/tenant-url";
 
 import { FixtureRow } from "./_components/fixture-row";
 import { LeagueMark } from "./_components/league-mark";
@@ -29,7 +30,10 @@ type LeagueHomeProps = {
 export default async function LeagueHome({ params, searchParams }: LeagueHomeProps) {
   const [{ leagueSlug }, query] = await Promise.all([params, searchParams]);
   const league = await getPublicLeague(leagueSlug);
-  const seasons = await getLeagueSeasons(league.id);
+  const [seasons, tenantUrl] = await Promise.all([
+    getLeagueSeasons(league.id),
+    getTenantUrlBuilder(leagueSlug),
+  ]);
   const season = seasons.find((item) => item.status === "active") || seasons[0];
   const allCompetitions = season
     ? await getLeagueCompetitions(league.id, season.id)
@@ -116,7 +120,7 @@ export default async function LeagueHome({ params, searchParams }: LeagueHomePro
                 : "Latest results"}
           </h2>
           </div>
-          <Link href="/fixtures">View all fixtures</Link>
+          <Link href={tenantUrl("/fixtures")}>View all fixtures</Link>
         </header>
 
         <div className="public-fixture-list">
@@ -129,6 +133,7 @@ export default async function LeagueHome({ params, searchParams }: LeagueHomePro
             <FixtureRow
               fixture={fixture}
               key={fixture.id}
+              tenantUrl={tenantUrl}
               timezone={league.timezone}
             />
           ))}
@@ -148,7 +153,7 @@ export default async function LeagueHome({ params, searchParams }: LeagueHomePro
               <p className="public-kicker">League table</p>
               <h2>Current order</h2>
             </div>
-            <Link href="/table">Full table</Link>
+            <Link href={tenantUrl("/table")}>Full table</Link>
           </header>
           {divisions.length > 1 ? (
             <nav className="division-tabs">
@@ -156,7 +161,7 @@ export default async function LeagueHome({ params, searchParams }: LeagueHomePro
                 <Link
                   key={division.id}
                   className={`division-tab${selectedDivision?.id === division.id ? " division-tab-active" : ""}`}
-                  href={`?competition=${division.id}`}
+                  href={tenantUrl("/", { competition: division.id })}
                 >
                   {division.name}
                 </Link>
@@ -167,6 +172,7 @@ export default async function LeagueHome({ params, searchParams }: LeagueHomePro
             <StandingsTable
               compact
               rows={standings.slice(0, 6)}
+              tenantUrl={tenantUrl}
             />
           ) : (
             <div className="public-empty">
@@ -182,12 +188,12 @@ export default async function LeagueHome({ params, searchParams }: LeagueHomePro
               <p className="public-kicker">Performance index</p>
               <h2>Players</h2>
             </div>
-            <Link href="/stats">All stats</Link>
+            <Link href={tenantUrl("/stats")}>All stats</Link>
           </header>
           <div className="performer-list">
             {topPlayers.map((player, index) => (
               <Link
-                href={`/players/${player.player_identity_id}`}
+                href={tenantUrl(`/players/${player.player_identity_id}`)}
                 key={`${player.competition_id}-${player.player_identity_id}`}
               >
                 <b>{String(index + 1).padStart(2, "0")}</b>
@@ -217,7 +223,7 @@ export default async function LeagueHome({ params, searchParams }: LeagueHomePro
         </header>
         <div className="public-club-grid">
           {teams.map((team) => (
-            <Link href={`/teams/${team.slug}`} key={team.id}>
+            <Link href={tenantUrl(`/teams/${team.slug}`)} key={team.id}>
               <LeagueMark
                 colour={team.primary_colour}
                 logoUrl={team.logo_url}

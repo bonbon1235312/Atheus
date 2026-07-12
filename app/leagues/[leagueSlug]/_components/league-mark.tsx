@@ -1,3 +1,5 @@
+import { getWcagOnColour } from "@/lib/accessible-colour";
+
 type LeagueMarkProps = {
   name: string;
   logoUrl?: string | null;
@@ -18,6 +20,7 @@ export function LeagueMark({
     .map((word) => word[0])
     .join("")
     .toUpperCase();
+  const backgroundColour = colour || "var(--league-primary)";
 
   return (
     <span
@@ -25,8 +28,11 @@ export function LeagueMark({
       className={`league-mark${compact ? " league-mark-compact" : ""}`}
       role="img"
       style={{
-        backgroundColor: colour || "var(--league-primary)",
+        backgroundColor: backgroundColour,
         backgroundImage: logoUrl ? `url("${logoUrl}")` : undefined,
+        color: colour
+          ? getWcagOnColour(colour)
+          : "var(--league-on-primary)",
       }}
     >
       {!logoUrl ? initials : null}

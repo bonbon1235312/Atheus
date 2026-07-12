@@ -224,7 +224,7 @@ export function OnboardingForm({
           <p className="step-index">04</p>
           <h2>Site administration</h2>
           <p className="form-section-desc">
-            A separate login for your league's website workspace. Use it to
+            A separate login for your league&apos;s website workspace. Use it to
             sign in directly at your league site without going through Discord.
             Share it with co-admins, or keep it as a backup. Discord remains
             required for ownership and billing.

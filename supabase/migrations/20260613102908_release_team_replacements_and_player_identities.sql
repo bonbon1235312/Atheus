@@ -654,6 +654,15 @@ begin
 
   if exists (
     select 1
+    from public.player_external_identities external_identity
+    where external_identity.league_id = p_league_id
+      and external_identity.player_identity_id = p_source_player_identity_id
+  ) then
+    raise exception 'The source identity has an immutable EA mapping; keep it as the merge target.';
+  end if;
+
+  if exists (
+    select 1
     from public.player_match_stats source_stats
     join public.player_match_stats target_stats
       on target_stats.league_id = source_stats.league_id

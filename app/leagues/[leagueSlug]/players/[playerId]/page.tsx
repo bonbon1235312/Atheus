@@ -11,6 +11,7 @@ import {
   getPublicLeague,
   playerOverall,
 } from "@/lib/public-league-data";
+import { getTenantUrlBuilder } from "@/lib/tenant-url";
 
 export const revalidate = 60;
 
@@ -20,7 +21,10 @@ type PlayerPageProps = {
 
 export default async function PlayerPage({ params }: PlayerPageProps) {
   const { leagueSlug, playerId } = await params;
-  const league = await getPublicLeague(leagueSlug);
+  const [league, tenantUrl] = await Promise.all([
+    getPublicLeague(leagueSlug),
+    getTenantUrlBuilder(leagueSlug),
+  ]);
 
   if (!league.publicStatsEnabled) {
     notFound();
@@ -129,7 +133,7 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
           <div className="player-team-history">
             {teamHistory.map((team) => (
               <Link
-                href={`/teams/${team.slug}`}
+                href={tenantUrl(`/teams/${team.slug}`)}
                 key={team.id}
               >
                 <span>{team.abbreviation || "Club"}</span>
@@ -183,10 +187,10 @@ export default async function PlayerPage({ params }: PlayerPageProps) {
           {history.map((match) => (
             <div className="player-match-row" key={match.id}>
               <span>{formatKickoff(match.kickoff_at, league.timezone)}</span>
-              <Link href={`/teams/${match.team_slug}`}>
+              <Link href={tenantUrl(`/teams/${match.team_slug}`)}>
                 {match.team_name}
               </Link>
-              <Link href={`/teams/${match.opponent_team_slug}`}>
+              <Link href={tenantUrl(`/teams/${match.opponent_team_slug}`)}>
                 {match.opponent_team_name}
               </Link>
               <b>

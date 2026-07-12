@@ -7,6 +7,7 @@ import {
   getPublicFixtures,
   getPublicLeague,
 } from "@/lib/public-league-data";
+import { getTenantUrlBuilder } from "@/lib/tenant-url";
 
 import { FixtureRow } from "../_components/fixture-row";
 
@@ -27,7 +28,10 @@ export default async function FixturesPage({
   searchParams,
 }: FixturesPageProps) {
   const [{ leagueSlug }, query] = await Promise.all([params, searchParams]);
-  const league = await getPublicLeague(leagueSlug);
+  const [league, tenantUrl] = await Promise.all([
+    getPublicLeague(leagueSlug),
+    getTenantUrlBuilder(leagueSlug),
+  ]);
   const seasons = await getLeagueSeasons(league.id);
   const selectedSeason =
     seasons.find((season) => season.id === query.season) ||
@@ -51,8 +55,7 @@ export default async function FixturesPage({
     if (competitionId) next.set("competition", competitionId);
     if (query.team) next.set("team", query.team);
     if (query.view) next.set("view", query.view);
-    const queryString = next.toString();
-    return `/${leagueSlug}/fixtures${queryString ? `?${queryString}` : ""}`;
+    return tenantUrl("/fixtures", next);
   };
   const fixtures = await getPublicFixtures(leagueSlug, {
     seasonId: selectedSeason?.id,
@@ -162,6 +165,7 @@ export default async function FixturesPage({
                 <FixtureRow
                   fixture={fixture}
                   key={fixture.id}
+                  tenantUrl={tenantUrl}
                   timezone={league.timezone}
                 />
               ))}
