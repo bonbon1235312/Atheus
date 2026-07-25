@@ -1,19 +1,27 @@
 import Link from "next/link";
 
+import { MarketingShell } from "@/components/marketing/marketing-shell";
+
 export default function NotFound() {
   return (
-    <main className="access-page">
-      <Link className="wordmark" href="/">
-        <span className="wordmark-mark">A</span>
-        <span>ATHEUS</span>
-      </Link>
-      <section className="access-panel">
-        <p className="eyebrow">404 / Not found</p>
-        <h1>This route does not exist.</h1>
-        <Link className="button button-primary" href="/">
-          Return home
-        </Link>
+    <MarketingShell>
+      <section className="ax-page-hero">
+        <div className="ax-container">
+          <p className="ax-eyebrow">404</p>
+          <h1 className="ax-h1">Page not found</h1>
+          <p className="ax-lead">
+            That route does not exist. Head home or browse the product suite.
+          </p>
+          <div className="ax-hero-actions">
+            <Link className="ax-btn ax-btn-primary" href="/">
+              Home
+            </Link>
+            <Link className="ax-btn ax-btn-secondary" href="/products">
+              Products
+            </Link>
+          </div>
+        </div>
       </section>
-    </main>
+    </MarketingShell>
   );
 }

@@ -1,313 +1,118 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 
+import Link from "next/link";
+
+import { HomeHero } from "@/components/marketing/home-hero";
+import { MarketingShell } from "@/components/marketing/marketing-shell";
+import { MotionProductCard } from "@/components/marketing/motion-product-card";
+import { WowCta } from "@/components/marketing/process-rail";
+import { ProofMosaic } from "@/components/marketing/proof-mosaic";
+import { Reveal } from "@/components/marketing/reveal";
+import { products } from "@/lib/products";
+
 export const metadata: Metadata = {
-  title: "Atheus Industries",
+  title: "Atheus",
   description:
-    "Engineering intelligent systems across web, AI and robotics. An early-stage technology studio.",
+    "Custom websites from £600, plus premium SaaS products. Atheus builds software that looks and works serious.",
+  openGraph: {
+    images: [{ url: "/brand/sites-hearth.jpg" }],
+  },
 };
 
-const services = [
+const values = [
   {
-    n: "01",
-    title: "Web Design & Development",
-    body: "Full-stack websites and web applications. From landing pages to multi-tenant platforms, built with modern frameworks and attention to performance and accessibility.",
+    title: "Custom, not templated",
+    body: "Every site and product surface is designed for the brief. No skinning someone else's layout.",
   },
   {
-    n: "02",
-    title: "AI Automation Systems",
-    body: "Intelligent automation pipelines using LLMs and APIs. Custom agents, data processors and decision systems that reduce manual overhead and operate at scale.",
+    title: "Fast by default",
+    body: "Performance is part of the craft. Pages should feel instant on a phone and sharp on a laptop.",
   },
   {
-    n: "03",
-    title: "Discord Bots & Software Automation",
-    body: "Bots, integrations and automated workflows across platforms. Discord communities, data pipelines, scheduled tasks and custom tooling built to specification.",
+    title: "Clear pricing",
+    body: "Small business sites start at £600. Larger brand builds and SaaS products scale with scope.",
   },
   {
-    n: "04",
-    title: "Robotics & Embedded Systems",
-    body: "Physical computing with ESP32, Arduino and similar platforms. Sensor networks, actuator systems and hardware prototypes that bridge software and the real world.",
+    title: "One team end to end",
+    body: "Design and engineering stay together. Fewer handoffs, fewer diluted decisions.",
   },
-  {
-    n: "05",
-    title: "Technical Prototyping",
-    body: "Early-stage exploration of new ideas. From concept to working prototype — systems that prove the idea before committing to scale.",
-  },
-];
-
-const projects = [
-  {
-    id: "league-platform",
-    status: "Case Study",
-    statusKey: "archived",
-    title: "League Platform",
-    sub: "Full-stack multi-tenant SaaS",
-    body: "A complete deployed software platform for EA FC Pro Clubs communities. Multi-tenant architecture, Discord OAuth, automated EA data collection, subdomain routing and real-time league statistics.",
-    tags: ["Next.js", "Supabase", "Discord OAuth", "EA FC API"],
-    featured: true,
-  },
-  {
-    id: "eden",
-    status: "Research",
-    statusKey: "research",
-    title: "EDEN",
-    sub: "AI civilisation simulation",
-    body: "Multi-agent civilisation simulator powered by Claude. Explores emergent behaviour, decision systems and AI-driven world state at scale.",
-    tags: ["Claude API", "Multi-agent", "Python"],
-    featured: false,
-  },
-  {
-    id: "acl-bot",
-    status: "Deployed",
-    statusKey: "deployed",
-    title: "ACL Bot",
-    sub: "Discord community tooling",
-    body: "Full-featured Discord bot for football league operations. Availability scheduling, stat tracking, lineup builder and AI session summaries.",
-    tags: ["Python", "discord.py", "Supabase"],
-    featured: false,
-  },
-];
-
-const systems = [
-  { name: "atheus.dev", status: "live" as const },
-  { name: "League Platform", status: "live" as const },
-  { name: "ACL Bot", status: "live" as const },
-  { name: "EDEN", status: "active" as const },
-];
-
-const tickerItems = [
-  "Web Development",
-  "AI Automation",
-  "Discord Bots",
-  "Robotics",
-  "Hardware Prototyping",
-  "Technical Research",
-  "Embedded Systems",
-  "Full-Stack Engineering",
 ];
 
 export default function Home() {
+  const sites = products.find((p) => p.slug === "sites")!;
+  const suite = products.filter((p) => p.slug !== "sites");
+
   return (
-    <div className="ai-page">
-      <div className="ai-grain" aria-hidden="true" />
+    <MarketingShell>
+      <HomeHero />
+      <ProofMosaic />
 
-      <header className="ai-nav">
-        <Link className="ai-brand" href="/" aria-label="Atheus Industries home">
-          <span aria-hidden="true">AI</span>
-          <strong>Atheus Industries</strong>
-        </Link>
-        <nav aria-label="Primary navigation">
-          <Link href="/about">About</Link>
-          <Link href="/services">Services</Link>
-          <Link href="/projects">Projects</Link>
-          <Link href="/contact">Contact</Link>
-        </nav>
-        <Link className="ai-nav-action" href="/admin">
-          Platform login
-        </Link>
-      </header>
-
-      {/* ── Hero ─────────────────────────────────────────────── */}
-      <section className="ai-hero">
-        <div className="ai-hero-glow" aria-hidden="true" />
-
-        <div className="ai-hero-inner">
-          {/* Title block — dominates the upper hero */}
-          <div className="ai-hero-title-block">
-            <span className="ai-hero-eyebrow">
-              <i aria-hidden="true" />
-              Studio · 2025 — Building
-            </span>
-            <h1 className="ai-hero-h1">
-              <span className="ai-h1-main">Atheus</span>
-              <span className="ai-h1-sub">Industries</span>
-            </h1>
-          </div>
-
-          {/* Lower row — copy + systems status */}
-          <div className="ai-hero-lower">
-            <div className="ai-hero-copy">
-              <p className="ai-hero-lead">
-                Engineering intelligent systems across web, AI and robotics.
-                An early-stage studio building real things.
-              </p>
-              <div className="ai-hero-actions">
-                <Link className="ai-btn ai-btn-primary" href="/projects">
-                  View our work
-                </Link>
-                <Link className="ai-btn ai-btn-outline" href="/contact">
-                  Get in touch
-                </Link>
-              </div>
-            </div>
-
-            <div className="ai-systems-panel" aria-label="Live systems status">
-              <div className="ai-panel-bar">
-                <span className="ai-panel-dots" aria-hidden="true">
-                  <i /><i /><i />
-                </span>
-                <span className="ai-panel-label">ATHEUS · SYSTEMS</span>
-              </div>
-              <ul className="ai-panel-list">
-                {systems.map((s) => (
-                  <li key={s.name} className="ai-panel-row">
-                    <span className="ai-panel-name">{s.name}</span>
-                    <span className={`ai-panel-status is-${s.status}`}>
-                      <i aria-hidden="true" />
-                      {s.status === "live" ? "LIVE" : "ACTIVE"}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-              <div className="ai-panel-footer">
-                <span>4 systems</span>
-                <span>OPERATIONAL</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Capabilities ticker ───────────────────────────────── */}
-      <div className="ai-ticker" aria-hidden="true">
-        <div className="ai-ticker-track">
-          {[...tickerItems, ...tickerItems, ...tickerItems].map((item, i) => (
-            <span key={i}>{item}&nbsp;·&nbsp;</span>
-          ))}
-        </div>
-      </div>
-
-      {/* ── Services ─────────────────────────────────────────── */}
-      <section className="ai-services-section" id="services">
-        <div className="ai-section-inner">
-          <div className="ai-section-head">
-            <span className="ai-kicker">What we build</span>
-            <h2>Services</h2>
-          </div>
-          <div className="ai-services-list">
-            {services.map((svc) => (
-              <div className="ai-service-row" key={svc.n}>
-                <span className="ai-service-n">{svc.n}</span>
-                <h3>{svc.title}</h3>
-                <p>{svc.body}</p>
-              </div>
-            ))}
-          </div>
-          <div className="ai-section-action">
-            <Link className="ai-btn ai-btn-outline" href="/services">
-              Full services
+      {/* Teaser only — the full tier breakdown lives on /products/sites so the
+          two pages stop rendering the same three cards. */}
+      <section className="ax-section ax-section-tint">
+        <div className="ax-container ax-price-teaser">
+          <Reveal>
+            <p className="ax-kicker-pill">Pricing</p>
+            <h2 className="ax-h2">Clear pricing, before you have to ask.</h2>
+          </Reveal>
+          <Reveal delayMs={60}>
+            <p className="ax-lead">{sites.pricingNote}</p>
+            <Link className="ax-btn ax-btn-primary ax-btn-icon" href="/products/sites#pricing">
+              See the full breakdown
+              <span className="ax-btn-orb" aria-hidden="true">
+                →
+              </span>
             </Link>
-          </div>
+          </Reveal>
         </div>
       </section>
 
-      {/* ── Projects ─────────────────────────────────────────── */}
-      <section className="ai-projects-section" id="projects">
-        <div className="ai-section-inner">
-          <div className="ai-section-head">
-            <span className="ai-kicker">Selected work</span>
-            <h2>Projects</h2>
-          </div>
-          <div className="ai-projects-grid">
-            {projects.filter((p) => p.featured).map((p) => (
-              <article className="ai-project-card ai-project-featured" key={p.id}>
-                <span className={`ai-project-status is-${p.statusKey}`}>{p.status}</span>
-                <h3>{p.title}</h3>
-                <p className="ai-project-sub">{p.sub}</p>
-                <p className="ai-project-body">{p.body}</p>
-                <footer>
-                  {p.tags.map((t) => (
-                    <span className="ai-tag" key={t}>{t}</span>
-                  ))}
-                </footer>
-              </article>
-            ))}
-            <div className="ai-projects-secondary">
-              {projects.filter((p) => !p.featured).map((p) => (
-                <article className="ai-project-card" key={p.id}>
-                  <span className={`ai-project-status is-${p.statusKey}`}>{p.status}</span>
-                  <h3>{p.title}</h3>
-                  <p className="ai-project-sub">{p.sub}</p>
-                  <p className="ai-project-body">{p.body}</p>
-                  <footer>
-                    {p.tags.map((t) => (
-                      <span className="ai-tag" key={t}>{t}</span>
-                    ))}
-                  </footer>
-                </article>
-              ))}
-            </div>
-          </div>
-          <div className="ai-section-action">
-            <Link className="ai-btn ai-btn-outline" href="/projects">
-              All projects
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* ── About strip ───────────────────────────────────────── */}
-      <section className="ai-about-strip">
-        <div className="ai-section-inner">
-          <div className="ai-about-inner">
-            <div className="ai-about-copy">
-              <span className="ai-kicker">About</span>
-              <h2>We build things that work.</h2>
-              <p>
-                Atheus Industries is an early-stage technology studio founded by Evan.
-                The work here is real: deployed systems, active experiments and genuine
-                prototypes. No inflated claims, no fake case studies.
-              </p>
-              <Link className="ai-btn ai-btn-outline" href="/about">
-                About us
-              </Link>
-            </div>
-            <div className="ai-about-rule" aria-hidden="true" />
-          </div>
-        </div>
-      </section>
-
-      {/* ── CTA ──────────────────────────────────────────────── */}
-      <section className="ai-cta-section" id="contact">
-        <div className="ai-section-inner">
-          <div className="ai-cta-inner">
-            <span className="ai-kicker">Get in touch</span>
-            <h2>Building something?</h2>
-            <p>
-              Available for custom builds, consultations and collaborations.
-              Website projects, AI tooling, Discord bots and hardware prototyping.
+      <section className="ax-section">
+        <div className="ax-container ax-split">
+          <Reveal>
+            <h2 className="ax-h2">Why people pick Atheus</h2>
+            <p className="ax-lead">
+              Whether you need a website or a product platform, the standard stays the
+              same: intentional, fast, and hard to ignore.
             </p>
-            <Link className="ai-btn ai-btn-primary" href="/contact">
-              Contact us
-            </Link>
+          </Reveal>
+          <Reveal delayMs={60}>
+            <ul className="ax-value-list">
+              {values.map((value) => (
+                <li key={value.title}>
+                  <strong>{value.title}</strong>
+                  <span>{value.body}</span>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="ax-section" style={{ paddingTop: 0 }}>
+        <div className="ax-container">
+          <Reveal className="ax-section-head">
+            <h2 className="ax-h2">Also shipping</h2>
+            <p className="ax-lead">
+              A growing product suite beside Sites. Same engineering bar.
+            </p>
+          </Reveal>
+          <div className="ax-product-grid">
+            {suite.map((product, index) => (
+              <Reveal key={product.slug} delayMs={index * 50}>
+                <MotionProductCard product={product} />
+              </Reveal>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ── Footer ───────────────────────────────────────────── */}
-      <footer className="ai-footer">
-        <div className="ai-footer-inner">
-          <div className="ai-footer-brand">
-            <Link className="ai-brand" href="/">
-              <span aria-hidden="true">AI</span>
-              <strong>Atheus Industries</strong>
-            </Link>
-            <p>Engineering intelligent systems across web, AI and robotics.</p>
-          </div>
-          <nav aria-label="Studio navigation">
-            <p>Studio</p>
-            <Link href="/about">About</Link>
-            <Link href="/services">Services</Link>
-            <Link href="/projects">Projects</Link>
-            <Link href="/contact">Contact</Link>
-          </nav>
-          <nav aria-label="Platform navigation">
-            <p>Platform</p>
-            <Link href="/admin">League Dashboard</Link>
-          </nav>
-          <small>© Atheus Industries 2026</small>
-        </div>
-      </footer>
-    </div>
+      <WowCta
+        title="Ready to make people say wow?"
+        lead="Send a short brief. Business name, what you sell, and any links you already have. We will reply with a clear next step."
+        primary={{ href: "/contact", label: "Request a quote" }}
+        secondary={{ href: "/products/sites", label: "View Sites" }}
+      />
+    </MarketingShell>
   );
 }

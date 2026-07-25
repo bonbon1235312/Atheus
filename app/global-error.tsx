@@ -86,7 +86,7 @@ export default function GlobalError({
               Return home
             </Link>
             <a
-              href="mailto:nicholsone140@gmail.com"
+              href="mailto:hello@atheus.dev"
               style={{
                 padding: "0.5rem 1.25rem",
                 border: "1px solid rgba(12,17,24,0.18)",

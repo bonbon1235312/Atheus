@@ -1,0 +1,39 @@
+.demo-badge {
+  position: fixed;
+  z-index: 80;
+  left: 50%;
+  bottom: 1rem;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  padding: 0.55rem 0.75rem 0.55rem 0.95rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(8, 9, 12, 0.82);
+  backdrop-filter: blur(16px);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.78rem;
+  white-space: nowrap;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+}
+
+.demo-badge strong {
+  color: #fff;
+  font-weight: 600;
+}
+
+.demo-badge a {
+  color: #e8a23a;
+  font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .demo-badge {
+    left: 1rem;
+    right: 1rem;
+    transform: none;
+    justify-content: space-between;
+    white-space: normal;
+  }
+}

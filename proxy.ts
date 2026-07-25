@@ -2,10 +2,23 @@ import { type NextRequest, NextResponse } from "next/server";
 
 import {
   atheusRootDomain,
+  demoSlugFromHostname,
   leagueSlugFromHostname,
 } from "@/lib/public-url";
+import { isDemoSiteSlug } from "@/lib/demo-sites";
 
 const PUBLIC_FILE = /\.[a-z0-9]+$/i;
+
+function isPassthroughPath(pathname: string) {
+  return (
+    pathname.startsWith("/api/") ||
+    pathname.startsWith("/_next/") ||
+    pathname === "/favicon.ico" ||
+    pathname === "/robots.txt" ||
+    pathname === "/sitemap.xml" ||
+    PUBLIC_FILE.test(pathname)
+  );
+}
 
 export function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -14,6 +27,26 @@ export function proxy(request: NextRequest) {
     request.headers.get("x-forwarded-host") ||
     request.nextUrl.hostname;
   const normalizedHostname = requestHostname.split(":")[0].toLowerCase();
+  const demoSlug = demoSlugFromHostname(normalizedHostname);
+
+  if (demoSlug) {
+    if (isPassthroughPath(pathname)) {
+      return NextResponse.next();
+    }
+
+    const internalRoot = `/demos/${demoSlug}`;
+    if (pathname === internalRoot || pathname.startsWith(`${internalRoot}/`)) {
+      const destination = request.nextUrl.clone();
+      destination.pathname = pathname.slice(internalRoot.length) || "/";
+      return NextResponse.redirect(destination);
+    }
+
+    const destination = request.nextUrl.clone();
+    destination.pathname =
+      pathname === "/" ? internalRoot : `${internalRoot}${pathname}`;
+    return NextResponse.rewrite(destination);
+  }
+
   const slug = leagueSlugFromHostname(normalizedHostname);
 
   if (slug) {
@@ -40,14 +73,7 @@ export function proxy(request: NextRequest) {
       return NextResponse.redirect(destination);
     }
 
-    if (
-      pathname.startsWith("/api/") ||
-      pathname.startsWith("/_next/") ||
-      pathname === "/favicon.ico" ||
-      pathname === "/robots.txt" ||
-      pathname === "/sitemap.xml" ||
-      PUBLIC_FILE.test(pathname)
-    ) {
+    if (isPassthroughPath(pathname)) {
       return NextResponse.next();
     }
 
@@ -71,6 +97,17 @@ export function proxy(request: NextRequest) {
       const destination = request.nextUrl.clone();
       destination.pathname = "/admin";
       destination.search = "";
+      return NextResponse.redirect(destination);
+    }
+
+    const demoPathMatch = pathname.match(
+      /^\/demos\/([a-z0-9]+(?:-[a-z0-9]+)*)(\/.*)?$/,
+    );
+    if (demoPathMatch && isDemoSiteSlug(demoPathMatch[1]!)) {
+      const [, publicSlug, suffix = ""] = demoPathMatch;
+      const destination = request.nextUrl.clone();
+      destination.hostname = `${publicSlug}.${atheusRootDomain()}`;
+      destination.pathname = suffix || "/";
       return NextResponse.redirect(destination);
     }
   }

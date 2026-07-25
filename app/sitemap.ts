@@ -1,17 +1,44 @@
 import type { MetadataRoute } from "next";
 
+import { products } from "@/lib/products";
 import { leaguePublicUrl } from "@/lib/public-url";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.AUTH_URL ?? "http://localhost:3000";
+  const now = new Date();
+
   const entries: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
-      lastModified: new Date(),
+      lastModified: now,
       changeFrequency: "weekly",
       priority: 1,
     },
+    {
+      url: `${baseUrl}/products`,
+      lastModified: now,
+      changeFrequency: "weekly",
+      priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/about`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    {
+      url: `${baseUrl}/contact`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.7,
+    },
+    ...products.map((product) => ({
+      url: `${baseUrl}/products/${product.slug}`,
+      lastModified: now,
+      changeFrequency: "weekly" as const,
+      priority: 0.85,
+    })),
   ];
 
   try {
@@ -50,7 +77,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       );
     }
   } catch {
-    // Keep the root sitemap available before deployment environment setup.
+    // Keep the marketing sitemap available before deployment environment setup.
   }
 
   return entries;

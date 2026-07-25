@@ -105,3 +105,16 @@ league creation and league-site credential rotation. Operational controls live a
 `<league>.atheus.dev/admin` and require that league's separate site username and
 password. Tenant sessions are bound to one league and cannot access another
 league's control room.
+
+## Sites demo subdomains
+
+The Sites product ships three live demo brands on reserved subdomains (same
+`*.atheus.dev` wildcard):
+
+- `https://hearth-co.atheus.dev` — cafe
+- `https://rivermark.atheus.dev` — architecture studio
+- `https://atelier.atheus.dev` — design agency
+
+Locally open `/demos/hearth-co`, `/demos/rivermark`, or `/demos/atelier`. On the
+apex domain those paths redirect to the matching subdomain. Demo slugs are
+reserved and cannot be claimed as league tenants.

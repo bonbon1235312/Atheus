@@ -5,6 +5,9 @@
   --muted: #616873;
   --accent: #156ee8;
   --accent-dark: #0c53b7;
+  --font-display: var(--font-geist-sans), system-ui, sans-serif;
+  --font-body: var(--font-geist-sans), system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 }
 
 * {
@@ -28,13 +31,16 @@ body:has(.landing-shell) {
   background: #10111a;
 }
 
-body:has(.ai-page) {
-  background:
-    linear-gradient(rgba(255, 255, 255, 0.014) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.014) 1px, transparent 1px),
-    #09090b;
-  background-size: 64px 64px;
-  background-attachment: fixed;
+body:has(.ax-page) {
+  background: #07080a;
+  color: #f5f6f8;
+}
+
+body:has(.hc-root),
+body:has(.rm-root),
+body:has(.at-root) {
+  background: #0a0a0b;
+  color: #f5f6f8;
 }
 
 a {

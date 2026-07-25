@@ -1,27 +1,46 @@
+import { GeistMono } from "geist/font/mono";
+import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
-import { Barlow_Condensed, Manrope } from "next/font/google";
+import { Instrument_Serif } from "next/font/google";
 
 import "./globals.css";
-import "./ai-studio.css";
+import "./marketing.css";
 
-const display = Barlow_Condensed({
-  variable: "--font-display",
+const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
-  weight: ["500", "600", "700"],
-});
-
-const body = Manrope({
-  variable: "--font-body",
-  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  display: "swap",
+  variable: "--font-instrument-serif",
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "Atheus Industries",
-    template: "%s | Atheus Industries",
+    default: "Atheus",
+    template: "%s | Atheus",
   },
   description:
-    "Engineering intelligent systems across web, AI and robotics. An early-stage technology studio building websites, automation tools, AI systems and hardware prototypes.",
+    "Atheus builds premium SaaS products and fully custom websites. From £600 for small business sites.",
+  metadataBase: new URL(process.env.AUTH_URL ?? "https://atheus.dev"),
+  icons: {
+    icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
+  },
+  openGraph: {
+    title: "Atheus",
+    description:
+      "Custom websites from £600. SaaS products and automation platforms built with serious craft.",
+    url: "/",
+    siteName: "Atheus",
+    type: "website",
+    images: [{ url: "/brand/og-default.png", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Atheus",
+    description:
+      "Custom websites from £600. SaaS products and automation platforms built with serious craft.",
+    images: ["/brand/og-default.png"],
+  },
 };
 
 export default function RootLayout({
@@ -30,8 +49,11 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${display.variable} ${body.variable}`}>{children}</body>
+    <html
+      lang="en"
+      className={`${GeistSans.variable} ${GeistMono.variable} ${instrumentSerif.variable}`}
+    >
+      <body>{children}</body>
     </html>
   );
 }

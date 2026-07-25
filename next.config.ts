@@ -4,6 +4,28 @@ import { withSentryConfig } from "@sentry/nextjs";
 const nextConfig: NextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
+  },
+  async redirects() {
+    return [
+      {
+        source: "/services",
+        destination: "/products",
+        permanent: true,
+      },
+      {
+        source: "/projects",
+        destination: "/products",
+        permanent: true,
+      },
+    ];
+  },
 };
 
 export default withSentryConfig(nextConfig, {
