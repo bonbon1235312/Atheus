@@ -1,0 +1,147 @@
+.demo-intro {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+  padding: clamp(1.2rem, 2.6vw, 2.5rem);
+  clip-path: inset(0 0 0 0);
+  color: var(--intro-ink);
+  background: var(--intro-bg);
+}
+.demo-intro--hearth {
+  --intro-bg: #1b120d;
+  --intro-ink: #e9d7bd;
+  --intro-accent: #c48a4a;
+  --intro-rule: rgba(233, 215, 189, 0.3);
+  font-family: var(--font-demo-dm-sans), sans-serif;
+  background-image: radial-gradient(ellipse at 50% 62%, #352114 0, #1b120d 65%);
+}
+.demo-intro--ridgeway {
+  --intro-bg: #222b2c;
+  --intro-ink: #f1efe7;
+  --intro-accent: #c9a14b;
+  --intro-rule: rgba(241, 239, 231, 0.3);
+  font-family: var(--font-demo-ibm-sans), sans-serif;
+}
+.demo-intro--northline {
+  --intro-bg: #eef3f9;
+  --intro-ink: #0e1a28;
+  --intro-accent: #0a5cff;
+  --intro-rule: rgba(14, 26, 40, 0.3);
+  font-family: var(--font-demo-outfit), sans-serif;
+  background-image: radial-gradient(#bdd0ed 0.7px, transparent 0.7px);
+  background-size: 24px 24px;
+}
+.demo-intro-top,
+.demo-intro-bottom {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--font-demo-ibm-mono), ui-monospace, monospace;
+  font-size: clamp(0.55rem, 0.75vw, 0.75rem);
+  font-weight: 600;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+.demo-intro-top { border-bottom: 1px solid var(--intro-rule); padding-bottom: 0.9rem; }
+.demo-intro-bottom { border-top: 1px solid var(--intro-rule); padding-top: 0.9rem; }
+.demo-intro-bottom span:last-child { color: var(--intro-accent); }
+.demo-intro-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: 1;
+  min-height: 0;
+}
+.demo-intro-glyph {
+  display: grid;
+  width: fit-content;
+  font-family: var(--font-demo-ibm-mono), ui-monospace, monospace;
+  font-size: clamp(7px, min(1.05vw, 1.7vh), 16px);
+  line-height: 1.13;
+  white-space: pre;
+  color: var(--intro-accent);
+  opacity: 0.83;
+}
+.demo-intro--hearth .demo-intro-glyph { color: #a98158; }
+.demo-intro--ridgeway .demo-intro-glyph { color: #d4b061; }
+.demo-intro--northline .demo-intro-glyph { color: #367be9; }
+.demo-intro-glyph span:nth-child(5n) { opacity: 0.55; }
+.demo-intro-title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 9%;
+  width: 100%;
+  opacity: 0;
+  color: var(--intro-ink);
+  text-align: center;
+  line-height: 1;
+}
+.demo-intro--hearth .demo-intro-title {
+  font-family: var(--font-demo-fraunces), Georgia, serif;
+  font-size: clamp(2rem, 5vw, 5rem);
+  letter-spacing: -0.07em;
+}
+.demo-intro--ridgeway .demo-intro-title {
+  font-family: var(--font-demo-oswald), Impact, sans-serif;
+  font-size: clamp(2.2rem, 5.4vw, 5.4rem);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+.demo-intro--northline .demo-intro-title {
+  font-family: var(--font-demo-outfit), sans-serif;
+  font-size: clamp(2.2rem, 6vw, 6rem);
+  font-weight: 700;
+  letter-spacing: -0.07em;
+}
+.demo-intro-scan {
+  position: absolute;
+  z-index: 1;
+  top: 15%;
+  left: 2.5%;
+  right: 2.5%;
+  height: 1px;
+  opacity: 0;
+  background: var(--intro-accent);
+  box-shadow: 0 0 24px var(--intro-accent);
+  pointer-events: none;
+}
+.demo-intro--hearth .demo-intro-scan { display: none; }
+.demo-intro--ridgeway .demo-intro-scan { height: 2px; box-shadow: none; }
+.demo-intro-active .hc-hero-copy h1,
+.demo-intro-active .hc-hero-copy p,
+.demo-intro-active .hc-hero-copy .hc-btn,
+.demo-intro-active .rw-hero-copy .rw-eyebrow,
+.demo-intro-active .rw-hero-copy h1,
+.demo-intro-active .rw-hero-aside > p,
+.demo-intro-active .rw-hero-actions,
+.demo-intro-active .nl-hero-copy h1,
+.demo-intro-active .nl-hero-copy p,
+.demo-intro-active .nl-hero-copy .nl-btn,
+.demo-intro-active .nl-hero-emergency { opacity: 0; }
+@media (max-width: 600px) {
+  .demo-intro-top span:last-child { display: none; }
+  .demo-intro-glyph { font-size: min(1.95vw, 7.5px); }
+  .demo-intro-title { bottom: 17%; }
+  .demo-intro--ridgeway .demo-intro-title { font-size: clamp(1.6rem, 7vw, 2rem); white-space: nowrap; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .demo-intro { display: none; }
+  .demo-intro-active .hc-hero-copy h1,
+  .demo-intro-active .hc-hero-copy p,
+  .demo-intro-active .hc-hero-copy .hc-btn,
+  .demo-intro-active .rw-hero-copy .rw-eyebrow,
+  .demo-intro-active .rw-hero-copy h1,
+  .demo-intro-active .rw-hero-aside > p,
+  .demo-intro-active .rw-hero-actions,
+  .demo-intro-active .nl-hero-copy h1,
+  .demo-intro-active .nl-hero-copy p,
+  .demo-intro-active .nl-hero-copy .nl-btn,
+  .demo-intro-active .nl-hero-emergency { opacity: 1; }
+}

@@ -1,99 +1,62 @@
 import type { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
 
-import { AboutHero } from "@/components/marketing/about-hero";
-import { BeliefStack } from "@/components/marketing/belief-stack";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
-import { SpotlightCard } from "@/components/marketing/motion-primitives";
-import { WowCta } from "@/components/marketing/process-rail";
-import { Reveal } from "@/components/marketing/reveal";
 
 export const metadata: Metadata = {
-  title: "About",
-  description:
-    "Atheus is a technology company building premium SaaS products, automation platforms, and developer tools.",
+  title: "Studio",
+  description: "Meet Atheus, an independent digital studio making custom websites and useful software with design and engineering in one practice.",
 };
 
 const principles = [
-  {
-    title: "Parent company, focused products",
-    body: "Atheus is not a single app. It is the company behind a suite of operational tools that share the same engineering bar.",
-  },
-  {
-    title: "Automation with judgment",
-    body: "We automate collection, scheduling, and access checks. People keep the decisions that need context.",
-  },
-  {
-    title: "Operator-first interfaces",
-    body: "Admin software should stay calm under weekly pressure. Clarity beats feature count.",
-  },
-  {
-    title: "Serious architecture",
-    body: "Tenancy, credentials, failure modes, and data ownership are product decisions, not afterthoughts.",
-  },
+  { number: "01", title: "Start with the story", body: "A design only works when it sounds and feels like the business behind it." },
+  { number: "02", title: "Make every detail earn its place", body: "Type, movement, content, and code should all help people understand and act." },
+  { number: "03", title: "Build for real life", body: "The site has to be fast on a phone, clear to use, and easy to grow after launch." },
 ] as const;
 
 export default function AboutPage() {
   return (
-    <MarketingShell>
-      <AboutHero />
-
-      <BeliefStack
-        lines={[
-          "Software should feel inevitable.",
-          "Automation belongs where judgment does not.",
-          "Operators deserve calm interfaces.",
-          "Craft is a product decision.",
-        ]}
-      />
-
-      <section className="ax-section" style={{ paddingTop: 0 }}>
-        <div className="ax-container ax-about-stack">
-          <Reveal as="article" className="ax-about-block">
-            <h2 className="ax-h2">What we build</h2>
-            <p className="ax-body">
-              We design and ship SaaS products, automation platforms, developer tools,
-              and fully custom websites. The common thread is removing repetitive work
-              and shipping interfaces that feel intentional.
-            </p>
-          </Reveal>
-
-          <Reveal as="article" className="ax-about-block">
-            <h2 className="ax-h2">How we work</h2>
-            <p className="ax-body">
-              Small surface area. Strong defaults. Explicit trade-offs. We prefer
-              systems that operators can understand in one sitting over platforms that
-              require a training programme.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="ax-section">
+    <MarketingShell variant="agency">
+      <section className="agency-subhero agency-about-hero">
         <div className="ax-container">
-          <Reveal className="ax-section-head">
-            <h2 className="ax-h2">Principles</h2>
-          </Reveal>
-          <div className="ax-feature-grid">
-            {principles.map((item, index) => (
-              <Reveal key={item.title} delayMs={index * 50} as="article">
-                <SpotlightCard>
-                  <div className="ax-feature">
-                    <h3 className="ax-h3">{item.title}</h3>
-                    <p>{item.body}</p>
-                  </div>
-                </SpotlightCard>
-              </Reveal>
-            ))}
+          <div className="agency-section-label"><span>Studio / Atheus</span><span>Design meets engineering</span></div>
+          <div className="agency-subhero-grid">
+            <h1>Built with intent.<br /><em>Made to matter.</em></h1>
+            <p>Atheus is an independent digital practice creating custom websites and software. We believe the best work has a point of view and a purpose.</p>
+          </div>
+          <div className="agency-about-gallery" aria-label="Examples of Atheus digital work">
+            <Image src="/brand/sites-hearth.jpg" alt="Hearth & Co website concept" width={1100} height={740} sizes="(max-width: 760px) 100vw, 60vw" priority />
+            <Image src="/brand/northline-hero.jpg" alt="Northline Electrical website concept" width={700} height={740} sizes="(max-width: 760px) 45vw, 35vw" />
           </div>
         </div>
       </section>
-
-      <WowCta
-        title="Work with us"
-        lead="Product access, collaboration, or a custom website. Start with a short brief."
-        primary={{ href: "/contact", label: "Contact" }}
-        secondary={{ href: "/products", label: "View products" }}
-      />
+      <section className="agency-services">
+        <div className="ax-container">
+          <div className="agency-section-label"><span>01 / How we think</span><span>Principles before decoration</span></div>
+          <div className="agency-services-grid">
+            <div><h2>Good work starts with <em>curiosity.</em></h2><p className="agency-services-intro">We ask what the business needs people to feel, understand, and do. Then we make choices that serve that answer.</p></div>
+            <div className="agency-service-list">
+              {principles.map((item) => (
+                <div className="agency-service" key={item.number}><span>{item.number}</span><div><h3>{item.title}</h3><p>{item.body}</p></div><span aria-hidden="true">↗</span></div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className="agency-manifesto">
+        <div className="ax-container">
+          <div className="agency-section-label"><span>02 / More than websites</span></div>
+          <h2>Design the experience.<br /><em>Engineer the reality.</em></h2>
+          <div className="agency-manifesto-bottom"><span className="agency-asterisk" aria-hidden="true">✳</span><p>Alongside sites, Atheus builds products for real operational work. The same care runs through both.</p></div>
+        </div>
+      </section>
+      <section className="agency-offer">
+        <div className="ax-container agency-offer-grid">
+          <div><div className="agency-section-label"><span>03 / Work together</span></div><h2>Have something in mind?</h2></div>
+          <div className="agency-offer-aside"><p>Tell us about the idea, the people it serves, and where you want it to go.</p><Link className="agency-btn" href="/contact">Start a project <span aria-hidden="true">↗</span></Link></div>
+        </div>
+      </section>
     </MarketingShell>
   );
 }

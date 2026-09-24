@@ -1,48 +1,17 @@
-# Atheus — Design System
+# Atheus design direction
 
-## Direction
-Premium dark engineering brand. Near-black canvas, cool zinc neutrals, one amber signal accent. Feels closer to Linear / Vercel / Resend in quality, not imitation.
+## Studio marketing
 
-## Theme
-Dark only for the company marketing site. Scene: a technical founder evaluating Atheus late at night on a laptop. Sharp, quiet, high contrast.
+The public marketing site presents Atheus as an independent digital studio. It uses an editorial layout rather than a SaaS card grid: generous space, large type, direct language, and working concept sites as the main visual proof.
 
-## Colour
-| Token | Value | Use |
-|-------|-------|-----|
-| Background | `#0b0c0e` | Page |
-| Elevated | `#121418` | Surfaces |
-| Text | `#f4f5f7` | Primary type |
-| Muted | `#9aa3b2` | Body |
-| Dim | `#6b7380` | Meta |
-| Accent | `#e8a23a` | CTA, signal, sparse highlights |
-| Accent ink | `#140e05` | Text on accent buttons |
-| Success | `#3dba84` | Live status |
+The warm paper surface (`#f2f0e9`) and charcoal ink (`#22221f`) carry the studio pages. Persimmon (`#e2512d`) is used for large display accents; smaller interactive text uses a darker shade for contrast. The Work and pricing sections use charcoal to change pace without changing the visual identity. Content sits in `app/agency.css` and the shared marketing shell.
 
-Accent usage stays under ~10% of the surface.
+Geist Sans carries the large structural type, Instrument Serif gives selected words a human counterpoint, and Geist Mono is reserved for section indexes and project metadata. Borders are mostly straight, with almost no card elevation. Motion follows the page narrative: an Anime.js timeline builds the opening A from small, changing lines of Atheus text, brings in the wordmark, and pulls the dark screen away. The home headline then enters in sequence, the project gallery opens with a masked reveal and subtle scroll movement, work and service details appear as they enter view, and fine progress indicators give the long page a sense of place. This takes cues from Sui's cinematic pacing and scroll-led storytelling while retaining Atheus's own palette and typography. The motion layer is progressive enhancement and respects reduced-motion preferences.
 
-## Typography
-- Display / body: **Sora** (`--font-display`, `--font-body`)
-- Mono (sparse labels only): **JetBrains Mono** (`--font-mono`)
-- Large confident headings, comfortable reading widths (~62ch body)
+The homepage and the Work, Websites, Products, Studio, Contact, Upgrade, and 404 routes share this system. The Work page clearly labels its examples as **concept sites**. Website prices are sourced from `lib/products.ts`.
 
-## Shape
-- Interactive radius: `10px`
-- Surface radius: `14px`
-- Borders: `rgba(255,255,255,0.08)` hairlines
-- Elevation via border + soft tinted shadow, not heavy multi-layer glow
+## Product and league interfaces
 
-## Motion
-Subtle only: hero grid drift, bar entrance, card hover lift, sticky header border. Honor `prefers-reduced-motion`.
+Admin tools, public league pages, and individual demo sites keep their own visual systems. Their styles live outside `app/agency.css` and should follow their own audience and workflow.
 
-## Components
-Marketing primitives live in `components/marketing/` and `app/marketing.css`:
-- Shell, header, footer
-- Buttons, badges, product cards
-- FAQ accordion, CTA band, tech chips
-
-## Product pages
-Shared template at `app/products/[slug]/page.tsx` driven by `lib/products.ts`.
-Add a product by extending the catalog array.
-
-## Out of scope for this system
-Admin workspace and public league sites keep their existing visual systems (`globals.css`, `public.css`).
+The concept sites have different motion budgets. Hearth & Co builds a cup from warm café text and settles its photography slowly. Ridgeway Civils briefly assembles an excavator from site text, then opens into direct project imagery, restrained typography and static accreditation details so buyers can assess the work quickly. Northline Electrical keeps its text-built bolt, then uses a small callout pulse, a precise hero line and animated service changes to feel responsive. Reduced-motion preferences skip the openings and leave content readable.

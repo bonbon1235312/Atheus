@@ -111,10 +111,10 @@ league's control room.
 The Sites product ships three live demo brands on reserved subdomains (same
 `*.atheus.dev` wildcard):
 
-- `https://hearth-co.atheus.dev` — cafe
-- `https://rivermark.atheus.dev` — architecture studio
-- `https://atelier.atheus.dev` — design agency
+- `https://ridgeway.atheus.dev` - construction / civils
+- `https://northline.atheus.dev` - electrical contractor
+- `https://hearth-co.atheus.dev` - cafe
 
-Locally open `/demos/hearth-co`, `/demos/rivermark`, or `/demos/atelier`. On the
+Locally open `/demos/ridgeway`, `/demos/northline`, or `/demos/hearth-co`. On the
 apex domain those paths redirect to the matching subdomain. Demo slugs are
 reserved and cannot be claimed as league tenants.

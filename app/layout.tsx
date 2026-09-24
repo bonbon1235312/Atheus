@@ -5,6 +5,7 @@ import { Instrument_Serif } from "next/font/google";
 
 import "./globals.css";
 import "./marketing.css";
+import "./agency.css";
 
 const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
@@ -20,7 +21,7 @@ export const metadata: Metadata = {
     template: "%s | Atheus",
   },
   description:
-    "Atheus builds premium SaaS products and fully custom websites. From £600 for small business sites.",
+    "Atheus is an independent digital studio creating distinctive websites and useful software. Custom business websites start at £600.",
   metadataBase: new URL(process.env.AUTH_URL ?? "https://atheus.dev"),
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
@@ -28,7 +29,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Atheus",
     description:
-      "Custom websites from £600. SaaS products and automation platforms built with serious craft.",
+      "Distinctive custom websites and useful software by Atheus. Business websites start at £600.",
     url: "/",
     siteName: "Atheus",
     type: "website",
@@ -38,7 +39,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Atheus",
     description:
-      "Custom websites from £600. SaaS products and automation platforms built with serious craft.",
+      "Distinctive custom websites and useful software by Atheus. Business websites start at £600.",
     images: ["/brand/og-default.png"],
   },
 };

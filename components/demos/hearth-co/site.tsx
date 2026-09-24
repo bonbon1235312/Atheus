@@ -2,21 +2,18 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { DemoBadge } from "@/components/demos/demo-badge";
+import { DemoIntro } from "@/components/demos/demo-intro";
+import { MenuBoard } from "@/components/demos/hearth-co/menu-board";
+import { TableBooking } from "@/components/demos/hearth-co/table-booking";
 
 import "@/components/demos/demo-badge.css";
 import "./hearth.css";
-
-const menu = [
-  { name: "House Espresso", detail: "Chocolate · hazelnut · long finish", price: "£3.40" },
-  { name: "Oat Flat White", detail: "Silky, balanced, everyday favourite", price: "£3.80" },
-  { name: "Batch Brew", detail: "Rotating single origin", price: "£3.20" },
-  { name: "Seasonal Pour Over", detail: "Ask for today's roast", price: "£4.20" },
-];
 
 export function HearthCoSite() {
   return (
     <div className="hc-root">
       <DemoBadge brand="Hearth & Co" />
+      <DemoIntro brand="hearth" />
 
       <header className="hc-nav">
         <Link className="hc-brand" href="#top">
@@ -24,13 +21,12 @@ export function HearthCoSite() {
         </Link>
         <nav aria-label="Primary">
           <a href="#menu">Menu</a>
+          <a href="#book">Book</a>
           <a href="#about">About</a>
-          <a href="#journal">Journal</a>
-          <a href="#visit">Location</a>
-          <a href="#visit">Hours</a>
+          <a href="#visit">Visit</a>
         </nav>
-        <a className="hc-nav-cta" href="#menu">
-          Order Ahead
+        <a className="hc-nav-cta" href="#book">
+          Book a table
         </a>
       </header>
 
@@ -48,44 +44,44 @@ export function HearthCoSite() {
           <div className="hc-hero-copy">
             <h1>Coffee worth the walk.</h1>
             <p>
-              Thoughtfully sourced beans, expertly brewed, and served in a space that
-              feels like home.
+              Thoughtfully sourced beans, expertly brewed, in a room that feels
+              like home.
             </p>
             <a className="hc-btn" href="#menu">
-              View Menu <span aria-hidden="true">→</span>
+              View menu
             </a>
           </div>
           <ul className="hc-hero-bar">
-            <li>Quality Ingredients</li>
-            <li>Expertly Brewed</li>
-            <li>Local &amp; Independent</li>
-            <li>Community Focused</li>
+            <li>Open daily 7:30-16:00</li>
+            <li>Colombia this month</li>
+            <li>House espresso</li>
+            <li>14 Grove Street</li>
           </ul>
         </section>
 
         <section className="hc-section" id="menu">
-          <div className="hc-wrap hc-split">
-            <div>
-              <p className="hc-kicker">Menu</p>
-              <h2>Brewed for slow mornings and sharp afternoons.</h2>
-            </div>
-            <ul className="hc-menu">
-              {menu.map((item) => (
-                <li key={item.name}>
-                  <div>
-                    <strong>{item.name}</strong>
-                    <span>{item.detail}</span>
-                  </div>
-                  <em>{item.price}</em>
-                </li>
-              ))}
-            </ul>
+          <div className="hc-wrap">
+            <h2 data-demo-reveal>Menu</h2>
+            <p className="hc-lead">
+              Coffee, food, and pastry. Filter it while you wait.
+            </p>
+            <MenuBoard />
+          </div>
+        </section>
+
+        <section className="hc-section hc-book-section" id="book">
+          <div className="hc-wrap">
+            <h2 data-demo-reveal>Book a table</h2>
+            <p className="hc-lead">
+              Pick a day, a party size, and a time. We hold it until you arrive.
+            </p>
+            <TableBooking />
           </div>
         </section>
 
         <section className="hc-section hc-about" id="about">
           <div className="hc-wrap hc-about-grid">
-            <div className="hc-about-media">
+            <div className="hc-about-media" data-demo-reveal>
               <Image
                 src="/brand/hearth-about.jpg"
                 alt="Freshly pulled espresso in a ceramic cup"
@@ -94,44 +90,20 @@ export function HearthCoSite() {
               />
             </div>
             <div>
-              <p className="hc-kicker">About</p>
-              <h2>A neighbourhood room with city standards.</h2>
+              <h2 data-demo-reveal>A neighbourhood room with city standards.</h2>
               <p>
-                Hearth &amp; Co started as a morning ritual and became a place people
-                stay. We roast light for clarity, milk drinks for balance, and keep the
-                room quiet enough to think.
+                Hearth &amp; Co started as a morning ritual and became a place
+                people stay. We roast light for clarity, milk drinks for
+                balance, and keep the room quiet enough to think.
               </p>
             </div>
           </div>
         </section>
 
-        <section className="hc-section" id="journal">
-          <div className="hc-wrap">
-            <p className="hc-kicker">Journal</p>
-            <h2 className="hc-journal-title">Notes from the bar</h2>
-            <div className="hc-journal-grid">
-              <article>
-                <strong>Why we switched origins this month</strong>
-                <p>A brighter Colombia lot for pour overs, and a steadier house espresso.</p>
-              </article>
-              <article>
-                <strong>Weekend pastry rotation</strong>
-                <p>Almond croissant returns on Saturdays. Cardamom bun stays all week.</p>
-              </article>
-            </div>
-          </div>
-        </section>
-
         <section className="hc-section hc-visit" id="visit">
-          <div className="hc-wrap hc-visit-grid">
-            <div>
-              <p className="hc-kicker">Visit</p>
-              <h2>Find us on the corner.</h2>
-              <p>14 Grove Street · Open daily 7:30–16:00</p>
-            </div>
-            <a className="hc-btn" href="mailto:hello@hearthandco.example">
-              Say hello <span aria-hidden="true">→</span>
-            </a>
+          <div className="hc-wrap">
+            <h2 data-demo-reveal>14 Grove Street</h2>
+            <p>Open daily 7:30-16:00. Last seating 14:30.</p>
           </div>
         </section>
       </main>

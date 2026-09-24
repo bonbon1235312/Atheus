@@ -1,4 +1,11 @@
-import { Cormorant_Garamond, DM_Sans, Fraunces, Newsreader } from "next/font/google";
+import {
+  DM_Sans,
+  Fraunces,
+  IBM_Plex_Mono,
+  IBM_Plex_Sans,
+  Oswald,
+  Outfit,
+} from "next/font/google";
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
@@ -16,16 +23,31 @@ const dmSans = DM_Sans({
   display: "swap",
 });
 
-const newsreader = Newsreader({
+const oswald = Oswald({
   subsets: ["latin"],
-  variable: "--font-demo-newsreader",
+  weight: ["500", "600", "700"],
+  variable: "--font-demo-oswald",
   display: "swap",
 });
 
-const cormorant = Cormorant_Garamond({
+const ibmSans = IBM_Plex_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600"],
-  variable: "--font-demo-cormorant",
+  variable: "--font-demo-ibm-sans",
+  display: "swap",
+});
+
+const ibmMono = IBM_Plex_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-demo-ibm-mono",
+  display: "swap",
+});
+
+const outfit = Outfit({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-demo-outfit",
   display: "swap",
 });
 
@@ -40,7 +62,7 @@ export default async function DemoLayout({ children, params }: Props) {
 
   return (
     <div
-      className={`${fraunces.variable} ${dmSans.variable} ${newsreader.variable} ${cormorant.variable}`}
+      className={`${fraunces.variable} ${dmSans.variable} ${oswald.variable} ${ibmSans.variable} ${ibmMono.variable} ${outfit.variable}`}
     >
       {children}
     </div>

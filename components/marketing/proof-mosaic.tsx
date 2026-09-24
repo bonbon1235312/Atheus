@@ -1,6 +1,3 @@
-"use client";
-
-import { motion, useReducedMotion } from "motion/react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -13,18 +10,18 @@ const tiles = [
     href: "/demos/hearth-co",
   },
   {
-    src: "/brand/sites-river.jpg",
-    label: "Rivermark Studio",
-    copy: "Editorial layouts that feel commissioned.",
+    src: "/brand/ridgeway-hero.jpg",
+    label: "Ridgeway Civils",
+    copy: "A contractor site that looks like the work.",
     span: "tall",
-    href: "/demos/rivermark",
+    href: "/demos/ridgeway",
   },
   {
-    src: "/brand/sites-showcase-2.jpg",
-    label: "Atelier",
-    copy: "Pricing and proof that convert.",
+    src: "/brand/northline-hero.jpg",
+    label: "Northline Electrical",
+    copy: "Bright, precise, and built to quote.",
     span: "base",
-    href: "/demos/atelier",
+    href: "/demos/northline",
   },
   {
     src: "/brand/league-product.png",
@@ -35,44 +32,23 @@ const tiles = [
   },
 ] as const;
 
-const ease = [0.22, 1, 0.36, 1] as const;
-
 export function ProofMosaic() {
-  const reduce = useReducedMotion();
-
   return (
     <section className="ax-section">
       <div className="ax-container">
         <div className="ax-section-head ax-section-head-center">
           <h2 className="ax-h2">Work that travels</h2>
           <p className="ax-lead">
-            Live demo sites on their own subdomains — open them and feel the craft.
+            Live demo sites on their own subdomains. Open them and judge the craft.
           </p>
         </div>
 
         <div className="ax-proof-mosaic">
-          {tiles.map((tile, index) => (
-            <motion.figure
+          {tiles.map((tile) => (
+            <figure
               key={tile.label}
               className="ax-proof-tile"
               data-span={tile.span}
-              initial={
-                reduce
-                  ? false
-                  : {
-                      opacity: 0,
-                      y: 36,
-                      clipPath: "inset(18% 18% 18% 18% round 24px)",
-                    }
-              }
-              whileInView={{
-                opacity: 1,
-                y: 0,
-                clipPath: "inset(0% 0% 0% 0% round 24px)",
-              }}
-              viewport={{ once: true, amount: 0.35 }}
-              transition={{ duration: 0.85, ease, delay: index * 0.08 }}
-              whileHover={reduce ? undefined : { y: -6 }}
             >
               <Link className="ax-proof-tile-link" href={tile.href} aria-label={`Open ${tile.label}`}>
                 <div className="ax-bezel">
@@ -93,7 +69,7 @@ export function ProofMosaic() {
                 </strong>
                 <span>{tile.copy}</span>
               </figcaption>
-            </motion.figure>
+            </figure>
           ))}
         </div>
       </div>

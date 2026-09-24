@@ -3,17 +3,14 @@ import type { ReactNode } from "react";
 import { SiteFooter } from "./site-footer";
 import { SiteHeader } from "./site-header";
 import { SkipLink } from "./skip-link";
-import { ScrollProgress } from "./scroll-progress";
 
-export function MarketingShell({ children }: { children: ReactNode }) {
+export function MarketingShell({ children, variant }: { children: ReactNode; variant?: "agency" }) {
   return (
-    <div className="ax-page">
+    <div className={variant === "agency" ? "ax-page ax-page--agency" : "ax-page"}>
       <SkipLink />
-      <ScrollProgress />
       <div className="ax-atmosphere" aria-hidden="true">
         <div className="ax-atmosphere-glow ax-atmosphere-glow-a" />
         <div className="ax-atmosphere-glow ax-atmosphere-glow-b" />
-        <div className="ax-atmosphere-glow ax-atmosphere-glow-c" />
         <div className="ax-atmosphere-veil" />
         <div className="ax-atmosphere-grid" />
         <div className="ax-atmosphere-vignette" />

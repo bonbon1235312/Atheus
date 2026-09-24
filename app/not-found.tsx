@@ -4,21 +4,17 @@ import { MarketingShell } from "@/components/marketing/marketing-shell";
 
 export default function NotFound() {
   return (
-    <MarketingShell>
-      <section className="ax-page-hero">
+    <MarketingShell variant="agency">
+      <section className="agency-contact agency-not-found">
         <div className="ax-container">
-          <p className="ax-eyebrow">404</p>
-          <h1 className="ax-h1">Page not found</h1>
-          <p className="ax-lead">
-            That route does not exist. Head home or browse the product suite.
-          </p>
-          <div className="ax-hero-actions">
-            <Link className="ax-btn ax-btn-primary" href="/">
-              Home
-            </Link>
-            <Link className="ax-btn ax-btn-secondary" href="/products">
-              Products
-            </Link>
+          <div className="agency-section-label"><span>404 / Lost your way?</span></div>
+          <div className="agency-contact-intro">
+            <h1>Nothing here.<br /><em>Plenty elsewhere.</em></h1>
+            <p>That address does not lead to a page. Find your way back into the studio.</p>
+          </div>
+          <div className="agency-not-found-links">
+            <Link className="agency-btn" href="/">Back to home <span aria-hidden="true">↗</span></Link>
+            <Link className="agency-arrow-link" href="/demos">Explore the work <span aria-hidden="true">↗</span></Link>
           </div>
         </div>
       </section>

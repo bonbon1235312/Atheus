@@ -14,16 +14,16 @@ import { useRef } from "react";
 
 const shots = [
   {
-    src: "/brand/sites-river.jpg",
-    alt: "Custom architecture studio website example",
-    caption: "Rivermark Studio",
-    href: "/demos/rivermark",
+    src: "/brand/ridgeway-hero.jpg",
+    alt: "Ridgeway Civils construction website example",
+    caption: "Ridgeway Civils",
+    href: "/demos/ridgeway",
   },
   {
-    src: "/brand/sites-showcase-2.jpg",
-    alt: "Custom services and pricing website layout",
-    caption: "Atelier",
-    href: "/demos/atelier",
+    src: "/brand/northline-hero.jpg",
+    alt: "Northline Electrical contractor website example",
+    caption: "Northline Electrical",
+    href: "/demos/northline",
   },
   {
     src: "/brand/sites-hearth.jpg",
@@ -38,9 +38,10 @@ function StaticShowcase() {
     <section className="ax-section">
       <div className="ax-container">
         <div className="ax-section-head ax-section-head-center">
-          <h2 className="ax-h2">Built to look expensive</h2>
+          <h2 className="ax-h2">Live work, not mockups</h2>
           <p className="ax-lead">
-            Show someone your site and watch the room change. That is the bar.
+            Three demo sites, each on its own subdomain. This is the standard we
+            build to.
           </p>
         </div>
         <div className="ax-showcase-bento">
@@ -119,9 +120,9 @@ export function ScrollShowcase() {
       <div className="ax-scroll-showcase-sticky">
         <div className="ax-container">
           <div className="ax-section-head ax-section-head-center">
-            <h2 className="ax-h2">Built to look expensive</h2>
+            <h2 className="ax-h2">Live work, not mockups</h2>
             <p className="ax-lead">
-              Scroll through the craft. This is the standard we build to.
+              Scroll the deck. Each frame is a live demo, not a concept board.
             </p>
             <div className="ax-scroll-progress" aria-hidden="true">
               <motion.span style={{ width: bar }} />
@@ -166,7 +167,7 @@ function SlideFrame({
 }) {
   return (
     <Link
-      className="ax-bezel ax-bezel-glow"
+      className="ax-bezel"
       href={shot.href}
       aria-label={`Open live demo: ${shot.caption}`}
     >

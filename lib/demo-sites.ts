@@ -10,34 +10,34 @@ export type DemoSite = {
 
 export const DEMO_SITES: DemoSite[] = [
   {
+    slug: "ridgeway",
+    name: "Ridgeway Civils",
+    tagline: "Plant, ground, concrete.",
+    category: "Construction",
+    description:
+      "A stark civils contractor site: heavy type, high-contrast plant photography, and a tender path that feels like a real yard.",
+    accent: "#f5c400",
+    image: "/brand/ridgeway-hero.jpg",
+  },
+  {
+    slug: "northline",
+    name: "Northline Electrical",
+    tagline: "Commercial power. 24/7 call-out.",
+    category: "Trades",
+    description:
+      "A bright, precise contractor site with a service selector, a real quote questionnaire, and an emergency number you cannot miss.",
+    accent: "#0a5cff",
+    image: "/brand/northline-hero.jpg",
+  },
+  {
     slug: "hearth-co",
     name: "Hearth & Co",
     tagline: "Coffee worth the walk.",
     category: "Cafe",
     description:
-      "A warm neighbourhood cafe site — menu, hours, and atmosphere without looking templated.",
+      "A warm neighbourhood cafe site with a live filterable menu and a table booking calendar, built for a phone in a queue.",
     accent: "#c48a4a",
     image: "/brand/sites-hearth.jpg",
-  },
-  {
-    slug: "rivermark",
-    name: "Rivermark Studio",
-    tagline: "Spaces that earn silence.",
-    category: "Architecture",
-    description:
-      "An architecture studio site with editorial type, project gravity, and calm navigation.",
-    accent: "#d4a24c",
-    image: "/brand/sites-river.jpg",
-  },
-  {
-    slug: "atelier",
-    name: "Atelier",
-    tagline: "Strategic design. Real business impact.",
-    category: "Agency",
-    description:
-      "A design agency site with clear services, transparent pricing, and premium craft.",
-    accent: "#c9a46c",
-    image: "/brand/sites-showcase-2.jpg",
   },
 ];
 

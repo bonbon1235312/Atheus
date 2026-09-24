@@ -3,89 +3,51 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { MarketingShell } from "@/components/marketing/marketing-shell";
-import { WowCta } from "@/components/marketing/process-rail";
-import { Reveal } from "@/components/marketing/reveal";
 import { DEMO_SITES } from "@/lib/demo-sites";
 
 export const metadata: Metadata = {
-  title: "Demos",
-  description:
-    "Three full demo sites built to show range — a cafe, an architecture studio, and a design agency. Open them and judge the craft.",
-  // Matches the per-demo pages, which are already noindex: these are
-  // illustrative builds, not real clients competing in search.
-  robots: {
-    index: false,
-    follow: false,
-  },
+  title: "Work",
+  description: "Explore three fully working website concepts by Atheus: hospitality, construction, and electrical trades.",
 };
 
 export default function DemosPage() {
   return (
-    <MarketingShell>
-      <section className="ax-section">
+    <MarketingShell variant="agency">
+      <section className="agency-subhero">
         <div className="ax-container">
-          <Reveal className="ax-section-head">
-            <p className="ax-kicker-pill">Demo sites</p>
-            <h1 className="ax-h1">Three brands. One standard.</h1>
-            <p className="ax-lead">
-              Each demo is a complete site, not a screenshot. Different industry,
-              different voice, same engineering bar — open them and judge the craft
-              directly.
-            </p>
-          </Reveal>
-
-          <div className="ax-demo-index">
-            {DEMO_SITES.map((site, index) => (
-              <Reveal key={site.slug} delayMs={index * 70}>
-                <article className="ax-demo-row">
-                  <Link
-                    className="ax-demo-row-media"
-                    href={`/demos/${site.slug}`}
-                    aria-label={`Open the ${site.name} demo site`}
-                  >
-                    <div className="ax-bezel">
-                      <div className="ax-bezel-inner">
-                        <Image
-                          src={site.image}
-                          alt=""
-                          width={1400}
-                          height={900}
-                          sizes="(max-width: 900px) 100vw, 52vw"
-                        />
-                      </div>
-                    </div>
-                  </Link>
-
-                  <div className="ax-demo-row-copy">
-                    <span
-                      className="ax-demo-row-category"
-                      style={{ color: site.accent }}
-                    >
-                      {site.category}
-                    </span>
-                    <h2 className="ax-h2">{site.name}</h2>
-                    <p className="ax-demo-row-tagline">{site.tagline}</p>
-                    <p className="ax-lead">{site.description}</p>
-                    <Link
-                      className="ax-btn ax-btn-secondary"
-                      href={`/demos/${site.slug}`}
-                    >
-                      Open {site.name}
-                    </Link>
-                  </div>
-                </article>
-              </Reveal>
-            ))}
+          <div className="agency-section-label"><span>Work / Atheus Studio</span><span>Three working concepts</span></div>
+          <div className="agency-subhero-grid">
+            <h1>Proof is in<br /><em>the details.</em></h1>
+            <p>Different industries need different voices. These are full concept builds, made to show the range of what a custom site can be.</p>
           </div>
         </div>
       </section>
-
-      <WowCta
-        title="Want one of these for your business?"
-        lead="Send a short brief: business name, what you sell, and any links you already have. We will come back with a clear next step."
-        primary={{ href: "/contact", label: "Request a quote" }}
-        secondary={{ href: "/products/sites", label: "See Sites pricing" }}
-      />
+      <section className="agency-work agency-work--index" aria-label="Website concepts">
+        <div className="ax-container">
+          {DEMO_SITES.map((site, index) => (
+            <article className="agency-case" key={site.slug}>
+              <div className="agency-case-top">
+                <span>0{index + 1} / 03</span>
+                <span>{site.category} / Concept site</span>
+              </div>
+              <Link className="agency-case-image" href={`/demos/${site.slug}`} aria-label={`Explore the ${site.name} concept`}>
+                <Image src={site.image} alt={`${site.name} website concept`} width={1700} height={950} sizes="(max-width: 760px) 100vw, 85vw" priority={index === 0} />
+                <span aria-hidden="true">↗</span>
+              </Link>
+              <div className="agency-case-bottom">
+                <h2>{site.name}</h2>
+                <div><p>{site.description}</p><Link className="agency-arrow-link" href={`/demos/${site.slug}`}>Explore the site <span aria-hidden="true">↗</span></Link></div>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+      <section className="agency-offer">
+        <div className="ax-container agency-offer-grid">
+          <div><div className="agency-section-label"><span>Your project / Next</span></div><h2>Now let’s build <em>yours.</em></h2></div>
+          <div className="agency-offer-aside"><p>Bring us the brief. We’ll find the right visual voice and build a site that works as hard as you do.</p><Link className="agency-btn" href="/contact">Start a project <span aria-hidden="true">↗</span></Link></div>
+        </div>
+      </section>
     </MarketingShell>
   );
 }

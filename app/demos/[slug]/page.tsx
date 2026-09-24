@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
-import { AtelierSite } from "@/components/demos/atelier/site";
 import { HearthCoSite } from "@/components/demos/hearth-co/site";
-import { RivermarkSite } from "@/components/demos/rivermark/site";
+import { NorthlineSite } from "@/components/demos/northline/site";
+import { RidgewaySite } from "@/components/demos/ridgeway/site";
 import { DEMO_SITES, getDemoSite } from "@/lib/demo-sites";
 import { demoPublicUrl } from "@/lib/public-url";
 
@@ -40,9 +40,9 @@ export default async function DemoSitePage({ params }: Props) {
   const site = getDemoSite(slug);
   if (!site) notFound();
 
+  if (slug === "ridgeway") return <RidgewaySite />;
+  if (slug === "northline") return <NorthlineSite />;
   if (slug === "hearth-co") return <HearthCoSite />;
-  if (slug === "rivermark") return <RivermarkSite />;
-  if (slug === "atelier") return <AtelierSite />;
 
   notFound();
 }

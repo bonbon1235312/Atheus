@@ -29,11 +29,11 @@ export function Reveal({
   return (
     <MotionTag
       className={className}
-      initial={reduce ? false : { opacity: 0, y: 28, filter: "blur(8px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      initial={reduce ? false : { opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.2, margin: "0px 0px -8% 0px" }}
       transition={{
-        duration: 0.8,
+        duration: 0.45,
         delay: delayMs / 1000,
         ease: [0.22, 1, 0.36, 1],
       }}

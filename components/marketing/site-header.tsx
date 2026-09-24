@@ -5,11 +5,10 @@ import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 
 const links = [
-  { href: "/", label: "Home" },
+  { href: "/demos", label: "Work" },
+  { href: "/products/sites", label: "Websites" },
   { href: "/products", label: "Products" },
-  { href: "/products/sites", label: "Sites" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
+  { href: "/about", label: "Studio" },
 ];
 
 function isCurrent(pathname: string, href: string) {
@@ -27,10 +26,6 @@ export function SiteHeader() {
   const panelId = useId();
 
   useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
-
-  useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -39,11 +34,9 @@ export function SiteHeader() {
 
   return (
     <header className="ax-header" data-scrolled={scrolled ? "true" : "false"}>
-      <div className="ax-header-island">
+      <div className="ax-header-bar">
         <Link className="ax-brand" href="/" aria-label="Atheus home">
-          <span className="ax-brand-mark" aria-hidden="true">
-            A
-          </span>
+          <span className="ax-brand-mark" aria-hidden="true">A<span>.</span></span>
           <span>Atheus</span>
         </Link>
 
@@ -63,11 +56,8 @@ export function SiteHeader() {
           <Link className="ax-btn ax-btn-ghost" href="/admin">
             Sign in
           </Link>
-          <Link className="ax-btn ax-btn-primary ax-btn-icon" href="/products/sites">
-            Get a site
-            <span className="ax-btn-orb" aria-hidden="true">
-              →
-            </span>
+          <Link className="ax-btn ax-btn-primary" href="/contact">
+            Start a project <span aria-hidden="true">↗</span>
           </Link>
           <button
             type="button"
@@ -95,13 +85,14 @@ export function SiteHeader() {
             key={link.href}
             href={link.href}
             aria-current={isCurrent(pathname, link.href) ? "page" : undefined}
+            onClick={() => setOpen(false)}
           >
             {link.label}
           </Link>
         ))}
-        <Link href="/admin">Sign in</Link>
-        <Link className="ax-btn ax-btn-primary" href="/products/sites">
-          Get a site
+        <Link href="/admin" onClick={() => setOpen(false)}>Sign in</Link>
+        <Link className="ax-btn ax-btn-primary" href="/contact" onClick={() => setOpen(false)}>
+          Start a project <span aria-hidden="true">↗</span>
         </Link>
       </div>
     </header>

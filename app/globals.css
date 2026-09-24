@@ -37,10 +37,14 @@ body:has(.ax-page) {
 }
 
 body:has(.hc-root),
-body:has(.rm-root),
-body:has(.at-root) {
+body:has(.rw-root) {
   background: #0a0a0b;
   color: #f5f6f8;
+}
+
+body:has(.nl-root) {
+  background: #f3f5f7;
+  color: #0e1a28;
 }
 
 a {

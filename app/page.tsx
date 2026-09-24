@@ -1,118 +1,114 @@
 import type { Metadata } from "next";
-
+import Image from "next/image";
 import Link from "next/link";
 
 import { HomeHero } from "@/components/marketing/home-hero";
+import { AgencyLoader } from "@/components/marketing/agency-loader";
+import { AgencyMotion } from "@/components/marketing/agency-motion";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
-import { MotionProductCard } from "@/components/marketing/motion-product-card";
-import { WowCta } from "@/components/marketing/process-rail";
-import { ProofMosaic } from "@/components/marketing/proof-mosaic";
-import { Reveal } from "@/components/marketing/reveal";
-import { products } from "@/lib/products";
 
 export const metadata: Metadata = {
-  title: "Atheus",
-  description:
-    "Custom websites from £600, plus premium SaaS products. Atheus builds software that looks and works serious.",
-  openGraph: {
-    images: [{ url: "/brand/sites-hearth.jpg" }],
-  },
+  title: "Atheus — Websites with presence",
+  description: "Atheus is an independent digital design studio creating distinctive custom websites for ambitious businesses. Websites start at £600.",
+  openGraph: { images: [{ url: "/brand/sites-hearth.jpg" }] },
 };
 
-const values = [
-  {
-    title: "Custom, not templated",
-    body: "Every site and product surface is designed for the brief. No skinning someone else's layout.",
-  },
-  {
-    title: "Fast by default",
-    body: "Performance is part of the craft. Pages should feel instant on a phone and sharp on a laptop.",
-  },
-  {
-    title: "Clear pricing",
-    body: "Small business sites start at £600. Larger brand builds and SaaS products scale with scope.",
-  },
-  {
-    title: "One team end to end",
-    body: "Design and engineering stay together. Fewer handoffs, fewer diluted decisions.",
-  },
-];
+const projects = [
+  { number: "01", name: "Hearth & Co", category: "Hospitality / Concept site", summary: "A neighbourhood cafe with a digital presence as inviting as the place itself.", image: "/brand/sites-hearth.jpg", alt: "Hearth & Co cafe website concept", href: "/demos/hearth-co" },
+  { number: "02", name: "Ridgeway Civils", category: "Construction / Concept site", summary: "Heavy industry, presented with the confidence and clarity it deserves.", image: "/brand/ridgeway-hero.jpg", alt: "Ridgeway Civils website concept", href: "/demos/ridgeway" },
+  { number: "03", name: "Northline Electrical", category: "Trades / Concept site", summary: "A precise service experience designed to turn urgency into an enquiry.", image: "/brand/northline-hero.jpg", alt: "Northline Electrical website concept", href: "/demos/northline" },
+] as const;
+
+const services = [
+  { number: "01", title: "Art direction", detail: "A visual language that could only belong to your business." },
+  { number: "02", title: "Web design", detail: "Every page considered, from the first impression to the final click." },
+  { number: "03", title: "Development", detail: "Fast, responsive sites built to work beautifully in the real world." },
+] as const;
 
 export default function Home() {
-  const sites = products.find((p) => p.slug === "sites")!;
-  const suite = products.filter((p) => p.slug !== "sites");
-
   return (
-    <MarketingShell>
+    <MarketingShell variant="agency">
+      <AgencyLoader />
+      <AgencyMotion />
       <HomeHero />
-      <ProofMosaic />
 
-      {/* Teaser only — the full tier breakdown lives on /products/sites so the
-          two pages stop rendering the same three cards. */}
-      <section className="ax-section ax-section-tint">
-        <div className="ax-container ax-price-teaser">
-          <Reveal>
-            <p className="ax-kicker-pill">Pricing</p>
-            <h2 className="ax-h2">Clear pricing, before you have to ask.</h2>
-          </Reveal>
-          <Reveal delayMs={60}>
-            <p className="ax-lead">{sites.pricingNote}</p>
-            <Link className="ax-btn ax-btn-primary ax-btn-icon" href="/products/sites#pricing">
-              See the full breakdown
-              <span className="ax-btn-orb" aria-hidden="true">
-                →
-              </span>
-            </Link>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="ax-section">
-        <div className="ax-container ax-split">
-          <Reveal>
-            <h2 className="ax-h2">Why people pick Atheus</h2>
-            <p className="ax-lead">
-              Whether you need a website or a product platform, the standard stays the
-              same: intentional, fast, and hard to ignore.
-            </p>
-          </Reveal>
-          <Reveal delayMs={60}>
-            <ul className="ax-value-list">
-              {values.map((value) => (
-                <li key={value.title}>
-                  <strong>{value.title}</strong>
-                  <span>{value.body}</span>
-                </li>
-              ))}
-            </ul>
-          </Reveal>
-        </div>
-      </section>
-
-      <section className="ax-section" style={{ paddingTop: 0 }}>
+      <section className="agency-work" id="work" aria-labelledby="agency-work-title">
         <div className="ax-container">
-          <Reveal className="ax-section-head">
-            <h2 className="ax-h2">Also shipping</h2>
-            <p className="ax-lead">
-              A growing product suite beside Sites. Same engineering bar.
-            </p>
-          </Reveal>
-          <div className="ax-product-grid">
-            {suite.map((product, index) => (
-              <Reveal key={product.slug} delayMs={index * 50}>
-                <MotionProductCard product={product} />
-              </Reveal>
+          <div className="agency-section-label"><span>01 / Selected work</span><span>Built to show what is possible</span></div>
+          <div className="agency-work-heading agency-reveal">
+            <h2 id="agency-work-title">Different worlds.<br /><em>Same ambition.</em></h2>
+            <p>Three working concepts, each with its own voice. Open the sites, explore the details, and see the thinking in motion.</p>
+          </div>
+          <div className="agency-project-list">
+            {projects.map((project) => (
+              <article className="agency-project agency-reveal" key={project.number}>
+                <Link className="agency-project-image" href={project.href} aria-label={`Explore ${project.name} concept site`}>
+                  <span className="agency-project-image-media">
+                    <Image src={project.image} alt={project.alt} width={1500} height={900} sizes="(max-width: 800px) 100vw, 65vw" />
+                  </span>
+                  <span className="agency-project-open" aria-hidden="true">↗</span>
+                </Link>
+                <div className="agency-project-info">
+                  <span className="agency-project-number">{project.number} / 03</span>
+                  <div>
+                    <p>{project.category}</p>
+                    <h3><Link href={project.href}>{project.name}</Link></h3>
+                    <span>{project.summary}</span>
+                  </div>
+                </div>
+              </article>
             ))}
+          </div>
+          <Link className="agency-arrow-link agency-work-more" href="/demos">Explore all concepts <span aria-hidden="true">↗</span></Link>
+        </div>
+      </section>
+
+      <section className="agency-services" aria-labelledby="agency-services-title">
+        <div className="ax-container">
+          <div className="agency-section-label"><span>02 / What we do</span><span>One studio, start to finish</span></div>
+          <div className="agency-services-grid">
+            <div className="agency-reveal">
+              <h2 id="agency-services-title">A website should feel like <em>you.</em></h2>
+              <p className="agency-services-intro">Strategy, design, and development in one place. The result is a site with a distinct point of view and a clear job to do.</p>
+              <Link className="agency-arrow-link" href="/products/sites">Explore websites <span aria-hidden="true">↗</span></Link>
+            </div>
+            <div className="agency-service-list">
+              {services.map((service) => (
+                <div className="agency-service agency-reveal" key={service.number}>
+                  <span>{service.number}</span>
+                  <div><h3>{service.title}</h3><p>{service.detail}</p></div>
+                  <span aria-hidden="true">↗</span>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      <WowCta
-        title="Ready to make people say wow?"
-        lead="Send a short brief. Business name, what you sell, and any links you already have. We will reply with a clear next step."
-        primary={{ href: "/contact", label: "Request a quote" }}
-        secondary={{ href: "/products/sites", label: "View Sites" }}
-      />
+      <section className="agency-manifesto" aria-labelledby="agency-manifesto-title">
+        <div className="ax-container">
+          <div className="agency-section-label"><span>03 / Our point of view</span><span>Made to stand apart</span></div>
+          <h2 className="agency-reveal" id="agency-manifesto-title">A template can fill a page.<br /><em>It can’t tell your story.</em></h2>
+          <div className="agency-manifesto-bottom agency-reveal">
+            <span className="agency-asterisk" aria-hidden="true">✳</span>
+            <p>We make digital experiences with personality, purpose, and enough craft to leave an impression long after the tab closes.</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="agency-offer" aria-labelledby="agency-offer-title">
+        <div className="ax-container agency-offer-grid">
+          <div>
+            <div className="agency-section-label"><span>04 / Make a move</span></div>
+            <h2 className="agency-reveal" id="agency-offer-title">Your next chapter deserves a better website.</h2>
+          </div>
+          <div className="agency-offer-aside">
+            <p>Custom business websites start at £600. Tell us what you are building and we will shape a clear scope around it.</p>
+            <Link className="agency-btn" href="/contact">Start a project <span aria-hidden="true">↗</span></Link>
+            <Link className="agency-offer-small" href="/products/sites#pricing">How pricing works ↗</Link>
+          </div>
+        </div>
+      </section>
     </MarketingShell>
   );
 }
