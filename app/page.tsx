@@ -1,4 +1,3 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -6,11 +5,33 @@ import { HomeHero } from "@/components/marketing/home-hero";
 import { AgencyLoader } from "@/components/marketing/agency-loader";
 import { AgencyMotion } from "@/components/marketing/agency-motion";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
+import { HOME_DESCRIPTION, HOME_TITLE, SITE_ORIGIN, marketingMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Atheus — Websites with presence",
-  description: "Atheus is an independent digital design studio creating distinctive custom websites for ambitious businesses. Websites start at £600.",
-  openGraph: { images: [{ url: "/brand/sites-hearth.jpg" }] },
+export const metadata = marketingMetadata({ title: HOME_TITLE, description: HOME_DESCRIPTION, path: "/" });
+
+const studioSchema = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": `${SITE_ORIGIN}/#organization`,
+      name: "Atheus",
+      url: SITE_ORIGIN,
+      logo: `${SITE_ORIGIN}/favicon.svg`,
+      email: "hello@atheus.dev",
+      description: HOME_DESCRIPTION,
+      areaServed: { "@type": "Country", name: "United Kingdom" },
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${SITE_ORIGIN}/#website`,
+      name: "Atheus",
+      alternateName: "Atheus Studio",
+      url: `${SITE_ORIGIN}/`,
+      publisher: { "@id": `${SITE_ORIGIN}/#organization` },
+      inLanguage: "en-GB",
+    },
+  ],
 };
 
 const projects = [
@@ -28,6 +49,7 @@ const services = [
 export default function Home() {
   return (
     <MarketingShell variant="agency">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(studioSchema).replace(/</g, "\\u003c") }} />
       <AgencyLoader />
       <AgencyMotion />
       <HomeHero />
@@ -69,7 +91,7 @@ export default function Home() {
           <div className="agency-services-grid">
             <div className="agency-reveal">
               <h2 id="agency-services-title">A website should feel like <em>you.</em></h2>
-              <p className="agency-services-intro">Strategy, design, and development in one place. The result is a site with a distinct point of view and a clear job to do.</p>
+              <p className="agency-services-intro">Custom web design, art direction, and development in one place. The result is a site with a distinct point of view and a clear job to do.</p>
               <Link className="agency-arrow-link" href="/products/sites">Explore websites <span aria-hidden="true">↗</span></Link>
             </div>
             <div className="agency-service-list">

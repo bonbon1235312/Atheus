@@ -3,6 +3,8 @@ import { GeistSans } from "geist/font/sans";
 import type { Metadata } from "next";
 import { Instrument_Serif } from "next/font/google";
 
+import { HOME_DESCRIPTION, HOME_TITLE, SITE_ORIGIN } from "@/lib/seo";
+
 import "./globals.css";
 import "./marketing.css";
 import "./agency.css";
@@ -17,30 +19,28 @@ const instrumentSerif = Instrument_Serif({
 
 export const metadata: Metadata = {
   title: {
-    default: "Atheus",
+    default: HOME_TITLE,
     template: "%s | Atheus",
   },
-  description:
-    "Atheus is an independent digital studio creating distinctive websites and useful software. Custom business websites start at £600.",
-  metadataBase: new URL(process.env.AUTH_URL ?? "https://atheus.dev"),
+  description: HOME_DESCRIPTION,
+  metadataBase: new URL(SITE_ORIGIN),
   icons: {
     icon: [{ url: "/favicon.svg", type: "image/svg+xml" }],
   },
   openGraph: {
-    title: "Atheus",
-    description:
-      "Distinctive custom websites and useful software by Atheus. Business websites start at £600.",
-    url: "/",
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    url: SITE_ORIGIN,
     siteName: "Atheus",
     type: "website",
-    images: [{ url: "/brand/og-default.png", width: 1200, height: 630 }],
+    locale: "en_GB",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630, alt: "Atheus independent digital design studio" }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Atheus",
-    description:
-      "Distinctive custom websites and useful software by Atheus. Business websites start at £600.",
-    images: ["/brand/og-default.png"],
+    title: HOME_TITLE,
+    description: HOME_DESCRIPTION,
+    images: ["/opengraph-image"],
   },
 };
 

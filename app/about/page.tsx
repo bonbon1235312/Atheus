@@ -1,13 +1,14 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
 import { MarketingShell } from "@/components/marketing/marketing-shell";
+import { marketingMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Studio",
-  description: "Meet Atheus, an independent digital studio making custom websites and useful software with design and engineering in one practice.",
-};
+export const metadata = marketingMetadata({
+  title: "About Atheus | Independent UK Digital Design Studio",
+  description: "Meet Atheus, an independent UK studio combining web design, development and digital product thinking to create distinctive online experiences.",
+  path: "/about",
+});
 
 const principles = [
   { number: "01", title: "Start with the story", body: "A design only works when it sounds and feels like the business behind it." },

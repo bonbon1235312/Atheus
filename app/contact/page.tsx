@@ -1,12 +1,13 @@
-import type { Metadata } from "next";
 import Link from "next/link";
 
 import { MarketingShell } from "@/components/marketing/marketing-shell";
+import { marketingMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description: "Start a website or digital product project with Atheus. Send a brief to hello@atheus.dev.",
-};
+export const metadata = marketingMetadata({
+  title: "Contact Atheus | Start a Website Project",
+  description: "Talk to Atheus about a custom website, web design or digital product project. Tell us what you are building at hello@atheus.dev.",
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (

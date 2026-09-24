@@ -372,11 +372,11 @@ export const products: Product[] = [
     ],
     faqs: [
       {
-        q: "Are these templates?",
+        q: "Are your websites custom or template based?",
         a: "No. Sites projects are designed and built to the brief. Shared engineering standards, unique visual systems.",
       },
       {
-        q: "How does pricing work?",
+        q: "How much does a custom website cost?",
         a: "Small business sites start at £600. After a short brief we confirm scope, timeline, and a fixed quote for that build.",
       },
       {

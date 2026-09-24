@@ -6,7 +6,7 @@ export function HomeHero() {
     <section className="agency-hero" aria-labelledby="agency-hero-title">
       <div className="ax-container">
         <div className="agency-hero-topline">
-          <span>Independent digital design studio</span>
+          <span>Independent UK web design studio</span>
           <span>Design & development / UK</span>
         </div>
         <div className="agency-hero-intro">
@@ -18,7 +18,7 @@ export function HomeHero() {
           </h1>
           <div className="agency-hero-aside agency-reveal">
             <span className="agency-star" aria-hidden="true">✳</span>
-            <p>Atheus designs and builds expressive websites for businesses ready to look as good as the work they do.</p>
+            <p>Atheus is an independent UK design studio building expressive websites and digital products for ambitious businesses.</p>
             <Link className="agency-arrow-link" href="/contact">Start a project <span aria-hidden="true">↗</span></Link>
           </div>
         </div>

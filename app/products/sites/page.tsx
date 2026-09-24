@@ -1,14 +1,30 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
 import { MarketingShell } from "@/components/marketing/marketing-shell";
 import { getProduct } from "@/lib/products";
+import { SITE_ORIGIN, marketingMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Custom websites",
-  description: "Custom websites by Atheus, designed and built for the business behind the brief. Small business sites start at £600.",
-  openGraph: { images: [{ url: "/brand/sites-hearth.jpg" }] },
+const description = "Custom web design and development for UK businesses. Atheus creates distinctive, responsive websites shaped around your brand. Projects start at £600.";
+
+export const metadata = marketingMetadata({
+  title: "Custom Web Design & Development UK | Atheus",
+  description,
+  path: "/products/sites",
+  image: "/brand/sites-hearth.jpg",
+  imageAlt: "Hearth & Co custom website concept by Atheus",
+});
+
+const serviceSchema = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "@id": `${SITE_ORIGIN}/products/sites#service`,
+  name: "Custom web design and development",
+  serviceType: "Web design and development",
+  description,
+  url: `${SITE_ORIGIN}/products/sites`,
+  provider: { "@id": `${SITE_ORIGIN}/#organization` },
+  areaServed: { "@type": "Country", name: "United Kingdom" },
 };
 
 const steps = [
@@ -22,12 +38,13 @@ export default function SitesPage() {
   const product = getProduct("sites")!;
   return (
     <MarketingShell variant="agency">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema).replace(/</g, "\\u003c") }} />
       <section className="agency-subhero agency-sites-hero">
         <div className="ax-container">
           <div className="agency-section-label"><span>Websites / Atheus Studio</span><span>Custom by design</span></div>
           <div className="agency-subhero-grid">
             <h1>Your business has a story.<br /><em>Your site should tell it.</em></h1>
-            <div><p>Custom design and development for ambitious businesses. From a focused first site to a full brand experience.</p><Link className="agency-arrow-link" href="/contact">Start a project <span aria-hidden="true">↗</span></Link></div>
+            <div><p>Custom web design and development for ambitious UK businesses. From a focused first site to a full brand experience.</p><Link className="agency-arrow-link" href="/contact">Start a project <span aria-hidden="true">↗</span></Link></div>
           </div>
           <div className="agency-sites-feature">
             <Image src="/brand/sites-hearth.jpg" alt="Hearth & Co custom cafe website concept" width={1700} height={950} sizes="100vw" priority />
@@ -40,7 +57,7 @@ export default function SitesPage() {
         <div className="ax-container">
           <div className="agency-section-label"><span>01 / The approach</span><span>Design and build, together</span></div>
           <div className="agency-services-grid">
-            <div><h2>Different brief.<br /><em>Different answer.</em></h2><p className="agency-services-intro">There is no house template. The visual direction, content, and technology all follow what your business actually needs.</p><Link className="agency-arrow-link" href="/demos">See the work <span aria-hidden="true">↗</span></Link></div>
+            <div><h2>Custom web design.<br /><em>Entirely yours.</em></h2><p className="agency-services-intro">There is no house template. The visual direction, content, and technology all follow what your business actually needs.</p><Link className="agency-arrow-link" href="/demos">See the work <span aria-hidden="true">↗</span></Link></div>
             <div className="agency-service-list">
               {steps.map((step) => <div className="agency-service" key={step.number}><span>{step.number}</span><div><h3>{step.title}</h3><p>{step.body}</p></div><span aria-hidden="true">↗</span></div>)}
             </div>

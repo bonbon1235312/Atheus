@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 
 import { MarketingShell } from "@/components/marketing/marketing-shell";
 import { getProduct, products, statusLabel } from "@/lib/products";
+import { marketingMetadata } from "@/lib/seo";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -15,12 +16,19 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const product = getProduct(slug);
-  if (!product) return { title: "Product" };
-  return {
-    title: product.name,
-    description: product.description,
-    openGraph: { title: `${product.name} | Atheus`, description: product.description, images: [{ url: product.image }] },
+  if (!product || slug === "sites") notFound();
+  const titles: Record<string, string> = {
+    league: "League Management Software | Atheus",
+    club: "Club Management Software | Atheus",
+    blackwall: "BlackWall Access Control | Atheus",
   };
+  return marketingMetadata({
+    title: titles[slug] ?? `${product.name} | Atheus`,
+    description: product.description,
+    path: `/products/${slug}`,
+    image: product.image,
+    imageAlt: product.imageAlt,
+  });
 }
 
 export default async function ProductPage({ params }: Props) {

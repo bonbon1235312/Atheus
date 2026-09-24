@@ -1,14 +1,15 @@
-import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 
 import { MarketingShell } from "@/components/marketing/marketing-shell";
 import { products, statusLabel } from "@/lib/products";
+import { marketingMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Products",
-  description: "Explore Atheus websites and software products for leagues, clubs, and access control.",
-};
+export const metadata = marketingMetadata({
+  title: "Websites & Digital Products | Atheus",
+  description: "Explore custom websites and digital products by Atheus, from expressive business sites to software for leagues, clubs and access control.",
+  path: "/products",
+});
 
 export default function ProductsPage() {
   const ordered = [products.find((product) => product.slug === "sites")!, ...products.filter((product) => product.slug !== "sites")];

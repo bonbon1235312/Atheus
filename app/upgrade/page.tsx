@@ -1,12 +1,13 @@
 import Link from "next/link";
-import type { Metadata } from "next";
 
 import { MarketingShell } from "@/components/marketing/marketing-shell";
+import { marketingMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Upgrade to Premium",
-  description: "Unlock unlimited leagues and priority support on Atheus League for £8 per month.",
-};
+export const metadata = marketingMetadata({
+  title: "Atheus League Premium | Unlimited Leagues",
+  description: "Upgrade Atheus League for unlimited leagues and priority support. Premium is £8 per month.",
+  path: "/upgrade",
+});
 
 export default function UpgradePage() {
   return (
