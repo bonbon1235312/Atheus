@@ -43,7 +43,7 @@ export default function SitesPage() {
         <div className="ax-container">
           <div className="agency-section-label"><span>Websites / Atheus Studio</span><span>Custom by design</span></div>
           <div className="agency-subhero-grid">
-            <h1>Your business has a story.<br /><em>Your site should tell it.</em></h1>
+            <h1>Your business has a story.<br /><em>Let it speak.</em></h1>
             <div><p>Custom web design and development for ambitious UK businesses. From a focused first site to a full brand experience.</p><Link className="agency-arrow-link" href="/contact">Start a project <span aria-hidden="true">↗</span></Link></div>
           </div>
           <div className="agency-sites-feature">

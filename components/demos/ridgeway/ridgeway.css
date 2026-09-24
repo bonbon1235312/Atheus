@@ -92,7 +92,7 @@
   .rw-nav-phone { font-size: .78rem; }
   .rw-hero-media { height: clamp(360px, 90vw, 540px); }
   .rw-photo-note { right: 1rem; bottom: 1rem; font-size: .58rem; }
-  .rw-hero-copy { grid-template-columns: 1fr; gap: 1.5rem; padding-block: 3rem 3.5rem; }
+  .rw-hero-copy { grid-template-columns: minmax(0, 1fr); gap: 1.5rem; padding-block: 3rem 3.5rem; }
   .rw-hero h1 { font-size: clamp(3.4rem, 11vw, 5.7rem); }
   .rw-accredit-inner { grid-template-columns: 1fr; gap: .7rem; padding-block: 1.3rem; }
   .rw-accredit-inner > div { gap: .75rem 1.5rem; }
@@ -108,7 +108,7 @@
 @media (max-width: 420px) {
   .rw-brand { font-size: .95rem; }
   .rw-nav-phone { font-size: .7rem; }
-  .rw-hero h1 { font-size: 3.2rem; }
+  .rw-hero h1 { font-size: clamp(2.55rem, 10vw, 3.2rem); }
   .rw-hero-actions { align-items: stretch; flex-direction: column; }
   .rw-text-link { align-self: flex-start; }
   .rw-facts > div { grid-template-columns: 1fr; gap: .35rem; }

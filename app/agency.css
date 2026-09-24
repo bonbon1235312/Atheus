@@ -47,6 +47,7 @@
 .ax-page--agency .ax-nav a:hover,
 .ax-page--agency .ax-nav a[aria-current="page"] { color: #ad351c; }
 .ax-page--agency .ax-header-actions { gap: 1rem; }
+.ax-page--agency .ax-footer { width: 100%; }
 .ax-page--agency .ax-btn-ghost { color: #4e4f4a; }
 .ax-page--agency .ax-header .ax-btn-primary {
   min-height: 2.8rem;
@@ -1083,6 +1084,18 @@
   .agency-motion-ready .agency-asterisk,
   .agency-motion-ready .agency-gallery-stamp { rotate: none; }
   .agency-motion-ready .agency-project-image { clip-path: none; transition: none; }
+}
+
+/* Keep studio pages readable on phones if scroll observers are delayed or unavailable. */
+@media (max-width: 760px) {
+  .agency-motion-ready .agency-reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+  .agency-motion-ready .agency-project-image { clip-path: none; transition: none; }
+  .agency-motion-ready .agency-project-image-media { transform: none; transition: none; }
+  .agency-motion-ready .agency-service > * { opacity: 1; transform: none; transition: none; }
 }
 
 /* A text-built studio mark opens the experience before the editorial reveal. */
