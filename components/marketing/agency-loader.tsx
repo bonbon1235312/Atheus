@@ -6,6 +6,9 @@ const ROWS = 41;
 const COLUMNS = 83;
 const TEXT = "ATHEUS  /  DESIGN WITH INTENT  /  ";
 const GLITCH = "ATHEUS/0123456789+*";
+const DOT_COLUMNS = 21;
+const DOT_ROWS = 21;
+const DOTS = Array.from({ length: DOT_COLUMNS * DOT_ROWS }, (_, index) => index);
 
 function makeGlyph(frame: number) {
   return Array.from({ length: ROWS }, (_, row) => {
@@ -31,6 +34,7 @@ export function AgencyLoader() {
   const [frame, setFrame] = useState(0);
   const [complete, setComplete] = useState(false);
   const loaderRef = useRef<HTMLDivElement>(null);
+  const dotsRef = useRef<HTMLDivElement>(null);
   const glyphRef = useRef<HTMLDivElement>(null);
   const titleRef = useRef<HTMLDivElement>(null);
   const lines = useMemo(() => makeGlyph(frame), [frame]);
@@ -47,8 +51,9 @@ export function AgencyLoader() {
     let stopTimeline: (() => void) | undefined;
 
     void import("animejs").then(({ createTimeline, stagger }) => {
-      if (cancelled || !loaderRef.current || !glyphRef.current || !titleRef.current) return;
+      if (cancelled || !loaderRef.current || !dotsRef.current || !glyphRef.current || !titleRef.current) return;
       const counter = { value: 0 };
+      const grid = { grid: [DOT_COLUMNS, DOT_ROWS], from: "center" as const };
       const timeline = createTimeline({
         onComplete: () => {
           if (cancelled) return;
@@ -58,6 +63,20 @@ export function AgencyLoader() {
       });
 
       timeline
+        .add(dotsRef.current.querySelectorAll(".agency-loader-dot"), {
+          opacity: [0, 0.5],
+          scale: stagger([1.1, 0.75], grid),
+          duration: 420,
+          delay: stagger(18, grid),
+          ease: "inOutQuad",
+        }, 0)
+        .add(dotsRef.current.querySelectorAll(".agency-loader-dot"), {
+          scale: [0.75, 2.1, 0.75],
+          opacity: [0.35, 0.9, 0.25],
+          duration: 720,
+          delay: stagger(29, grid),
+          ease: "inOutQuad",
+        }, 580)
         .add(counter, {
           value: 20,
           duration: 1150,
@@ -102,6 +121,9 @@ export function AgencyLoader() {
     <div className="agency-loader" ref={loaderRef} role="status" aria-label="Loading Atheus studio">
       <div className="agency-loader-top" aria-hidden="true"><span>ATHEUS / 001</span><span>DESIGN IN MOTION</span></div>
       <div className="agency-loader-center" aria-hidden="true">
+        <div className="agency-loader-dots" ref={dotsRef}>
+          {DOTS.map((dot) => <span className="agency-loader-dot" key={dot} />)}
+        </div>
         <div className="agency-loader-glyph" ref={glyphRef}>
           {lines.map((line, index) => <span key={index}>{line}</span>)}
         </div>
