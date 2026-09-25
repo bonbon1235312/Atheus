@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { MarketingShell } from "@/components/marketing/marketing-shell";
 import { marketingMetadata } from "@/lib/seo";
 
@@ -32,7 +30,6 @@ export default function UpgradePage() {
           </div>
           <div className="agency-upgrade-actions">
             <a className="agency-btn" href="https://discord.gg/dPrMMc82bf" rel="noreferrer" target="_blank">Contact on Discord <span aria-hidden="true">↗</span></a>
-            <Link className="agency-arrow-link" href="/admin">Back to dashboard <span aria-hidden="true">↗</span></Link>
           </div>
         </div>
       </section>

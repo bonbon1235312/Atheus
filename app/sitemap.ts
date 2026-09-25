@@ -1,89 +1,53 @@
 import type { MetadataRoute } from "next";
+import { headers } from "next/headers";
 
 import { products } from "@/lib/products";
-import { leaguePublicUrl } from "@/lib/public-url";
+import {
+  demoSlugFromHostname,
+  leaguePublicUrl,
+  leagueSlugFromHostname,
+} from "@/lib/public-url";
 import { SITE_ORIGIN } from "@/lib/seo";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
+export const dynamic = "force-dynamic";
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = SITE_ORIGIN;
+  const hostname = (await headers()).get("host")?.split(":")[0].toLowerCase() ?? "";
 
-  const entries: MetadataRoute.Sitemap = [
-    {
-      url: `${baseUrl}/`,
-      changeFrequency: "weekly",
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/products`,
-      changeFrequency: "weekly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/demos`,
-      changeFrequency: "monthly",
-      priority: 0.85,
-    },
-    {
-      url: `${baseUrl}/about`,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/contact`,
-      changeFrequency: "monthly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/upgrade`,
-      changeFrequency: "monthly",
-      priority: 0.5,
-    },
-    ...products.map((product) => ({
-      url: `${baseUrl}/products/${product.slug}`,
-      changeFrequency: "weekly" as const,
-      priority: 0.85,
-    })),
-  ];
+  // Concept demos are intentionally noindex, so they have no sitemap entries.
+  if (demoSlugFromHostname(hostname)) return [];
 
-  try {
-    const { data: leagues } = await supabaseAdmin()
-      .from("leagues")
-      .select("slug, updated_at")
-      .eq("status", "active");
+  const leagueSlug = leagueSlugFromHostname(hostname);
+  if (leagueSlug) {
+    try {
+      const { data: league } = await supabaseAdmin()
+        .from("leagues")
+        .select("slug")
+        .eq("slug", leagueSlug)
+        .eq("status", "active")
+        .maybeSingle();
 
-    for (const league of leagues ?? []) {
-      const root = leaguePublicUrl(league.slug as string);
-      entries.push(
-        {
-          url: root,
-          lastModified: new Date(league.updated_at),
-          changeFrequency: "daily",
-          priority: 0.9,
-        },
-        {
-          url: `${root}/fixtures`,
-          lastModified: new Date(league.updated_at),
-          changeFrequency: "hourly",
-          priority: 0.8,
-        },
-        {
-          url: `${root}/table`,
-          lastModified: new Date(league.updated_at),
-          changeFrequency: "hourly",
-          priority: 0.8,
-        },
-        {
-          url: `${root}/stats`,
-          lastModified: new Date(league.updated_at),
-          changeFrequency: "hourly",
-          priority: 0.8,
-        },
-      );
+      if (!league) return [];
+
+      const root = leaguePublicUrl(leagueSlug);
+      return ["", "/fixtures", "/table", "/stats"].map((path) => ({
+        url: `${root}${path}`,
+      }));
+    } catch {
+      // An unavailable data service should not expose another host's URLs.
+      return [];
     }
-  } catch {
-    // Keep the marketing sitemap available before deployment environment setup.
   }
 
-  return entries;
+  return [
+    "/",
+    "/products",
+    "/products/sites",
+    ...products.filter((product) => product.slug !== "sites").map((product) => `/products/${product.slug}`),
+    "/demos",
+    "/about",
+    "/contact",
+    "/upgrade",
+  ].map((path) => ({ url: new URL(path, SITE_ORIGIN).toString() }));
 }

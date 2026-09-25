@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import {
@@ -15,6 +16,7 @@ import {
   sortPlayers,
 } from "@/lib/public-league-data";
 import { getTenantUrlBuilder } from "@/lib/tenant-url";
+import { leaguePublicUrl } from "@/lib/public-url";
 
 import { FixtureRow } from "./_components/fixture-row";
 import { LeagueMark } from "./_components/league-mark";
@@ -26,6 +28,11 @@ type LeagueHomeProps = {
   params: Promise<{ leagueSlug: string }>;
   searchParams: Promise<{ competition?: string }>;
 };
+
+export async function generateMetadata({ params }: LeagueHomeProps): Promise<Metadata> {
+  const { leagueSlug } = await params;
+  return { alternates: { canonical: leaguePublicUrl(leagueSlug) } };
+}
 
 export default async function LeagueHome({ params, searchParams }: LeagueHomeProps) {
   const [{ leagueSlug }, query] = await Promise.all([params, searchParams]);

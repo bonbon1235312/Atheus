@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 import { MarketingShell } from "@/components/marketing/marketing-shell";
 import { marketingMetadata } from "@/lib/seo";
 
@@ -23,7 +21,7 @@ export default function ContactPage() {
           <div className="agency-contact-bottom">
             <div><span>01 / The brief</span><p>Tell us about your business, who it serves, and what the new site or product needs to do.</p></div>
             <div><span>02 / The starting point</span><p>Share your current site, any references you like, and your ideal timeline if you have one.</p></div>
-            <div><span>03 / Product access</span><p>Looking for League or another Atheus product? Mention the product in your message, or <Link href="/admin">open the platform ↗</Link>.</p></div>
+            <div><span>03 / Product access</span><p>Looking for League or another Atheus product? Mention the product in your message and we’ll point you to the right next step.</p></div>
           </div>
         </div>
       </section>

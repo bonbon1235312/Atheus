@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import type { LeaderboardSort } from "@/lib/public-league-data";
@@ -12,6 +13,7 @@ import {
   sortPlayers,
 } from "@/lib/public-league-data";
 import { getTenantUrlBuilder } from "@/lib/tenant-url";
+import { leaguePublicUrl } from "@/lib/public-url";
 
 export const revalidate = 60;
 
@@ -39,6 +41,14 @@ type StatsPageProps = {
     team?: string;
   }>;
 };
+
+export async function generateMetadata({ params }: StatsPageProps): Promise<Metadata> {
+  const { leagueSlug } = await params;
+  return {
+    title: "Player leaderboard",
+    alternates: { canonical: leaguePublicUrl(leagueSlug, "stats") },
+  };
+}
 
 function metricValue(
   sort: LeaderboardSort,

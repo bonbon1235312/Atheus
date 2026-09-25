@@ -1,7 +1,6 @@
 "use client";
 
 import { motion, useReducedMotion } from "motion/react";
-import Link from "next/link";
 
 const ease = [0.22, 1, 0.36, 1] as const;
 
@@ -47,14 +46,8 @@ export function ContactExperience() {
             <div className="ax-contact-side">
               <h3 className="ax-h3">Product access</h3>
               <p>
-                For League, open the platform directly. For Sites, send a brief and we
-                will quote against scope. For Club or BlackWall, email us with your
-                organisation and use case.
-              </p>
-              <p style={{ marginTop: "1rem" }}>
-                <Link className="ax-text-link" href="/admin">
-                  Platform sign in <span aria-hidden="true">→</span>
-                </Link>
+                For League, Sites, Club or BlackWall, email us with your
+                organisation and use case. We’ll point you to the right next step.
               </p>
             </div>
             <div className="ax-contact-side">

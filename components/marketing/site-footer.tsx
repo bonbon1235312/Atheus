@@ -19,7 +19,6 @@ export function SiteFooter() {
             <Link href="/products">Products</Link>
             <Link href="/about">Studio</Link>
             <Link href="/contact">Contact</Link>
-            <Link href="/admin">Platform sign in</Link>
           </nav>
         </div>
         <div className="ax-footer-bottom">

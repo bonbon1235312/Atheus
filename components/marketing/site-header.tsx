@@ -53,9 +53,6 @@ export function SiteHeader() {
         </nav>
 
         <div className="ax-header-actions">
-          <Link className="ax-btn ax-btn-ghost" href="/admin">
-            Sign in
-          </Link>
           <Link className="ax-btn ax-btn-primary" href="/contact">
             Start a project <span aria-hidden="true">↗</span>
           </Link>
@@ -90,7 +87,6 @@ export function SiteHeader() {
             {link.label}
           </Link>
         ))}
-        <Link href="/admin" onClick={() => setOpen(false)}>Sign in</Link>
         <Link className="ax-btn ax-btn-primary" href="/contact" onClick={() => setOpen(false)}>
           Start a project <span aria-hidden="true">↗</span>
         </Link>

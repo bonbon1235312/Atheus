@@ -11,7 +11,6 @@ import LeagueSetupPage from "@/app/admin/[leagueId]/setup/page";
 import SiteAccessSettingsPage from "@/app/admin/[leagueId]/site-access/page";
 import StaffPage from "@/app/admin/[leagueId]/staff/page";
 import TeamsPage from "@/app/admin/[leagueId]/teams/page";
-import SiteLoginPage from "@/app/admin/site-login/page";
 import { supabaseAdmin } from "@/lib/supabase-admin";
 
 export const dynamic = "force-dynamic";
@@ -44,12 +43,7 @@ export default async function TenantAdminPage({
     session.siteLeagueSlug === league.slug;
 
   if (sectionPath === "site-login") {
-    if (hasLeagueSession) {
-      redirect("/admin");
-    }
-    return SiteLoginPage({
-      searchParams: Promise.resolve({ league: leagueSlug }),
-    });
+    notFound();
   }
 
   if (!hasLeagueSession) {

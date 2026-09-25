@@ -6,6 +6,7 @@ import { notFound } from "next/navigation";
 
 import { getWcagOnColour } from "@/lib/accessible-colour";
 import { getPublicLeagueAnyStatus } from "@/lib/public-league-data";
+import { leaguePublicUrl } from "@/lib/public-url";
 import { getTenantUrlBuilder } from "@/lib/tenant-url";
 
 import { LeagueMark } from "./_components/league-mark";
@@ -34,11 +35,22 @@ export async function generateMetadata({
     };
   }
 
+  const description = league.description ||
+    `Fixtures, standings, results and player statistics for ${league.name}.`;
+  const url = leaguePublicUrl(leagueSlug);
+
   return {
-    title: league.name,
-    description:
-      league.description ||
-      `Fixtures, standings, results and player statistics for ${league.name}.`,
+    title: { default: league.name, template: `%s | ${league.name}` },
+    description,
+    metadataBase: new URL(url),
+    openGraph: {
+      type: "website",
+      title: league.name,
+      description,
+      url,
+      siteName: league.name,
+    },
+    twitter: { card: "summary", title: league.name, description },
   };
 }
 
@@ -97,13 +109,6 @@ export default async function LeagueLayout({
               <Link href={tenantUrl("/table")}>Table</Link>
               <Link href={tenantUrl("/stats")}>Stats</Link>
             </nav>
-
-            <Link
-              className="league-admin-link"
-              href={`/admin/site-login?league=${encodeURIComponent(leagueSlug)}`}
-            >
-              Admin
-            </Link>
           </>
         ) : null}
       </header>

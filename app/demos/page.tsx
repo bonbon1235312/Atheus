@@ -2,8 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { MarketingShell } from "@/components/marketing/marketing-shell";
+import { StructuredData } from "@/components/marketing/structured-data";
 import { DEMO_SITES } from "@/lib/demo-sites";
-import { marketingMetadata } from "@/lib/seo";
+import { breadcrumbSchema, marketingMetadata } from "@/lib/seo";
 
 export const metadata = marketingMetadata({
   title: "Web Design Portfolio & Live Concepts | Atheus",
@@ -14,6 +15,10 @@ export const metadata = marketingMetadata({
 export default function DemosPage() {
   return (
     <MarketingShell variant="agency">
+      <StructuredData data={breadcrumbSchema([
+        { name: "Atheus", path: "/" },
+        { name: "Work", path: "/demos" },
+      ])} />
       <section className="agency-subhero">
         <div className="ax-container">
           <div className="agency-section-label"><span>Work / Atheus Studio</span><span>Three working concepts</span></div>

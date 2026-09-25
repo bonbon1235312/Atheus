@@ -15,12 +15,14 @@ const fraunces = Fraunces({
   subsets: ["latin"],
   variable: "--font-demo-fraunces",
   display: "swap",
+  preload: false,
 });
 
 const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-demo-dm-sans",
   display: "swap",
+  preload: false,
 });
 
 const oswald = Oswald({
@@ -28,6 +30,7 @@ const oswald = Oswald({
   weight: ["500", "600", "700"],
   variable: "--font-demo-oswald",
   display: "swap",
+  preload: false,
 });
 
 const ibmSans = IBM_Plex_Sans({
@@ -35,6 +38,7 @@ const ibmSans = IBM_Plex_Sans({
   weight: ["400", "500", "600"],
   variable: "--font-demo-ibm-sans",
   display: "swap",
+  preload: false,
 });
 
 const ibmMono = IBM_Plex_Mono({
@@ -42,6 +46,7 @@ const ibmMono = IBM_Plex_Mono({
   weight: ["400", "500"],
   variable: "--font-demo-ibm-mono",
   display: "swap",
+  preload: false,
 });
 
 const outfit = Outfit({
@@ -49,6 +54,7 @@ const outfit = Outfit({
   weight: ["400", "500", "600", "700"],
   variable: "--font-demo-outfit",
   display: "swap",
+  preload: false,
 });
 
 type Props = {

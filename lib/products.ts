@@ -47,7 +47,7 @@ export const products: Product[] = [
       { label: "Sites", value: "Branded subdomains" },
       { label: "Ops", value: "Automated collection" },
     ],
-    primaryCta: { label: "Open platform", href: "/admin" },
+    primaryCta: { label: "Ask about League", href: "/contact" },
     secondaryCta: { label: "Contact", href: "/contact" },
     pricingNote:
       "Free for one active league. Premium unlocks unlimited leagues for £8 per month.",

@@ -2,8 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 
 import { MarketingShell } from "@/components/marketing/marketing-shell";
+import { StructuredData } from "@/components/marketing/structured-data";
 import { products, statusLabel } from "@/lib/products";
-import { marketingMetadata } from "@/lib/seo";
+import { breadcrumbSchema, marketingMetadata } from "@/lib/seo";
 
 export const metadata = marketingMetadata({
   title: "Websites & Digital Products | Atheus",
@@ -15,6 +16,10 @@ export default function ProductsPage() {
   const ordered = [products.find((product) => product.slug === "sites")!, ...products.filter((product) => product.slug !== "sites")];
   return (
     <MarketingShell variant="agency">
+      <StructuredData data={breadcrumbSchema([
+        { name: "Atheus", path: "/" },
+        { name: "Products", path: "/products" },
+      ])} />
       <section className="agency-subhero">
         <div className="ax-container">
           <div className="agency-section-label"><span>Products / Atheus</span><span>Digital experiences and tools</span></div>

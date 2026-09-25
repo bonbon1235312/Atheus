@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import {
@@ -8,6 +9,7 @@ import {
   getPublicLeague,
 } from "@/lib/public-league-data";
 import { getTenantUrlBuilder } from "@/lib/tenant-url";
+import { leaguePublicUrl } from "@/lib/public-url";
 
 import { FixtureRow } from "../_components/fixture-row";
 
@@ -22,6 +24,14 @@ type FixturesPageProps = {
     view?: string;
   }>;
 };
+
+export async function generateMetadata({ params }: FixturesPageProps): Promise<Metadata> {
+  const { leagueSlug } = await params;
+  return {
+    title: "Fixtures & results",
+    alternates: { canonical: leaguePublicUrl(leagueSlug, "fixtures") },
+  };
+}
 
 export default async function FixturesPage({
   params,

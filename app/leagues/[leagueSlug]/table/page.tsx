@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 
 import {
@@ -7,6 +8,7 @@ import {
   getStandings,
 } from "@/lib/public-league-data";
 import { getTenantUrlBuilder } from "@/lib/tenant-url";
+import { leaguePublicUrl } from "@/lib/public-url";
 
 import { StandingsTable } from "../_components/standings-table";
 
@@ -16,6 +18,14 @@ type TablePageProps = {
   params: Promise<{ leagueSlug: string }>;
   searchParams: Promise<{ competition?: string; season?: string }>;
 };
+
+export async function generateMetadata({ params }: TablePageProps): Promise<Metadata> {
+  const { leagueSlug } = await params;
+  return {
+    title: "League table",
+    alternates: { canonical: leaguePublicUrl(leagueSlug, "table") },
+  };
+}
 
 export default async function TablePage({
   params,

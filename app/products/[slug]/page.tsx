@@ -4,8 +4,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 
 import { MarketingShell } from "@/components/marketing/marketing-shell";
+import { StructuredData } from "@/components/marketing/structured-data";
 import { getProduct, products, statusLabel } from "@/lib/products";
-import { marketingMetadata } from "@/lib/seo";
+import { breadcrumbSchema, marketingMetadata } from "@/lib/seo";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -38,6 +39,11 @@ export default async function ProductPage({ params }: Props) {
 
   return (
     <MarketingShell variant="agency">
+      <StructuredData data={breadcrumbSchema([
+        { name: "Atheus", path: "/" },
+        { name: "Products", path: "/products" },
+        { name: product.name, path: `/products/${slug}` },
+      ])} />
       <section className="agency-subhero agency-product-hero">
         <div className="ax-container">
           <div className="agency-section-label"><span>Products / {product.name}</span><span>{product.category} / {statusLabel[product.status]}</span></div>

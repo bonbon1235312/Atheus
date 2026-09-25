@@ -5,7 +5,20 @@ export const SITE_ORIGIN = "https://www.atheus.dev";
 export const SITE_NAME = "Atheus";
 export const HOME_TITLE = "Atheus — Independent Digital Design Studio";
 export const HOME_DESCRIPTION =
-  "Atheus is an independent UK digital design and development studio creating expressive websites, digital products and brand experiences.";
+  "Atheus is an independent UK web design and development studio creating expressive custom websites, digital products and brand experiences.";
+
+export function breadcrumbSchema(items: ReadonlyArray<{ name: string; path: string }>) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: item.name,
+      item: new URL(item.path, SITE_ORIGIN).toString(),
+    })),
+  };
+}
 
 type PageMetadata = {
   title: string;

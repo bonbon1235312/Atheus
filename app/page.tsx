@@ -5,6 +5,7 @@ import { HomeHero } from "@/components/marketing/home-hero";
 import { AgencyLoader } from "@/components/marketing/agency-loader";
 import { AgencyMotion } from "@/components/marketing/agency-motion";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
+import { StructuredData } from "@/components/marketing/structured-data";
 import { HOME_DESCRIPTION, HOME_TITLE, SITE_ORIGIN, marketingMetadata } from "@/lib/seo";
 
 export const metadata = marketingMetadata({ title: HOME_TITLE, description: HOME_DESCRIPTION, path: "/" });
@@ -49,7 +50,7 @@ const services = [
 export default function Home() {
   return (
     <MarketingShell variant="agency">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(studioSchema).replace(/</g, "\\u003c") }} />
+      <StructuredData data={studioSchema} />
       <AgencyLoader />
       <AgencyMotion />
       <HomeHero />
