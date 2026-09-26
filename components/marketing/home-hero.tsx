@@ -24,11 +24,11 @@ export function HomeHero() {
         </div>
         <div className="agency-hero-gallery" aria-label="Website concepts by Atheus">
           <div className="agency-hero-gallery-main">
-            <Image src="/brand/sites-hearth.jpg" alt="Hearth & Co cafe website concept with warm interior photography" width={1600} height={900} preload loading="eager" fetchPriority="high" sizes="(max-width: 800px) 100vw, 70vw" />
+            <Image src="/work/hearth-desktop.webp" alt="Hearth & Co cafe website concept with warm interior photography" width={1440} height={1000} preload loading="eager" fetchPriority="high" sizes="(max-width: 760px) calc(100vw - 40px), 70vw" />
             <span className="agency-gallery-caption">Hearth & Co / Hospitality</span>
           </div>
           <div className="agency-hero-gallery-side">
-            <Image src="/brand/ridgeway-hero.jpg" alt="Ridgeway Civils construction site concept" width={800} height={1050} fetchPriority="low" sizes="(max-width: 800px) 40vw, 25vw" />
+            <Image src="/brand/ridgeway-hero.jpg" alt="Ridgeway Civils construction site concept" width={1536} height={1024} fetchPriority="low" sizes="(max-width: 760px) calc(100vw - 40px), 80vw" />
             <span className="agency-gallery-caption">Ridgeway / Construction</span>
           </div>
           <Link className="agency-gallery-stamp" href="/work" aria-label="Explore selected work">

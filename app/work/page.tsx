@@ -27,7 +27,7 @@ export default function WorkPage() {
           {selectedWork.map((project, index) => (
             <article className="agency-case" key={project.slug}>
               <div className="agency-case-top"><span>0{index + 1} / 04</span><span>{project.category} / {project.status}</span></div>
-              <Link className={`agency-case-image${index === 0 ? " studio-live-image" : ""}`} href={project.href} aria-label={`Read the ${project.name} case study`}>
+              <Link className={`agency-case-image${project.presentation === "screen" ? " studio-image-screen" : ""}`} href={project.href} aria-label={`Read the ${project.name} case study`}>
                 <Image src={project.image} alt={`${project.name} ${index === 0 ? "live platform" : "website concept"}`} width={project.width} height={project.height} sizes="(max-width: 760px) 100vw, 85vw" preload={index === 0} />
                 <span aria-hidden="true">↗</span>
               </Link>

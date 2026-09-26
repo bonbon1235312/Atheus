@@ -60,7 +60,7 @@ export default function Home() {
           <div className="agency-project-list">
             {selectedWork.map((project, index) => (
               <article className={`agency-project agency-reveal${index === 0 ? " studio-home-feature" : ""}`} key={project.slug}>
-                <Link className="agency-project-image" href={project.href} aria-label={`Read the ${project.name} case study`}>
+                <Link className={`agency-project-image${project.presentation === "screen" ? " studio-image-screen" : ""}`} href={project.href} aria-label={`Read the ${project.name} case study`}>
                   <span className="agency-project-image-media">
                     <Image src={project.image} alt={`${project.name} ${index === 0 ? "live platform" : "website concept"}`} width={project.width} height={project.height} sizes="(max-width: 800px) 100vw, 85vw" />
                   </span>

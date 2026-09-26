@@ -1313,7 +1313,6 @@
 .studio-delivery p { margin: 0 0 1rem; line-height: 1.8; font-size: .95rem; color: var(--ax-text-muted); }
 .studio-outcome { border-top: 1px solid var(--ax-border-strong); }
 .studio-outcome .agency-btn { margin-block: 1rem; }
-.studio-live-image { aspect-ratio: 1.44 !important; }
 .studio-home-feature { grid-template-columns: 1fr !important; }
 .studio-home-feature .agency-project-image { aspect-ratio: 1.65; }
 .studio-home-feature .agency-project-info { display: flex; justify-content: space-between; align-items: start; gap: 2rem; padding-top: 1.5rem; }
@@ -1414,4 +1413,46 @@
   .studio-founder-mark { min-height: 320px; }
   .studio-service-disciplines { padding-bottom: 2rem; }
   .studio-case-cover figcaption, .studio-screen figcaption { font-size: .6rem; }
+}
+
+/* Screens keep their complete composition; photographs can fill a crop. */
+.agency-hero-gallery { height: auto; align-items: stretch; }
+.agency-hero-gallery-main { aspect-ratio: 1.44; }
+.agency-hero-gallery-main img,
+.agency-motion-ready .agency-hero-gallery-main img {
+  object-fit: contain;
+  object-position: center;
+  transform: none;
+  will-change: auto;
+}
+.agency-hero-gallery-side { min-width: 0; min-height: 0; }
+.agency-hero-gallery-side img { position: absolute; inset: 0; }
+.agency-case-image { width: 100%; min-width: 0; height: auto; aspect-ratio: 16 / 10; }
+.agency-project-image img, .agency-case-image img { display: block; }
+.agency-project-image.studio-image-screen,
+.agency-project:nth-child(2) .agency-project-image.studio-image-screen,
+.agency-case-image.studio-image-screen { height: auto; aspect-ratio: 1.44; background: #10121a; }
+.agency-project-image.studio-image-screen img,
+.agency-case-image.studio-image-screen img { object-fit: contain; }
+.agency-motion-ready .studio-image-screen img,
+.agency-motion-ready .agency-project.is-visible .studio-image-screen:hover .agency-project-image-media,
+.studio-image-screen:hover img { transform: none; will-change: auto; }
+.agency-motion-ready .studio-image-screen .agency-project-image-media { transform: none; }
+.studio-case-cover, .studio-screen, .studio-mobile-capture { min-width: 0; }
+.studio-case-cover img, .studio-screen img, .studio-mobile-capture img { max-width: 100%; }
+@media (max-width: 760px) {
+  .agency-hero-gallery { grid-template-columns: minmax(0, 1fr); gap: .75rem; }
+  .agency-hero-gallery-side { aspect-ratio: 2 / 1; }
+  .agency-hero-gallery-side .agency-gallery-caption { display: block; }
+  .agency-gallery-caption { font-size: .6rem; }
+  .agency-gallery-stamp { width: 84px; height: 84px; bottom: -1.6rem; }
+  .agency-case-image { height: auto; aspect-ratio: 4 / 3; }
+  .agency-motion-ready .agency-project-image img,
+  .agency-motion-ready .agency-hero-gallery-side img { transform: none; will-change: auto; }
+  .agency-project-image:hover img, .agency-case-image:hover img { transform: none; }
+}
+.agency-hero-gallery-side img { object-position: 35% center; }
+@media (max-width: 760px) {
+  .studio-image-screen .agency-project-open,
+  .agency-case-image.studio-image-screen > span { width: 2.25rem; height: 2.25rem; right: .5rem; top: .5rem; font-size: 1.25rem; }
 }

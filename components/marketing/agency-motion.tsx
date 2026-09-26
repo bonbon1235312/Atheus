@@ -12,7 +12,7 @@ export function AgencyMotion() {
 
     const reveals = Array.from(document.querySelectorAll<HTMLElement>(".agency-reveal"));
     const gallery = document.querySelector<HTMLElement>(".agency-hero-gallery");
-    const projects = Array.from(document.querySelectorAll<HTMLElement>(".agency-project-image"));
+    const projects = Array.from(document.querySelectorAll<HTMLElement>(".agency-project-image:not(.studio-image-screen)"));
     const services = document.querySelector<HTMLElement>(".agency-service-list");
     const asterisk = document.querySelector<HTMLElement>(".agency-asterisk");
     const observer = new IntersectionObserver(
