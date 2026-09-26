@@ -14,15 +14,15 @@ export function SiteFooter() {
         <div className="agency-footer-nav">
           <Link className="agency-footer-wordmark" href="/" aria-label="Atheus home">Atheus<span>.</span></Link>
           <nav aria-label="Footer">
-            <Link href="/demos">Work</Link>
-            <Link href="/products/sites">Websites</Link>
-            <Link href="/products">Products</Link>
-            <Link href="/about">Studio</Link>
+            <Link href="/work">Work</Link>
+            <Link href="/services">Services</Link>
+            <Link href="/studio">Studio</Link>
             <Link href="/contact">Contact</Link>
           </nav>
         </div>
         <div className="ax-footer-bottom">
           <span>© {new Date().getFullYear()} Atheus</span>
+          <span className="studio-footer-legal"><Link href="/privacy">Privacy</Link><Link href="/terms">Project terms</Link></span>
           <span>Design with intent. Built to last.</span>
         </div>
       </div>

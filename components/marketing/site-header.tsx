@@ -5,17 +5,14 @@ import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
 
 const links = [
-  { href: "/demos", label: "Work" },
-  { href: "/products/sites", label: "Websites" },
-  { href: "/products", label: "Products" },
-  { href: "/about", label: "Studio" },
+  { href: "/work", label: "Work" },
+  { href: "/services", label: "Services" },
+  { href: "/studio", label: "Studio" },
+  { href: "/contact", label: "Contact" },
 ];
 
 function isCurrent(pathname: string, href: string) {
   if (href === "/") return pathname === "/";
-  if (href === "/products") {
-    return pathname === "/products" || (pathname.startsWith("/products/") && !pathname.startsWith("/products/sites"));
-  }
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
@@ -37,7 +34,7 @@ export function SiteHeader() {
       <div className="ax-header-bar">
         <Link className="ax-brand" href="/" aria-label="Atheus home">
           <span className="ax-brand-mark" aria-hidden="true">A<span>.</span></span>
-          <span>Atheus</span>
+          <span>ATHEUS.</span>
         </Link>
 
         <nav className="ax-nav" aria-label="Primary">

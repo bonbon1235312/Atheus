@@ -18,7 +18,7 @@ export function HomeHero() {
           </h1>
           <div className="agency-hero-aside agency-reveal">
             <span className="agency-star" aria-hidden="true">✳</span>
-            <p>Atheus is an independent UK design studio building expressive websites and digital products for ambitious businesses.</p>
+            <p>Atheus is an independent digital studio designing and building distinctive websites and software.</p>
             <Link className="agency-arrow-link" href="/contact">Start a project <span aria-hidden="true">↗</span></Link>
           </div>
         </div>
@@ -31,7 +31,7 @@ export function HomeHero() {
             <Image src="/brand/ridgeway-hero.jpg" alt="Ridgeway Civils construction site concept" width={800} height={1050} fetchPriority="low" sizes="(max-width: 800px) 40vw, 25vw" />
             <span className="agency-gallery-caption">Ridgeway / Construction</span>
           </div>
-          <Link className="agency-gallery-stamp" href="/demos" aria-label="Explore our demo work">
+          <Link className="agency-gallery-stamp" href="/work" aria-label="Explore selected work">
             <span>Explore<br />the work</span><span aria-hidden="true">↗</span>
           </Link>
         </div>

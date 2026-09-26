@@ -1,7 +1,7 @@
 import type { MetadataRoute } from "next";
 import { headers } from "next/headers";
 
-import { products } from "@/lib/products";
+import { selectedWork } from "@/lib/work";
 import {
   demoSlugFromHostname,
   leaguePublicUrl,
@@ -42,12 +42,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   return [
     "/",
-    "/products",
-    "/products/sites",
-    ...products.filter((product) => product.slug !== "sites").map((product) => `/products/${product.slug}`),
-    "/demos",
-    "/about",
+    "/work",
+    ...selectedWork.map((project) => project.href),
+    "/services",
+    "/studio",
     "/contact",
-    "/upgrade",
+    "/privacy",
+    "/terms",
   ].map((path) => ({ url: new URL(path, SITE_ORIGIN).toString() }));
 }

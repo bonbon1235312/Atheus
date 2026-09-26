@@ -1,0 +1,18 @@
+export const servicePackages = [
+  { name: "Focused website", price: "From £600", timing: "Typically 1–2 weeks", description: "An excellent first website for a small local business.", items: ["1–3 core pages or an equivalent focused structure", "Bespoke visual direction and responsive build", "Contact or enquiry functionality", "Technical SEO and performance/accessibility pass", "One structured revision round and launch support"] },
+  { name: "Custom business website", price: "£1.5k–£4k", timing: "Typically 2–5 weeks", description: "More pages, more content and more ways for the site to work for you.", items: ["Multi-page content architecture and art direction", "CMS where required", "Custom forms or agreed integrations", "Richer interaction and motion", "Two structured revision rounds, cross-device QA and handover"] },
+  { name: "Brand / digital experience", price: "£4k–£12k+", timing: "Timeline agreed after discovery", description: "A deeper engagement for a larger, more expressive web presence.", items: ["Discovery and content strategy", "Substantial art direction and bespoke motion", "Larger page systems or CMS architecture", "Photography coordination where scoped", "Integrations and a tailored review process"] },
+  { name: "Software / custom product", price: "Scoped", timing: "Functionality sets the scope", description: "Portals, dashboards, internal tools and community platforms.", items: ["Product and interface design", "Data models and workflow planning", "Agreed integrations and application development", "Validation and launch planning", "A project-specific support and handover agreement"] },
+] as const;
+
+export const serviceFaqs = [
+  ["Are the websites custom?", "Yes. The structure, visual direction and development follow your brief. Shared engineering standards help with reliability; they do not prescribe how your business should look."],
+  ["What content do I need to provide?", "You supply the core factual content, branding and photography where available. Atheus shapes the hierarchy and presentation. Full copywriting, photography and asset production can be scoped separately."],
+  ["How long does a project take?", "Focused websites typically take 1–2 weeks and custom business websites 2–5 weeks. Timing depends on the agreed scope, content readiness and feedback. Larger projects receive a tailored schedule before work begins."],
+  ["Who owns the finished site?", "Once final payment is complete, you receive the agreed production website and project assets. Third-party software, fonts and services remain subject to their own licences. The project agreement records the exact deliverables and ownership terms."],
+  ["Can you keep my existing domain and hosting?", "Usually, where the existing setup suits the build. Hosting and domain costs are separate from the development quote and agreed before launch."],
+  ["Can I update the content myself?", "A content management system can be included when you need it. We agree what you need to edit and the handover requirements before quoting; a CMS is not automatically included in every project."],
+  ["What happens after launch?", "14 days of post-launch bug support is included. Ongoing maintenance, content changes and new features can be arranged separately. Support covers faults in the agreed build rather than additional scope."],
+  ["Can you redesign an existing website?", "Yes. We start by looking at what is working, what needs to change, and which content, URLs or integrations need to be retained."],
+  ["Do you work outside the North East?", "Yes. Atheus works remotely with businesses across the UK. Project conversations, reviews and handover can all happen online."],
+] as const;

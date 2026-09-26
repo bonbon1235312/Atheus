@@ -14,16 +14,12 @@ const nextConfig: NextConfig = {
   },
   async redirects() {
     return [
-      {
-        source: "/services",
-        destination: "/products",
-        permanent: true,
-      },
-      {
-        source: "/projects",
-        destination: "/products",
-        permanent: true,
-      },
+      { source: "/products", destination: "/services", permanent: true },
+      { source: "/products/:path*", destination: "/services", permanent: true },
+      { source: "/projects", destination: "/work", permanent: true },
+      { source: "/demos", destination: "/work", permanent: true },
+      { source: "/about", destination: "/studio", permanent: true },
+      { source: "/upgrade", destination: "/services", permanent: true },
     ];
   },
 };

@@ -1,0 +1,20 @@
+import Image from "next/image";
+import Link from "next/link";
+import { MarketingShell } from "@/components/marketing/marketing-shell";
+import { StructuredData } from "@/components/marketing/structured-data";
+import { breadcrumbSchema, marketingMetadata, SITE_ORIGIN } from "@/lib/seo";
+
+export const metadata = marketingMetadata({ title: "Evan Nicholson & Atheus | Independent Digital Studio", description: "Meet Evan Nicholson, the designer and developer behind Atheus. Independent web design and software development, with one point of contact from brief to launch.", path: "/studio" });
+
+export default function StudioPage() {
+  return <MarketingShell variant="agency">
+    <StructuredData data={breadcrumbSchema([{ name: "Atheus", path: "/" }, { name: "Studio", path: "/studio" }])} />
+    <StructuredData data={{ "@context": "https://schema.org", "@type": "Person", "@id": `${SITE_ORIGIN}/studio#evan`, name: "Evan Nicholson", jobTitle: "Designer and developer", worksFor: { "@type": "Organization", name: "Atheus", url: SITE_ORIGIN } }} />
+    <section className="agency-subhero"><div className="ax-container"><div className="agency-section-label"><span>Studio / Evan Nicholson</span><span>Independent by design</span></div><div className="agency-subhero-grid"><h1>Expressive design.<br /><em>Serious engineering.</em></h1><p>Atheus is an independent digital studio designing and building distinctive websites and software. Small enough to stay close to the work. Curious enough to take it somewhere new.</p></div></div></section>
+    <section className="studio-founder ax-container"><div className="studio-founder-mark" aria-hidden="true"><span>ATHEUS / EN</span><strong>Evan<br /><em>Nicholson.</em></strong><span>Design + development / UK</span></div><div className="studio-prose"><span className="studio-eyebrow">The person behind the work</span><h2>Hi, I’m Evan.</h2><p className="studio-lead">I’m the designer and developer behind Atheus. I take projects from the first conversation through to the finished build.</p><p>I started Atheus around a simple idea: strong digital work should bring expressive design and serious engineering together. I work directly across strategy, visual direction, interface design and development to make that happen.</p><p>You won’t be handed between sales, design and development teams. The person discussing the brief with you is the same person making the decisions and building the result.</p><a className="agency-arrow-link" href="mailto:hello@atheus.dev">Say hello ↗</a></div></section>
+    <section className="studio-editorial ax-container"><div className="studio-section-side"><span className="studio-eyebrow">A way of working</span><h2>Stay curious.<br /><em>Follow through.</em></h2></div><div className="studio-prose"><p className="studio-lead">The first question is what the work needs people to understand, feel and do.</p><p>That answer guides the content, the typography, the interactions and the code. A website has to work on a phone, help someone find their next step, and remain useful after the launch.</p><p>The same approach runs through software. KickOff connects a public interface to a deeper system of match data, competitive records and community activity.</p><Link className="agency-arrow-link" href="/work/kickoff">Inside KickOff ↗</Link></div></section>
+    <figure className="studio-case-cover ax-container"><Image src="/work/kickoff-desktop.webp" alt="KickOff, an original digital product designed and developed by Atheus" width={1440} height={1000} sizes="(max-width: 760px) 100vw, 85vw" /><figcaption>KickOff / An Atheus original, live in the world.</figcaption></figure>
+    <section className="agency-offer"><div className="ax-container agency-offer-grid"><div><div className="agency-section-label"><span>Work together</span></div><h2>Bring the idea.<br /><em>Let’s find its form.</em></h2></div><div className="agency-offer-aside"><p>A new website, a redesign or a product that needs shaping. A few details are enough to start.</p><Link className="agency-btn" href="/contact">Start a project ↗</Link></div></div></section>
+  </MarketingShell>;
+}
+

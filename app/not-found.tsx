@@ -14,7 +14,7 @@ export default function NotFound() {
           </div>
           <div className="agency-not-found-links">
             <Link className="agency-btn" href="/">Back to home <span aria-hidden="true">↗</span></Link>
-            <Link className="agency-arrow-link" href="/demos">Explore the work <span aria-hidden="true">↗</span></Link>
+            <Link className="agency-arrow-link" href="/work">Explore the work <span aria-hidden="true">↗</span></Link>
           </div>
         </div>
       </section>

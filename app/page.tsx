@@ -7,6 +7,7 @@ import { AgencyMotion } from "@/components/marketing/agency-motion";
 import { MarketingShell } from "@/components/marketing/marketing-shell";
 import { StructuredData } from "@/components/marketing/structured-data";
 import { HOME_DESCRIPTION, HOME_TITLE, SITE_ORIGIN, marketingMetadata } from "@/lib/seo";
+import { selectedWork } from "@/lib/work";
 
 export const metadata = marketingMetadata({ title: HOME_TITLE, description: HOME_DESCRIPTION, path: "/" });
 
@@ -35,16 +36,10 @@ const studioSchema = {
   ],
 };
 
-const projects = [
-  { number: "01", name: "Hearth & Co", category: "Hospitality / Concept site", summary: "A neighbourhood cafe with a digital presence as inviting as the place itself.", image: "/brand/sites-hearth.jpg", alt: "Hearth & Co cafe website concept", href: "/demos/hearth-co" },
-  { number: "02", name: "Ridgeway Civils", category: "Construction / Concept site", summary: "Heavy industry, presented with the confidence and clarity it deserves.", image: "/brand/ridgeway-hero.jpg", alt: "Ridgeway Civils website concept", href: "/demos/ridgeway" },
-  { number: "03", name: "Northline Electrical", category: "Trades / Concept site", summary: "A precise service experience designed to turn urgency into an enquiry.", image: "/brand/northline-hero.jpg", alt: "Northline Electrical website concept", href: "/demos/northline" },
-] as const;
-
 const services = [
-  { number: "01", title: "Art direction", detail: "A visual language that could only belong to your business." },
-  { number: "02", title: "Web design", detail: "Every page considered, from the first impression to the final click." },
-  { number: "03", title: "Development", detail: "Fast, responsive sites built to work beautifully in the real world." },
+  { number: "01", title: "Design", detail: "Strategy, art direction and interfaces shaped around your audience." },
+  { number: "02", title: "Development", detail: "Responsive websites, purposeful motion and care in the details." },
+  { number: "03", title: "Digital products", detail: "Custom software that connects useful interfaces to the systems behind them." },
 ] as const;
 
 export default function Home() {
@@ -60,21 +55,21 @@ export default function Home() {
           <div className="agency-section-label"><span>01 / Selected work</span><span>Built to show what is possible</span></div>
           <div className="agency-work-heading agency-reveal">
             <h2 id="agency-work-title">Different worlds.<br /><em>Same ambition.</em></h2>
-            <p>Three working concepts, each with its own voice. Open the sites, explore the details, and see the thinking in motion.</p>
+            <p>A live competitive platform and three distinct website concepts. Explore the work, the decisions behind it, and the details that make it useful.</p>
           </div>
           <div className="agency-project-list">
-            {projects.map((project) => (
-              <article className="agency-project agency-reveal" key={project.number}>
-                <Link className="agency-project-image" href={project.href} aria-label={`Explore ${project.name} concept site`}>
+            {selectedWork.map((project, index) => (
+              <article className={`agency-project agency-reveal${index === 0 ? " studio-home-feature" : ""}`} key={project.slug}>
+                <Link className="agency-project-image" href={project.href} aria-label={`Read the ${project.name} case study`}>
                   <span className="agency-project-image-media">
-                    <Image src={project.image} alt={project.alt} width={1500} height={900} sizes="(max-width: 800px) 100vw, 65vw" />
+                    <Image src={project.image} alt={`${project.name} ${index === 0 ? "live platform" : "website concept"}`} width={project.width} height={project.height} sizes="(max-width: 800px) 100vw, 85vw" />
                   </span>
                   <span className="agency-project-open" aria-hidden="true">↗</span>
                 </Link>
                 <div className="agency-project-info">
-                  <span className="agency-project-number">{project.number} / 03</span>
+                  <span className="agency-project-number">0{index + 1} / 04</span>
                   <div>
-                    <p>{project.category}</p>
+                    <p>{project.category} / {project.status}</p>
                     <h3><Link href={project.href}>{project.name}</Link></h3>
                     <span>{project.summary}</span>
                   </div>
@@ -82,7 +77,7 @@ export default function Home() {
               </article>
             ))}
           </div>
-          <Link className="agency-arrow-link agency-work-more" href="/demos">Explore all concepts <span aria-hidden="true">↗</span></Link>
+          <Link className="agency-arrow-link agency-work-more" href="/work">Explore selected work <span aria-hidden="true">↗</span></Link>
         </div>
       </section>
 
@@ -93,7 +88,7 @@ export default function Home() {
             <div className="agency-reveal">
               <h2 id="agency-services-title">A website should feel like <em>you.</em></h2>
               <p className="agency-services-intro">Custom web design, art direction, and development in one place. The result is a site with a distinct point of view and a clear job to do.</p>
-              <Link className="agency-arrow-link" href="/products/sites">Explore websites <span aria-hidden="true">↗</span></Link>
+              <Link className="agency-arrow-link" href="/services">Explore services <span aria-hidden="true">↗</span></Link>
             </div>
             <div className="agency-service-list">
               {services.map((service) => (
@@ -108,9 +103,13 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="studio-home-person ax-container">
+        <div><span className="studio-eyebrow">03 / Independent by design</span><h2>One conversation.<br /><em>One maker.</em></h2></div>
+        <div><p className="studio-lead">I’m Evan Nicholson, the designer and developer behind Atheus.</p><p>I work across strategy, visual direction, interface design and development. The person discussing your brief is the same person making the design decisions and building the result.</p><Link className="agency-arrow-link" href="/studio">Meet the studio ↗</Link></div>
+      </section>
       <section className="agency-manifesto" aria-labelledby="agency-manifesto-title">
         <div className="ax-container">
-          <div className="agency-section-label"><span>03 / Our point of view</span><span>Made to stand apart</span></div>
+          <div className="agency-section-label"><span>04 / Our point of view</span><span>Made to stand apart</span></div>
           <h2 className="agency-reveal" id="agency-manifesto-title">A template can fill a page.<br /><em>It can’t tell your story.</em></h2>
           <div className="agency-manifesto-bottom agency-reveal">
             <span className="agency-asterisk" aria-hidden="true">✳</span>
@@ -122,13 +121,13 @@ export default function Home() {
       <section className="agency-offer" aria-labelledby="agency-offer-title">
         <div className="ax-container agency-offer-grid">
           <div>
-            <div className="agency-section-label"><span>04 / Make a move</span></div>
+            <div className="agency-section-label"><span>05 / Make a move</span></div>
             <h2 className="agency-reveal" id="agency-offer-title">Your next chapter deserves a better website.</h2>
           </div>
           <div className="agency-offer-aside">
             <p>Custom business websites start at £600. Tell us what you are building and we will shape a clear scope around it.</p>
             <Link className="agency-btn" href="/contact">Start a project <span aria-hidden="true">↗</span></Link>
-            <Link className="agency-offer-small" href="/products/sites#pricing">How pricing works ↗</Link>
+            <Link className="agency-offer-small" href="/services#pricing">How pricing works ↗</Link>
           </div>
         </div>
       </section>
