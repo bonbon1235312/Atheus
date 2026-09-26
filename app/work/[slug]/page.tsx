@@ -32,4 +32,3 @@ export default async function ConceptCaseStudy({ params }: Props) {
     <section className="studio-editorial studio-outcome ax-container"><div className="studio-section-side"><span className="studio-eyebrow">04 / The thinking</span><h2>What makes<br /><em>it work.</em></h2></div><div className="studio-prose"><p className="studio-lead">{project.lesson}</p><Link className="agency-btn" href={`/demos/${project.demo}`}>Explore the concept ↗</Link><p className="studio-source">Demo forms and business details are illustrative. They do not place real bookings or service requests.</p><Link className="agency-arrow-link" href={`/work/${project.next}`}>Next project ↗</Link></div></section>
   </MarketingShell>;
 }
-

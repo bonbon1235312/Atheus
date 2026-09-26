@@ -17,4 +17,3 @@ export default function StudioPage() {
     <section className="agency-offer"><div className="ax-container agency-offer-grid"><div><div className="agency-section-label"><span>Work together</span></div><h2>Bring the idea.<br /><em>Let’s find its form.</em></h2></div><div className="agency-offer-aside"><p>A new website, a redesign or a product that needs shaping. A few details are enough to start.</p><Link className="agency-btn" href="/contact">Start a project ↗</Link></div></div></section>
   </MarketingShell>;
 }
-

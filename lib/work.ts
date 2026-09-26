@@ -17,4 +17,3 @@ export const kickoffSnapshot = {
   failed: "74",
   postedPercent: "99.31%",
 } as const;
-
