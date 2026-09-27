@@ -1,6 +1,9 @@
 import { DEMO_SITE_SLUGS } from "@/lib/demo-sites";
 
 const DEFAULT_ROOT_DOMAIN = "atheus.dev";
+const CLIENT_PREVIEWS: Readonly<Record<string, string>> = {
+  "lowrys-preview": "lowrys",
+};
 
 export const RESERVED_LEAGUE_SLUGS = new Set([
   "admin",
@@ -16,6 +19,7 @@ export const RESERVED_LEAGUE_SLUGS = new Set([
   "status",
   "support",
   "www",
+  ...Object.keys(CLIENT_PREVIEWS),
   ...DEMO_SITE_SLUGS,
 ]);
 
@@ -53,6 +57,12 @@ export function demoSlugFromHostname(hostname: string): string | null {
     return null;
   }
   return slug;
+}
+
+/** Only explicitly registered client previews may use the wildcard host. */
+export function previewSlugFromHostname(hostname: string): string | null {
+  const slug = slugFromHostname(hostname);
+  return slug && Object.hasOwn(CLIENT_PREVIEWS, slug) ? CLIENT_PREVIEWS[slug]! : null;
 }
 
 /**

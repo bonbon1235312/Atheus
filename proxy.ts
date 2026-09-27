@@ -4,6 +4,7 @@ import {
   atheusRootDomain,
   demoSlugFromHostname,
   leagueSlugFromHostname,
+  previewSlugFromHostname,
 } from "@/lib/public-url";
 import { isDemoSiteSlug } from "@/lib/demo-sites";
 
@@ -27,6 +28,20 @@ export function proxy(request: NextRequest) {
     request.headers.get("x-forwarded-host") ||
     request.nextUrl.hostname;
   const normalizedHostname = requestHostname.split(":")[0].toLowerCase();
+  const previewSlug = previewSlugFromHostname(normalizedHostname);
+  if (previewSlug) {
+    if (isPassthroughPath(pathname)) return NextResponse.next();
+    const internalRoot = `/previews/${previewSlug}`;
+    const destination = request.nextUrl.clone();
+    if (pathname === internalRoot || pathname.startsWith(`${internalRoot}/`)) {
+      destination.pathname = pathname.slice(internalRoot.length) || "/";
+      return NextResponse.redirect(destination);
+    }
+    destination.pathname = pathname === "/" ? internalRoot : `${internalRoot}${pathname}`;
+    const response = NextResponse.rewrite(destination);
+    response.headers.set("X-Robots-Tag", "noindex, nofollow");
+    return response;
+  }
   const demoSlug = demoSlugFromHostname(normalizedHostname);
 
   if (demoSlug) {
@@ -87,6 +102,12 @@ export function proxy(request: NextRequest) {
     normalizedHostname === atheusRootDomain() ||
     normalizedHostname === `www.${atheusRootDomain()}`
   ) {
+    if (pathname === "/previews/lowrys") {
+      const destination = request.nextUrl.clone();
+      destination.hostname = `lowrys-preview.${atheusRootDomain()}`;
+      destination.pathname = "/";
+      return NextResponse.redirect(destination, 308);
+    }
     const centralLeagueAdminMatch = pathname.match(
       /^\/admin\/[0-9a-f-]{36}(?:\/([^/]+))?/i,
     );

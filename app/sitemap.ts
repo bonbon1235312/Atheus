@@ -6,6 +6,7 @@ import {
   demoSlugFromHostname,
   leaguePublicUrl,
   leagueSlugFromHostname,
+  previewSlugFromHostname,
 } from "@/lib/public-url";
 import { SITE_ORIGIN } from "@/lib/seo";
 import { supabaseAdmin } from "@/lib/supabase-admin";
@@ -16,7 +17,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const hostname = (await headers()).get("host")?.split(":")[0].toLowerCase() ?? "";
 
   // Concept demos are intentionally noindex, so they have no sitemap entries.
-  if (demoSlugFromHostname(hostname)) return [];
+  if (demoSlugFromHostname(hostname) || previewSlugFromHostname(hostname)) return [];
 
   const leagueSlug = leagueSlugFromHostname(hostname);
   if (leagueSlug) {

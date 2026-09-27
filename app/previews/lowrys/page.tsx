@@ -6,6 +6,7 @@ const directions = "https://www.google.com/maps/search/?api=1&query=Lowrys+at+th
 export const metadata: Metadata = {
   title: { absolute: "Lowry’s at the Chandlery — Design concept by Atheus" },
   description: "A proposed website direction for Lowry’s at the Chandlery. Design preview only; menu and visitor information await owner confirmation.",
+  alternates: { canonical: "https://lowrys-preview.atheus.dev/" },
   robots: { index: false, follow: false, googleBot: { index: false, follow: false, noimageindex: true } },
   openGraph: { title: "Lowry’s at the Chandlery — A first look", description: "Warm quayside editorial. A website concept by Atheus, prepared for Lowry’s.", images: [{ url: "/previews/lowrys/chandlery.jpg", alt: "The Chandlery and the River Tweed, photographed by Geoff Holland" }] },
   twitter: { card: "summary_large_image", title: "Lowry’s — Design concept", description: "A proposed website direction by Atheus.", images: ["/previews/lowrys/chandlery.jpg"] },

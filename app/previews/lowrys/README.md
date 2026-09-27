@@ -10,3 +10,5 @@ Photos:
 - Both CC BY-SA 2.0: https://creativecommons.org/licenses/by-sa/2.0/ . Display crops/resizing only; image adaptations retain this licence. Credits and licence links are visible in the preview footer. These show historic local context, not current food/interiors.
 
 The bakery feature is typographic until Lowry's supplies approved photography. No generated food or copied review photography is used.
+
+Public preview address: https://lowrys-preview.atheus.dev/ (existing Atheus wildcard). The old production /previews/lowrys URL redirects here; localhost retains the path for development. Preview hosts have an empty sitemap and noindex response headers.
